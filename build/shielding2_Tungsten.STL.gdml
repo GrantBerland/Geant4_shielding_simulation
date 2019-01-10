@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="shielding2_Tungsten.STL_v0" unit="mm" x="5.4" y="3.721465" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v1" unit="mm" x="5.4" y="3.721465" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v2" unit="mm" x="5.4" y="0.0" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v3" unit="mm" x="5.4" y="0.0" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v4" unit="mm" x="15.4" y="3.65" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v5" unit="mm" x="15.4" y="0.0" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v6" unit="mm" x="15.4" y="0.0" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v7" unit="mm" x="15.4" y="3.65" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v8" unit="mm" x="15.49647" y="4.752666" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v9" unit="mm" x="15.49647" y="4.752666" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v10" unit="mm" x="5.321057" y="4.719639" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v11" unit="mm" x="5.321057" y="4.719639" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v12" unit="mm" x="5.086189" y="5.692993" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v13" unit="mm" x="5.086189" y="5.692993" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v14" unit="mm" x="4.701237" y="6.617328" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v15" unit="mm" x="15.78295" y="5.821828" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v16" unit="mm" x="15.78295" y="5.821828" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v17" unit="mm" x="4.175771" y="7.46966" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v18" unit="mm" x="4.701237" y="6.617328" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v19" unit="mm" x="3.522859" y="8.228796" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v20" unit="mm" x="2.758733" y="8.875861" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v21" unit="mm" x="0.9751294" y="9.772612" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v22" unit="mm" x="16.25074" y="6.825" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v23" unit="mm" x="1.902392" y="9.394767" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v24" unit="mm" x="4.175771" y="7.46966" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v25" unit="mm" x="16.25074" y="6.825" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v26" unit="mm" x="1.902392" y="9.394767" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v27" unit="mm" x="2.758733" y="8.875861" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v28" unit="mm" x="0.9751294" y="9.772612" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v29" unit="mm" x="3.522859" y="8.228796" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v30" unit="mm" x="8.247335" y="13.09647" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v31" unit="mm" x="-3.212901e-17" y="10.0" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v32" unit="mm" x="16.88562" y="7.731701" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v33" unit="mm" x="16.88562" y="7.731701" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v34" unit="mm" x="9.35" y="13.0" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v35" unit="mm" x="17.6683" y="8.514382" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v36" unit="mm" x="17.6683" y="8.514382" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v37" unit="mm" x="18.575" y="9.149261" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v38" unit="mm" x="18.575" y="9.149261" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v39" unit="mm" x="19.57817" y="9.617048" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v40" unit="mm" x="19.57817" y="9.617048" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v41" unit="mm" x="20.64733" y="9.903529" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v42" unit="mm" x="20.64733" y="9.903529" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v43" unit="mm" x="7.178172" y="13.38295" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v44" unit="mm" x="6.175" y="13.85074" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v45" unit="mm" x="5.268299" y="14.48562" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v46" unit="mm" x="-3.212901e-17" y="10.0" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v47" unit="mm" x="21.75" y="10.0" z="31.0"/>
+        <position name="shielding2_Tungsten.STL_v48" unit="mm" x="21.75" y="10.0" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v49" unit="mm" x="7.629121e-17" y="10.0" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v50" unit="mm" x="49.5" y="10.0" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v51" unit="mm" x="7.629121e-17" y="59.5" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v52" unit="mm" x="23.75" y="55.5" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v53" unit="mm" x="23.75" y="14.0" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v54" unit="mm" x="23.76519" y="13.82635" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v55" unit="mm" x="23.81031" y="13.65798" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v56" unit="mm" x="23.88397" y="13.5" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v57" unit="mm" x="23.98396" y="13.35721" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v58" unit="mm" x="24.10721" y="13.23396" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v59" unit="mm" x="24.25" y="13.13397" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v60" unit="mm" x="24.40798" y="13.06031" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v61" unit="mm" x="24.57635" y="13.01519" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v62" unit="mm" x="24.75" y="13.0" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v63" unit="mm" x="49.5" y="10.0" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v64" unit="mm" x="25.61603" y="13.5" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v65" unit="mm" x="25.68969" y="13.65798" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v66" unit="mm" x="25.09202" y="13.06031" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v67" unit="mm" x="25.25" y="13.13397" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v68" unit="mm" x="25.73481" y="13.82635" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v69" unit="mm" x="25.75" y="14.0" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v70" unit="mm" x="49.5" y="59.5" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v71" unit="mm" x="24.92365" y="13.01519" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v72" unit="mm" x="25.39279" y="13.23396" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v73" unit="mm" x="25.51604" y="13.35721" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v74" unit="mm" x="49.5" y="59.5" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v75" unit="mm" x="7.629121e-17" y="59.5" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v76" unit="mm" x="3.850739" y="16.175" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v77" unit="mm" x="3.382952" y="17.17817" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v78" unit="mm" x="3.096471" y="18.24733" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v79" unit="mm" x="4.485618" y="15.2683" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v80" unit="mm" x="3.0" y="19.35" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v81" unit="mm" x="3.0" y="50.15" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v82" unit="mm" x="40.15" y="13.0" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v83" unit="mm" x="49.5" y="59.5" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v84" unit="mm" x="43.325" y="13.85074" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v85" unit="mm" x="42.32183" y="13.38295" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v86" unit="mm" x="46.11705" y="17.17817" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v87" unit="mm" x="45.64926" y="16.175" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v88" unit="mm" x="46.40353" y="18.24733" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v89" unit="mm" x="46.5" y="50.15" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v90" unit="mm" x="46.5" y="19.35" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v91" unit="mm" x="45.01438" y="15.2683" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v92" unit="mm" x="44.2317" y="14.48562" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v93" unit="mm" x="41.25267" y="13.09647" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v94" unit="mm" x="24.57635" y="13.01519" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v95" unit="mm" x="24.75" y="13.0" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v96" unit="mm" x="24.10721" y="13.23396" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v97" unit="mm" x="23.98396" y="13.35721" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v98" unit="mm" x="9.35" y="13.0" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v99" unit="mm" x="24.25" y="13.13397" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v100" unit="mm" x="23.88397" y="13.5" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v101" unit="mm" x="23.81031" y="13.65798" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v102" unit="mm" x="23.76519" y="13.82635" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v103" unit="mm" x="24.40798" y="13.06031" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v104" unit="mm" x="23.75" y="14.0" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v105" unit="mm" x="7.178172" y="13.38295" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v106" unit="mm" x="8.247335" y="13.09647" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v107" unit="mm" x="40.15" y="13.0" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v108" unit="mm" x="24.92365" y="13.01519" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v109" unit="mm" x="41.25267" y="13.09647" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v110" unit="mm" x="42.32183" y="13.38295" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v111" unit="mm" x="25.75" y="14.0" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v112" unit="mm" x="25.73481" y="13.82635" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v113" unit="mm" x="25.68969" y="13.65798" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v114" unit="mm" x="25.61603" y="13.5" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v115" unit="mm" x="25.51604" y="13.35721" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v116" unit="mm" x="25.39279" y="13.23396" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v117" unit="mm" x="25.25" y="13.13397" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v118" unit="mm" x="25.09202" y="13.06031" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v119" unit="mm" x="6.175" y="13.85074" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v120" unit="mm" x="43.325" y="13.85074" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v121" unit="mm" x="5.268299" y="14.48562" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v122" unit="mm" x="44.2317" y="14.48562" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v123" unit="mm" x="25.75" y="55.5" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v124" unit="mm" x="25.75" y="55.5" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v125" unit="mm" x="23.75" y="55.5" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v126" unit="mm" x="3.0" y="50.15" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v127" unit="mm" x="3.0" y="19.35" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v128" unit="mm" x="3.096471" y="18.24733" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v129" unit="mm" x="3.382952" y="17.17817" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v130" unit="mm" x="3.850739" y="16.175" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v131" unit="mm" x="4.485618" y="15.2683" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v132" unit="mm" x="46.40353" y="18.24733" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v133" unit="mm" x="46.5" y="19.35" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v134" unit="mm" x="45.01438" y="15.2683" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v135" unit="mm" x="45.64926" y="16.175" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v136" unit="mm" x="46.11705" y="17.17817" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v137" unit="mm" x="46.5" y="50.15" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v138" unit="mm" x="3.096471" y="51.25266" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v139" unit="mm" x="3.096471" y="51.25266" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v140" unit="mm" x="46.40353" y="51.25266" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v141" unit="mm" x="46.40353" y="51.25266" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v142" unit="mm" x="3.382952" y="52.32183" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v143" unit="mm" x="3.382952" y="52.32183" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v144" unit="mm" x="46.11705" y="52.32183" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v145" unit="mm" x="46.11705" y="52.32183" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v146" unit="mm" x="3.850739" y="53.325" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v147" unit="mm" x="3.850739" y="53.325" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v148" unit="mm" x="45.64926" y="53.325" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v149" unit="mm" x="45.64926" y="53.325" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v150" unit="mm" x="4.485618" y="54.2317" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v151" unit="mm" x="4.485618" y="54.2317" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v152" unit="mm" x="45.01438" y="54.2317" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v153" unit="mm" x="45.01438" y="54.2317" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v154" unit="mm" x="5.268299" y="55.01438" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v155" unit="mm" x="5.268299" y="55.01438" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v156" unit="mm" x="44.2317" y="55.01438" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v157" unit="mm" x="44.2317" y="55.01438" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v158" unit="mm" x="6.175" y="55.64926" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v159" unit="mm" x="6.175" y="55.64926" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v160" unit="mm" x="43.325" y="55.64926" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v161" unit="mm" x="48.52487" y="59.72739" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v162" unit="mm" x="43.325" y="55.64926" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v163" unit="mm" x="23.76519" y="55.67365" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v164" unit="mm" x="23.76519" y="55.67365" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v165" unit="mm" x="25.73481" y="55.67365" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v166" unit="mm" x="9.35" y="56.5" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v167" unit="mm" x="7.178172" y="56.11705" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v168" unit="mm" x="40.15" y="56.5" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v169" unit="mm" x="25.73481" y="55.67365" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v170" unit="mm" x="42.32183" y="56.11705" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v171" unit="mm" x="7.178172" y="56.11705" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v172" unit="mm" x="33.24926" y="62.675" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v173" unit="mm" x="42.32183" y="56.11705" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v174" unit="mm" x="23.81031" y="55.84202" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v175" unit="mm" x="23.81031" y="55.84202" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v176" unit="mm" x="25.68969" y="55.84202" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v177" unit="mm" x="25.68969" y="55.84202" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v178" unit="mm" x="23.88397" y="56.0" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v179" unit="mm" x="23.88397" y="56.0" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v180" unit="mm" x="25.61603" y="56.0" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v181" unit="mm" x="25.61603" y="56.0" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v182" unit="mm" x="23.98396" y="56.14279" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v183" unit="mm" x="23.98396" y="56.14279" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v184" unit="mm" x="25.51604" y="56.14279" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v185" unit="mm" x="25.51604" y="56.14279" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v186" unit="mm" x="8.247335" y="56.40353" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v187" unit="mm" x="8.247335" y="56.40353" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v188" unit="mm" x="41.25267" y="56.40353" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v189" unit="mm" x="41.25267" y="56.40353" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v190" unit="mm" x="24.10721" y="56.26605" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v191" unit="mm" x="24.10721" y="56.26605" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v192" unit="mm" x="25.39279" y="56.26605" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v193" unit="mm" x="25.39279" y="56.26605" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v194" unit="mm" x="24.25" y="56.36602" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v195" unit="mm" x="24.25" y="56.36602" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v196" unit="mm" x="25.25" y="56.36602" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v197" unit="mm" x="25.25" y="56.36602" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v198" unit="mm" x="24.40798" y="56.43969" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v199" unit="mm" x="24.40798" y="56.43969" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v200" unit="mm" x="25.09202" y="56.43969" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v201" unit="mm" x="25.09202" y="56.43969" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v202" unit="mm" x="9.35" y="56.5" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v203" unit="mm" x="40.15" y="56.5" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v204" unit="mm" x="24.57635" y="56.48481" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v205" unit="mm" x="24.57635" y="56.48481" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v206" unit="mm" x="24.92365" y="56.48481" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v207" unit="mm" x="24.92365" y="56.48481" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v208" unit="mm" x="24.75" y="56.5" z="0.0"/>
+        <position name="shielding2_Tungsten.STL_v209" unit="mm" x="24.75" y="56.5" z="3.0"/>
+        <position name="shielding2_Tungsten.STL_v210" unit="mm" x="27.75" y="59.5" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v211" unit="mm" x="30.925" y="60.35074" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v212" unit="mm" x="29.92183" y="59.88295" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v213" unit="mm" x="31.8317" y="60.98562" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v214" unit="mm" x="32.61438" y="61.7683" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v215" unit="mm" x="28.85267" y="59.59647" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v216" unit="mm" x="27.75" y="59.5" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v217" unit="mm" x="28.85267" y="59.59647" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v218" unit="mm" x="29.92183" y="59.88295" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v219" unit="mm" x="30.925" y="60.35074" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v220" unit="mm" x="31.8317" y="60.98562" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v221" unit="mm" x="32.61438" y="61.7683" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v222" unit="mm" x="33.24926" y="62.675" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v223" unit="mm" x="48.52487" y="59.72739" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v224" unit="mm" x="33.71705" y="63.67817" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v225" unit="mm" x="47.59761" y="60.10523" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v226" unit="mm" x="47.59761" y="60.10523" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v227" unit="mm" x="33.71705" y="63.67817" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v228" unit="mm" x="46.74127" y="60.62414" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v229" unit="mm" x="46.74127" y="60.62414" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v230" unit="mm" x="45.97714" y="61.2712" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v231" unit="mm" x="45.97714" y="61.2712" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v232" unit="mm" x="45.32423" y="62.03034" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v233" unit="mm" x="45.32423" y="62.03034" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v234" unit="mm" x="44.79876" y="62.88267" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v235" unit="mm" x="44.79876" y="62.88267" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v236" unit="mm" x="34.00353" y="64.74734" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v237" unit="mm" x="34.00353" y="64.74734" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v238" unit="mm" x="44.41381" y="63.80701" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v239" unit="mm" x="44.41381" y="63.80701" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v240" unit="mm" x="44.17894" y="64.78036" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v241" unit="mm" x="44.17894" y="64.78036" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v242" unit="mm" x="34.1" y="65.85" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v243" unit="mm" x="44.1" y="65.77853" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v244" unit="mm" x="34.1" y="65.85" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v245" unit="mm" x="44.1" y="65.77853" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v246" unit="mm" x="44.1" y="69.5" z="33.0"/>
+        <position name="shielding2_Tungsten.STL_v247" unit="mm" x="44.1" y="69.5" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v248" unit="mm" x="34.1" y="69.5" z="35.0"/>
+        <position name="shielding2_Tungsten.STL_v249" unit="mm" x="34.1" y="69.5" z="33.0"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="shielding2_Tungsten.STL-SOL">
+             <triangular vertex1="shielding2_Tungsten.STL_v0" vertex2="shielding2_Tungsten.STL_v1" vertex3="shielding2_Tungsten.STL_v2"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v3" vertex2="shielding2_Tungsten.STL_v0" vertex3="shielding2_Tungsten.STL_v2"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v4" vertex2="shielding2_Tungsten.STL_v5" vertex3="shielding2_Tungsten.STL_v2"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v1" vertex2="shielding2_Tungsten.STL_v4" vertex3="shielding2_Tungsten.STL_v2"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v5" vertex2="shielding2_Tungsten.STL_v3" vertex3="shielding2_Tungsten.STL_v2"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v4" vertex2="shielding2_Tungsten.STL_v6" vertex3="shielding2_Tungsten.STL_v5"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v6" vertex2="shielding2_Tungsten.STL_v3" vertex3="shielding2_Tungsten.STL_v5"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v6" vertex2="shielding2_Tungsten.STL_v0" vertex3="shielding2_Tungsten.STL_v3"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v7" vertex2="shielding2_Tungsten.STL_v0" vertex3="shielding2_Tungsten.STL_v6"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v4" vertex2="shielding2_Tungsten.STL_v7" vertex3="shielding2_Tungsten.STL_v6"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v1" vertex2="shielding2_Tungsten.STL_v8" vertex3="shielding2_Tungsten.STL_v4"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v9" vertex2="shielding2_Tungsten.STL_v7" vertex3="shielding2_Tungsten.STL_v4"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v8" vertex2="shielding2_Tungsten.STL_v9" vertex3="shielding2_Tungsten.STL_v4"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v10" vertex2="shielding2_Tungsten.STL_v0" vertex3="shielding2_Tungsten.STL_v7"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v9" vertex2="shielding2_Tungsten.STL_v10" vertex3="shielding2_Tungsten.STL_v7"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v11" vertex2="shielding2_Tungsten.STL_v8" vertex3="shielding2_Tungsten.STL_v1"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v0" vertex2="shielding2_Tungsten.STL_v11" vertex3="shielding2_Tungsten.STL_v1"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v10" vertex2="shielding2_Tungsten.STL_v11" vertex3="shielding2_Tungsten.STL_v0"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v12" vertex2="shielding2_Tungsten.STL_v8" vertex3="shielding2_Tungsten.STL_v11"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v10" vertex2="shielding2_Tungsten.STL_v12" vertex3="shielding2_Tungsten.STL_v11"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v9" vertex2="shielding2_Tungsten.STL_v13" vertex3="shielding2_Tungsten.STL_v10"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v13" vertex2="shielding2_Tungsten.STL_v12" vertex3="shielding2_Tungsten.STL_v10"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v12" vertex2="shielding2_Tungsten.STL_v14" vertex3="shielding2_Tungsten.STL_v8"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v14" vertex2="shielding2_Tungsten.STL_v15" vertex3="shielding2_Tungsten.STL_v8"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v16" vertex2="shielding2_Tungsten.STL_v9" vertex3="shielding2_Tungsten.STL_v8"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v15" vertex2="shielding2_Tungsten.STL_v16" vertex3="shielding2_Tungsten.STL_v8"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v16" vertex2="shielding2_Tungsten.STL_v17" vertex3="shielding2_Tungsten.STL_v9"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v17" vertex2="shielding2_Tungsten.STL_v18" vertex3="shielding2_Tungsten.STL_v9"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v18" vertex2="shielding2_Tungsten.STL_v13" vertex3="shielding2_Tungsten.STL_v9"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v13" vertex2="shielding2_Tungsten.STL_v14" vertex3="shielding2_Tungsten.STL_v12"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v18" vertex2="shielding2_Tungsten.STL_v14" vertex3="shielding2_Tungsten.STL_v13"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v19" vertex2="shielding2_Tungsten.STL_v20" vertex3="shielding2_Tungsten.STL_v15"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v21" vertex2="shielding2_Tungsten.STL_v22" vertex3="shielding2_Tungsten.STL_v15"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v23" vertex2="shielding2_Tungsten.STL_v21" vertex3="shielding2_Tungsten.STL_v15"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v20" vertex2="shielding2_Tungsten.STL_v23" vertex3="shielding2_Tungsten.STL_v15"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v14" vertex2="shielding2_Tungsten.STL_v24" vertex3="shielding2_Tungsten.STL_v15"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v24" vertex2="shielding2_Tungsten.STL_v19" vertex3="shielding2_Tungsten.STL_v15"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v25" vertex2="shielding2_Tungsten.STL_v16" vertex3="shielding2_Tungsten.STL_v15"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v22" vertex2="shielding2_Tungsten.STL_v25" vertex3="shielding2_Tungsten.STL_v15"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v26" vertex2="shielding2_Tungsten.STL_v27" vertex3="shielding2_Tungsten.STL_v16"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v28" vertex2="shielding2_Tungsten.STL_v26" vertex3="shielding2_Tungsten.STL_v16"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v27" vertex2="shielding2_Tungsten.STL_v29" vertex3="shielding2_Tungsten.STL_v16"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v29" vertex2="shielding2_Tungsten.STL_v17" vertex3="shielding2_Tungsten.STL_v16"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v30" vertex2="shielding2_Tungsten.STL_v28" vertex3="shielding2_Tungsten.STL_v16"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v25" vertex2="shielding2_Tungsten.STL_v30" vertex3="shielding2_Tungsten.STL_v16"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v18" vertex2="shielding2_Tungsten.STL_v24" vertex3="shielding2_Tungsten.STL_v14"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v17" vertex2="shielding2_Tungsten.STL_v24" vertex3="shielding2_Tungsten.STL_v18"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v31" vertex2="shielding2_Tungsten.STL_v32" vertex3="shielding2_Tungsten.STL_v22"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v21" vertex2="shielding2_Tungsten.STL_v31" vertex3="shielding2_Tungsten.STL_v22"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v33" vertex2="shielding2_Tungsten.STL_v25" vertex3="shielding2_Tungsten.STL_v22"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v32" vertex2="shielding2_Tungsten.STL_v33" vertex3="shielding2_Tungsten.STL_v22"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v34" vertex2="shielding2_Tungsten.STL_v30" vertex3="shielding2_Tungsten.STL_v25"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v33" vertex2="shielding2_Tungsten.STL_v34" vertex3="shielding2_Tungsten.STL_v25"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v17" vertex2="shielding2_Tungsten.STL_v19" vertex3="shielding2_Tungsten.STL_v24"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v29" vertex2="shielding2_Tungsten.STL_v19" vertex3="shielding2_Tungsten.STL_v17"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v31" vertex2="shielding2_Tungsten.STL_v35" vertex3="shielding2_Tungsten.STL_v32"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v36" vertex2="shielding2_Tungsten.STL_v33" vertex3="shielding2_Tungsten.STL_v32"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v35" vertex2="shielding2_Tungsten.STL_v36" vertex3="shielding2_Tungsten.STL_v32"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v36" vertex2="shielding2_Tungsten.STL_v34" vertex3="shielding2_Tungsten.STL_v33"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v29" vertex2="shielding2_Tungsten.STL_v20" vertex3="shielding2_Tungsten.STL_v19"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v27" vertex2="shielding2_Tungsten.STL_v20" vertex3="shielding2_Tungsten.STL_v29"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v31" vertex2="shielding2_Tungsten.STL_v37" vertex3="shielding2_Tungsten.STL_v35"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v38" vertex2="shielding2_Tungsten.STL_v36" vertex3="shielding2_Tungsten.STL_v35"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v37" vertex2="shielding2_Tungsten.STL_v38" vertex3="shielding2_Tungsten.STL_v35"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v38" vertex2="shielding2_Tungsten.STL_v34" vertex3="shielding2_Tungsten.STL_v36"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v27" vertex2="shielding2_Tungsten.STL_v23" vertex3="shielding2_Tungsten.STL_v20"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v26" vertex2="shielding2_Tungsten.STL_v23" vertex3="shielding2_Tungsten.STL_v27"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v31" vertex2="shielding2_Tungsten.STL_v39" vertex3="shielding2_Tungsten.STL_v37"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v40" vertex2="shielding2_Tungsten.STL_v38" vertex3="shielding2_Tungsten.STL_v37"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v39" vertex2="shielding2_Tungsten.STL_v40" vertex3="shielding2_Tungsten.STL_v37"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v40" vertex2="shielding2_Tungsten.STL_v34" vertex3="shielding2_Tungsten.STL_v38"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v26" vertex2="shielding2_Tungsten.STL_v21" vertex3="shielding2_Tungsten.STL_v23"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v28" vertex2="shielding2_Tungsten.STL_v21" vertex3="shielding2_Tungsten.STL_v26"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v31" vertex2="shielding2_Tungsten.STL_v41" vertex3="shielding2_Tungsten.STL_v39"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v42" vertex2="shielding2_Tungsten.STL_v40" vertex3="shielding2_Tungsten.STL_v39"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v41" vertex2="shielding2_Tungsten.STL_v42" vertex3="shielding2_Tungsten.STL_v39"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v42" vertex2="shielding2_Tungsten.STL_v34" vertex3="shielding2_Tungsten.STL_v40"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v28" vertex2="shielding2_Tungsten.STL_v31" vertex3="shielding2_Tungsten.STL_v21"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v30" vertex2="shielding2_Tungsten.STL_v43" vertex3="shielding2_Tungsten.STL_v28"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v43" vertex2="shielding2_Tungsten.STL_v44" vertex3="shielding2_Tungsten.STL_v28"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v44" vertex2="shielding2_Tungsten.STL_v45" vertex3="shielding2_Tungsten.STL_v28"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v45" vertex2="shielding2_Tungsten.STL_v46" vertex3="shielding2_Tungsten.STL_v28"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v46" vertex2="shielding2_Tungsten.STL_v31" vertex3="shielding2_Tungsten.STL_v28"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v31" vertex2="shielding2_Tungsten.STL_v47" vertex3="shielding2_Tungsten.STL_v41"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v48" vertex2="shielding2_Tungsten.STL_v42" vertex3="shielding2_Tungsten.STL_v41"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v47" vertex2="shielding2_Tungsten.STL_v48" vertex3="shielding2_Tungsten.STL_v41"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v48" vertex2="shielding2_Tungsten.STL_v34" vertex3="shielding2_Tungsten.STL_v42"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v47" vertex2="shielding2_Tungsten.STL_v31" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v50" vertex2="shielding2_Tungsten.STL_v47" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v51" vertex2="shielding2_Tungsten.STL_v52" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v52" vertex2="shielding2_Tungsten.STL_v53" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v53" vertex2="shielding2_Tungsten.STL_v54" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v54" vertex2="shielding2_Tungsten.STL_v55" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v55" vertex2="shielding2_Tungsten.STL_v56" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v56" vertex2="shielding2_Tungsten.STL_v57" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v57" vertex2="shielding2_Tungsten.STL_v58" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v58" vertex2="shielding2_Tungsten.STL_v59" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v59" vertex2="shielding2_Tungsten.STL_v60" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v60" vertex2="shielding2_Tungsten.STL_v61" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v61" vertex2="shielding2_Tungsten.STL_v62" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v62" vertex2="shielding2_Tungsten.STL_v50" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v31" vertex2="shielding2_Tungsten.STL_v51" vertex3="shielding2_Tungsten.STL_v49"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v48" vertex2="shielding2_Tungsten.STL_v47" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v63" vertex2="shielding2_Tungsten.STL_v48" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v64" vertex2="shielding2_Tungsten.STL_v65" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v66" vertex2="shielding2_Tungsten.STL_v67" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v65" vertex2="shielding2_Tungsten.STL_v68" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v68" vertex2="shielding2_Tungsten.STL_v69" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v69" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v62" vertex2="shielding2_Tungsten.STL_v71" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v71" vertex2="shielding2_Tungsten.STL_v66" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v67" vertex2="shielding2_Tungsten.STL_v72" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v72" vertex2="shielding2_Tungsten.STL_v73" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v73" vertex2="shielding2_Tungsten.STL_v64" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v74" vertex2="shielding2_Tungsten.STL_v63" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v70" vertex2="shielding2_Tungsten.STL_v74" vertex3="shielding2_Tungsten.STL_v50"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v46" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v31"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v75" vertex2="shielding2_Tungsten.STL_v51" vertex3="shielding2_Tungsten.STL_v31"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v76" vertex2="shielding2_Tungsten.STL_v77" vertex3="shielding2_Tungsten.STL_v46"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v77" vertex2="shielding2_Tungsten.STL_v78" vertex3="shielding2_Tungsten.STL_v46"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v45" vertex2="shielding2_Tungsten.STL_v79" vertex3="shielding2_Tungsten.STL_v46"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v79" vertex2="shielding2_Tungsten.STL_v76" vertex3="shielding2_Tungsten.STL_v46"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v78" vertex2="shielding2_Tungsten.STL_v80" vertex3="shielding2_Tungsten.STL_v46"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v80" vertex2="shielding2_Tungsten.STL_v81" vertex3="shielding2_Tungsten.STL_v46"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v81" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v46"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v63" vertex2="shielding2_Tungsten.STL_v82" vertex3="shielding2_Tungsten.STL_v48"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v82" vertex2="shielding2_Tungsten.STL_v34" vertex3="shielding2_Tungsten.STL_v48"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v74" vertex2="shielding2_Tungsten.STL_v83" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v84" vertex2="shielding2_Tungsten.STL_v85" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v86" vertex2="shielding2_Tungsten.STL_v87" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v88" vertex2="shielding2_Tungsten.STL_v86" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v83" vertex2="shielding2_Tungsten.STL_v89" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v89" vertex2="shielding2_Tungsten.STL_v90" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v90" vertex2="shielding2_Tungsten.STL_v88" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v87" vertex2="shielding2_Tungsten.STL_v91" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v91" vertex2="shielding2_Tungsten.STL_v92" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v92" vertex2="shielding2_Tungsten.STL_v84" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v85" vertex2="shielding2_Tungsten.STL_v93" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v93" vertex2="shielding2_Tungsten.STL_v82" vertex3="shielding2_Tungsten.STL_v63"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v94" vertex2="shielding2_Tungsten.STL_v95" vertex3="shielding2_Tungsten.STL_v62"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v61" vertex2="shielding2_Tungsten.STL_v94" vertex3="shielding2_Tungsten.STL_v62"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v95" vertex2="shielding2_Tungsten.STL_v71" vertex3="shielding2_Tungsten.STL_v62"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v96" vertex2="shielding2_Tungsten.STL_v97" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v99" vertex2="shielding2_Tungsten.STL_v96" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v97" vertex2="shielding2_Tungsten.STL_v100" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v100" vertex2="shielding2_Tungsten.STL_v101" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v101" vertex2="shielding2_Tungsten.STL_v102" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v95" vertex2="shielding2_Tungsten.STL_v94" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v94" vertex2="shielding2_Tungsten.STL_v103" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v103" vertex2="shielding2_Tungsten.STL_v99" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v102" vertex2="shielding2_Tungsten.STL_v104" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v104" vertex2="shielding2_Tungsten.STL_v105" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v105" vertex2="shielding2_Tungsten.STL_v106" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v34" vertex2="shielding2_Tungsten.STL_v95" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v30" vertex2="shielding2_Tungsten.STL_v34" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v106" vertex2="shielding2_Tungsten.STL_v30" vertex3="shielding2_Tungsten.STL_v98"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v34" vertex2="shielding2_Tungsten.STL_v82" vertex3="shielding2_Tungsten.STL_v95"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v82" vertex2="shielding2_Tungsten.STL_v107" vertex3="shielding2_Tungsten.STL_v95"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v107" vertex2="shielding2_Tungsten.STL_v108" vertex3="shielding2_Tungsten.STL_v95"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v108" vertex2="shielding2_Tungsten.STL_v71" vertex3="shielding2_Tungsten.STL_v95"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v109" vertex2="shielding2_Tungsten.STL_v110" vertex3="shielding2_Tungsten.STL_v107"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v111" vertex2="shielding2_Tungsten.STL_v112" vertex3="shielding2_Tungsten.STL_v107"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v112" vertex2="shielding2_Tungsten.STL_v113" vertex3="shielding2_Tungsten.STL_v107"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v113" vertex2="shielding2_Tungsten.STL_v114" vertex3="shielding2_Tungsten.STL_v107"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v114" vertex2="shielding2_Tungsten.STL_v115" vertex3="shielding2_Tungsten.STL_v107"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v115" vertex2="shielding2_Tungsten.STL_v116" vertex3="shielding2_Tungsten.STL_v107"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v116" vertex2="shielding2_Tungsten.STL_v117" vertex3="shielding2_Tungsten.STL_v107"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v117" vertex2="shielding2_Tungsten.STL_v118" vertex3="shielding2_Tungsten.STL_v107"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v118" vertex2="shielding2_Tungsten.STL_v108" vertex3="shielding2_Tungsten.STL_v107"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v110" vertex2="shielding2_Tungsten.STL_v111" vertex3="shielding2_Tungsten.STL_v107"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v82" vertex2="shielding2_Tungsten.STL_v109" vertex3="shielding2_Tungsten.STL_v107"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v93" vertex2="shielding2_Tungsten.STL_v109" vertex3="shielding2_Tungsten.STL_v82"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v103" vertex2="shielding2_Tungsten.STL_v94" vertex3="shielding2_Tungsten.STL_v61"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v60" vertex2="shielding2_Tungsten.STL_v103" vertex3="shielding2_Tungsten.STL_v61"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v108" vertex2="shielding2_Tungsten.STL_v66" vertex3="shielding2_Tungsten.STL_v71"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v118" vertex2="shielding2_Tungsten.STL_v66" vertex3="shielding2_Tungsten.STL_v108"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v99" vertex2="shielding2_Tungsten.STL_v103" vertex3="shielding2_Tungsten.STL_v60"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v59" vertex2="shielding2_Tungsten.STL_v99" vertex3="shielding2_Tungsten.STL_v60"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v118" vertex2="shielding2_Tungsten.STL_v67" vertex3="shielding2_Tungsten.STL_v66"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v117" vertex2="shielding2_Tungsten.STL_v67" vertex3="shielding2_Tungsten.STL_v118"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v43" vertex2="shielding2_Tungsten.STL_v30" vertex3="shielding2_Tungsten.STL_v106"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v105" vertex2="shielding2_Tungsten.STL_v43" vertex3="shielding2_Tungsten.STL_v106"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v93" vertex2="shielding2_Tungsten.STL_v110" vertex3="shielding2_Tungsten.STL_v109"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v85" vertex2="shielding2_Tungsten.STL_v110" vertex3="shielding2_Tungsten.STL_v93"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v96" vertex2="shielding2_Tungsten.STL_v99" vertex3="shielding2_Tungsten.STL_v59"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v58" vertex2="shielding2_Tungsten.STL_v96" vertex3="shielding2_Tungsten.STL_v59"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v117" vertex2="shielding2_Tungsten.STL_v72" vertex3="shielding2_Tungsten.STL_v67"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v116" vertex2="shielding2_Tungsten.STL_v72" vertex3="shielding2_Tungsten.STL_v117"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v97" vertex2="shielding2_Tungsten.STL_v96" vertex3="shielding2_Tungsten.STL_v58"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v57" vertex2="shielding2_Tungsten.STL_v97" vertex3="shielding2_Tungsten.STL_v58"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v116" vertex2="shielding2_Tungsten.STL_v73" vertex3="shielding2_Tungsten.STL_v72"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v115" vertex2="shielding2_Tungsten.STL_v73" vertex3="shielding2_Tungsten.STL_v116"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v100" vertex2="shielding2_Tungsten.STL_v97" vertex3="shielding2_Tungsten.STL_v57"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v56" vertex2="shielding2_Tungsten.STL_v100" vertex3="shielding2_Tungsten.STL_v57"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v115" vertex2="shielding2_Tungsten.STL_v64" vertex3="shielding2_Tungsten.STL_v73"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v114" vertex2="shielding2_Tungsten.STL_v64" vertex3="shielding2_Tungsten.STL_v115"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v104" vertex2="shielding2_Tungsten.STL_v119" vertex3="shielding2_Tungsten.STL_v105"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v44" vertex2="shielding2_Tungsten.STL_v43" vertex3="shielding2_Tungsten.STL_v105"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v119" vertex2="shielding2_Tungsten.STL_v44" vertex3="shielding2_Tungsten.STL_v105"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v120" vertex2="shielding2_Tungsten.STL_v111" vertex3="shielding2_Tungsten.STL_v110"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v85" vertex2="shielding2_Tungsten.STL_v120" vertex3="shielding2_Tungsten.STL_v110"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v84" vertex2="shielding2_Tungsten.STL_v120" vertex3="shielding2_Tungsten.STL_v85"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v101" vertex2="shielding2_Tungsten.STL_v100" vertex3="shielding2_Tungsten.STL_v56"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v55" vertex2="shielding2_Tungsten.STL_v101" vertex3="shielding2_Tungsten.STL_v56"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v114" vertex2="shielding2_Tungsten.STL_v65" vertex3="shielding2_Tungsten.STL_v64"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v113" vertex2="shielding2_Tungsten.STL_v65" vertex3="shielding2_Tungsten.STL_v114"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v102" vertex2="shielding2_Tungsten.STL_v101" vertex3="shielding2_Tungsten.STL_v55"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v54" vertex2="shielding2_Tungsten.STL_v102" vertex3="shielding2_Tungsten.STL_v55"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v113" vertex2="shielding2_Tungsten.STL_v68" vertex3="shielding2_Tungsten.STL_v65"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v112" vertex2="shielding2_Tungsten.STL_v68" vertex3="shielding2_Tungsten.STL_v113"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v104" vertex2="shielding2_Tungsten.STL_v102" vertex3="shielding2_Tungsten.STL_v54"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v53" vertex2="shielding2_Tungsten.STL_v104" vertex3="shielding2_Tungsten.STL_v54"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v112" vertex2="shielding2_Tungsten.STL_v69" vertex3="shielding2_Tungsten.STL_v68"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v111" vertex2="shielding2_Tungsten.STL_v69" vertex3="shielding2_Tungsten.STL_v112"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v104" vertex2="shielding2_Tungsten.STL_v121" vertex3="shielding2_Tungsten.STL_v119"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v45" vertex2="shielding2_Tungsten.STL_v44" vertex3="shielding2_Tungsten.STL_v119"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v121" vertex2="shielding2_Tungsten.STL_v45" vertex3="shielding2_Tungsten.STL_v119"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v122" vertex2="shielding2_Tungsten.STL_v111" vertex3="shielding2_Tungsten.STL_v120"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v84" vertex2="shielding2_Tungsten.STL_v122" vertex3="shielding2_Tungsten.STL_v120"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v92" vertex2="shielding2_Tungsten.STL_v122" vertex3="shielding2_Tungsten.STL_v84"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v52" vertex2="shielding2_Tungsten.STL_v104" vertex3="shielding2_Tungsten.STL_v53"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v123" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v69"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v111" vertex2="shielding2_Tungsten.STL_v124" vertex3="shielding2_Tungsten.STL_v69"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v124" vertex2="shielding2_Tungsten.STL_v123" vertex3="shielding2_Tungsten.STL_v69"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v125" vertex2="shielding2_Tungsten.STL_v126" vertex3="shielding2_Tungsten.STL_v104"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v126" vertex2="shielding2_Tungsten.STL_v127" vertex3="shielding2_Tungsten.STL_v104"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v127" vertex2="shielding2_Tungsten.STL_v128" vertex3="shielding2_Tungsten.STL_v104"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v128" vertex2="shielding2_Tungsten.STL_v129" vertex3="shielding2_Tungsten.STL_v104"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v129" vertex2="shielding2_Tungsten.STL_v130" vertex3="shielding2_Tungsten.STL_v104"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v130" vertex2="shielding2_Tungsten.STL_v131" vertex3="shielding2_Tungsten.STL_v104"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v131" vertex2="shielding2_Tungsten.STL_v121" vertex3="shielding2_Tungsten.STL_v104"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v52" vertex2="shielding2_Tungsten.STL_v125" vertex3="shielding2_Tungsten.STL_v104"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v132" vertex2="shielding2_Tungsten.STL_v133" vertex3="shielding2_Tungsten.STL_v111"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v122" vertex2="shielding2_Tungsten.STL_v134" vertex3="shielding2_Tungsten.STL_v111"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v133" vertex2="shielding2_Tungsten.STL_v124" vertex3="shielding2_Tungsten.STL_v111"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v134" vertex2="shielding2_Tungsten.STL_v135" vertex3="shielding2_Tungsten.STL_v111"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v135" vertex2="shielding2_Tungsten.STL_v136" vertex3="shielding2_Tungsten.STL_v111"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v136" vertex2="shielding2_Tungsten.STL_v132" vertex3="shielding2_Tungsten.STL_v111"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v79" vertex2="shielding2_Tungsten.STL_v45" vertex3="shielding2_Tungsten.STL_v121"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v131" vertex2="shielding2_Tungsten.STL_v79" vertex3="shielding2_Tungsten.STL_v121"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v92" vertex2="shielding2_Tungsten.STL_v134" vertex3="shielding2_Tungsten.STL_v122"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v91" vertex2="shielding2_Tungsten.STL_v134" vertex3="shielding2_Tungsten.STL_v92"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v76" vertex2="shielding2_Tungsten.STL_v79" vertex3="shielding2_Tungsten.STL_v131"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v130" vertex2="shielding2_Tungsten.STL_v76" vertex3="shielding2_Tungsten.STL_v131"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v91" vertex2="shielding2_Tungsten.STL_v135" vertex3="shielding2_Tungsten.STL_v134"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v87" vertex2="shielding2_Tungsten.STL_v135" vertex3="shielding2_Tungsten.STL_v91"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v77" vertex2="shielding2_Tungsten.STL_v76" vertex3="shielding2_Tungsten.STL_v130"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v129" vertex2="shielding2_Tungsten.STL_v77" vertex3="shielding2_Tungsten.STL_v130"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v87" vertex2="shielding2_Tungsten.STL_v136" vertex3="shielding2_Tungsten.STL_v135"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v86" vertex2="shielding2_Tungsten.STL_v136" vertex3="shielding2_Tungsten.STL_v87"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v78" vertex2="shielding2_Tungsten.STL_v77" vertex3="shielding2_Tungsten.STL_v129"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v128" vertex2="shielding2_Tungsten.STL_v78" vertex3="shielding2_Tungsten.STL_v129"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v86" vertex2="shielding2_Tungsten.STL_v132" vertex3="shielding2_Tungsten.STL_v136"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v88" vertex2="shielding2_Tungsten.STL_v132" vertex3="shielding2_Tungsten.STL_v86"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v80" vertex2="shielding2_Tungsten.STL_v78" vertex3="shielding2_Tungsten.STL_v128"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v127" vertex2="shielding2_Tungsten.STL_v80" vertex3="shielding2_Tungsten.STL_v128"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v88" vertex2="shielding2_Tungsten.STL_v133" vertex3="shielding2_Tungsten.STL_v132"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v90" vertex2="shielding2_Tungsten.STL_v133" vertex3="shielding2_Tungsten.STL_v88"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v126" vertex2="shielding2_Tungsten.STL_v80" vertex3="shielding2_Tungsten.STL_v127"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v90" vertex2="shielding2_Tungsten.STL_v89" vertex3="shielding2_Tungsten.STL_v133"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v89" vertex2="shielding2_Tungsten.STL_v137" vertex3="shielding2_Tungsten.STL_v133"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v137" vertex2="shielding2_Tungsten.STL_v124" vertex3="shielding2_Tungsten.STL_v133"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v126" vertex2="shielding2_Tungsten.STL_v81" vertex3="shielding2_Tungsten.STL_v80"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v125" vertex2="shielding2_Tungsten.STL_v138" vertex3="shielding2_Tungsten.STL_v126"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v139" vertex2="shielding2_Tungsten.STL_v81" vertex3="shielding2_Tungsten.STL_v126"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v138" vertex2="shielding2_Tungsten.STL_v139" vertex3="shielding2_Tungsten.STL_v126"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v140" vertex2="shielding2_Tungsten.STL_v124" vertex3="shielding2_Tungsten.STL_v137"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v89" vertex2="shielding2_Tungsten.STL_v140" vertex3="shielding2_Tungsten.STL_v137"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v139" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v81"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v83" vertex2="shielding2_Tungsten.STL_v141" vertex3="shielding2_Tungsten.STL_v89"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v141" vertex2="shielding2_Tungsten.STL_v140" vertex3="shielding2_Tungsten.STL_v89"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v125" vertex2="shielding2_Tungsten.STL_v142" vertex3="shielding2_Tungsten.STL_v138"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v143" vertex2="shielding2_Tungsten.STL_v139" vertex3="shielding2_Tungsten.STL_v138"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v142" vertex2="shielding2_Tungsten.STL_v143" vertex3="shielding2_Tungsten.STL_v138"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v144" vertex2="shielding2_Tungsten.STL_v124" vertex3="shielding2_Tungsten.STL_v140"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v141" vertex2="shielding2_Tungsten.STL_v144" vertex3="shielding2_Tungsten.STL_v140"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v143" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v139"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v83" vertex2="shielding2_Tungsten.STL_v145" vertex3="shielding2_Tungsten.STL_v141"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v145" vertex2="shielding2_Tungsten.STL_v144" vertex3="shielding2_Tungsten.STL_v141"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v125" vertex2="shielding2_Tungsten.STL_v146" vertex3="shielding2_Tungsten.STL_v142"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v147" vertex2="shielding2_Tungsten.STL_v143" vertex3="shielding2_Tungsten.STL_v142"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v146" vertex2="shielding2_Tungsten.STL_v147" vertex3="shielding2_Tungsten.STL_v142"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v148" vertex2="shielding2_Tungsten.STL_v124" vertex3="shielding2_Tungsten.STL_v144"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v145" vertex2="shielding2_Tungsten.STL_v148" vertex3="shielding2_Tungsten.STL_v144"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v147" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v143"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v83" vertex2="shielding2_Tungsten.STL_v149" vertex3="shielding2_Tungsten.STL_v145"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v149" vertex2="shielding2_Tungsten.STL_v148" vertex3="shielding2_Tungsten.STL_v145"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v125" vertex2="shielding2_Tungsten.STL_v150" vertex3="shielding2_Tungsten.STL_v146"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v151" vertex2="shielding2_Tungsten.STL_v147" vertex3="shielding2_Tungsten.STL_v146"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v150" vertex2="shielding2_Tungsten.STL_v151" vertex3="shielding2_Tungsten.STL_v146"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v152" vertex2="shielding2_Tungsten.STL_v124" vertex3="shielding2_Tungsten.STL_v148"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v149" vertex2="shielding2_Tungsten.STL_v152" vertex3="shielding2_Tungsten.STL_v148"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v151" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v147"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v83" vertex2="shielding2_Tungsten.STL_v153" vertex3="shielding2_Tungsten.STL_v149"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v153" vertex2="shielding2_Tungsten.STL_v152" vertex3="shielding2_Tungsten.STL_v149"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v125" vertex2="shielding2_Tungsten.STL_v154" vertex3="shielding2_Tungsten.STL_v150"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v155" vertex2="shielding2_Tungsten.STL_v151" vertex3="shielding2_Tungsten.STL_v150"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v154" vertex2="shielding2_Tungsten.STL_v155" vertex3="shielding2_Tungsten.STL_v150"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v156" vertex2="shielding2_Tungsten.STL_v124" vertex3="shielding2_Tungsten.STL_v152"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v153" vertex2="shielding2_Tungsten.STL_v156" vertex3="shielding2_Tungsten.STL_v152"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v155" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v151"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v83" vertex2="shielding2_Tungsten.STL_v157" vertex3="shielding2_Tungsten.STL_v153"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v157" vertex2="shielding2_Tungsten.STL_v156" vertex3="shielding2_Tungsten.STL_v153"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v125" vertex2="shielding2_Tungsten.STL_v158" vertex3="shielding2_Tungsten.STL_v154"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v159" vertex2="shielding2_Tungsten.STL_v155" vertex3="shielding2_Tungsten.STL_v154"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v158" vertex2="shielding2_Tungsten.STL_v159" vertex3="shielding2_Tungsten.STL_v154"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v160" vertex2="shielding2_Tungsten.STL_v124" vertex3="shielding2_Tungsten.STL_v156"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v157" vertex2="shielding2_Tungsten.STL_v160" vertex3="shielding2_Tungsten.STL_v156"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v159" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v155"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v161" vertex2="shielding2_Tungsten.STL_v162" vertex3="shielding2_Tungsten.STL_v157"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v83" vertex2="shielding2_Tungsten.STL_v161" vertex3="shielding2_Tungsten.STL_v157"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v162" vertex2="shielding2_Tungsten.STL_v160" vertex3="shielding2_Tungsten.STL_v157"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v51" vertex2="shielding2_Tungsten.STL_v163" vertex3="shielding2_Tungsten.STL_v52"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v164" vertex2="shielding2_Tungsten.STL_v125" vertex3="shielding2_Tungsten.STL_v52"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v163" vertex2="shielding2_Tungsten.STL_v164" vertex3="shielding2_Tungsten.STL_v52"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v165" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v123"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v124" vertex2="shielding2_Tungsten.STL_v165" vertex3="shielding2_Tungsten.STL_v123"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v164" vertex2="shielding2_Tungsten.STL_v166" vertex3="shielding2_Tungsten.STL_v125"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v166" vertex2="shielding2_Tungsten.STL_v167" vertex3="shielding2_Tungsten.STL_v125"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v167" vertex2="shielding2_Tungsten.STL_v158" vertex3="shielding2_Tungsten.STL_v125"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v168" vertex2="shielding2_Tungsten.STL_v169" vertex3="shielding2_Tungsten.STL_v124"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v170" vertex2="shielding2_Tungsten.STL_v168" vertex3="shielding2_Tungsten.STL_v124"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v160" vertex2="shielding2_Tungsten.STL_v170" vertex3="shielding2_Tungsten.STL_v124"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v169" vertex2="shielding2_Tungsten.STL_v165" vertex3="shielding2_Tungsten.STL_v124"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v171" vertex2="shielding2_Tungsten.STL_v159" vertex3="shielding2_Tungsten.STL_v158"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v167" vertex2="shielding2_Tungsten.STL_v171" vertex3="shielding2_Tungsten.STL_v158"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v162" vertex2="shielding2_Tungsten.STL_v170" vertex3="shielding2_Tungsten.STL_v160"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v171" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v159"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v172" vertex2="shielding2_Tungsten.STL_v173" vertex3="shielding2_Tungsten.STL_v162"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v161" vertex2="shielding2_Tungsten.STL_v172" vertex3="shielding2_Tungsten.STL_v162"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v173" vertex2="shielding2_Tungsten.STL_v170" vertex3="shielding2_Tungsten.STL_v162"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v51" vertex2="shielding2_Tungsten.STL_v174" vertex3="shielding2_Tungsten.STL_v163"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v175" vertex2="shielding2_Tungsten.STL_v164" vertex3="shielding2_Tungsten.STL_v163"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v174" vertex2="shielding2_Tungsten.STL_v175" vertex3="shielding2_Tungsten.STL_v163"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v176" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v165"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v169" vertex2="shielding2_Tungsten.STL_v176" vertex3="shielding2_Tungsten.STL_v165"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v175" vertex2="shielding2_Tungsten.STL_v166" vertex3="shielding2_Tungsten.STL_v164"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v168" vertex2="shielding2_Tungsten.STL_v177" vertex3="shielding2_Tungsten.STL_v169"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v177" vertex2="shielding2_Tungsten.STL_v176" vertex3="shielding2_Tungsten.STL_v169"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v51" vertex2="shielding2_Tungsten.STL_v178" vertex3="shielding2_Tungsten.STL_v174"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v179" vertex2="shielding2_Tungsten.STL_v175" vertex3="shielding2_Tungsten.STL_v174"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v178" vertex2="shielding2_Tungsten.STL_v179" vertex3="shielding2_Tungsten.STL_v174"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v180" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v176"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v177" vertex2="shielding2_Tungsten.STL_v180" vertex3="shielding2_Tungsten.STL_v176"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v179" vertex2="shielding2_Tungsten.STL_v166" vertex3="shielding2_Tungsten.STL_v175"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v168" vertex2="shielding2_Tungsten.STL_v181" vertex3="shielding2_Tungsten.STL_v177"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v181" vertex2="shielding2_Tungsten.STL_v180" vertex3="shielding2_Tungsten.STL_v177"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v51" vertex2="shielding2_Tungsten.STL_v182" vertex3="shielding2_Tungsten.STL_v178"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v183" vertex2="shielding2_Tungsten.STL_v179" vertex3="shielding2_Tungsten.STL_v178"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v182" vertex2="shielding2_Tungsten.STL_v183" vertex3="shielding2_Tungsten.STL_v178"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v184" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v180"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v181" vertex2="shielding2_Tungsten.STL_v184" vertex3="shielding2_Tungsten.STL_v180"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v183" vertex2="shielding2_Tungsten.STL_v166" vertex3="shielding2_Tungsten.STL_v179"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v168" vertex2="shielding2_Tungsten.STL_v185" vertex3="shielding2_Tungsten.STL_v181"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v185" vertex2="shielding2_Tungsten.STL_v184" vertex3="shielding2_Tungsten.STL_v181"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v166" vertex2="shielding2_Tungsten.STL_v186" vertex3="shielding2_Tungsten.STL_v167"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v187" vertex2="shielding2_Tungsten.STL_v171" vertex3="shielding2_Tungsten.STL_v167"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v186" vertex2="shielding2_Tungsten.STL_v187" vertex3="shielding2_Tungsten.STL_v167"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v188" vertex2="shielding2_Tungsten.STL_v168" vertex3="shielding2_Tungsten.STL_v170"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v173" vertex2="shielding2_Tungsten.STL_v188" vertex3="shielding2_Tungsten.STL_v170"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v187" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v171"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v172" vertex2="shielding2_Tungsten.STL_v189" vertex3="shielding2_Tungsten.STL_v173"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v189" vertex2="shielding2_Tungsten.STL_v188" vertex3="shielding2_Tungsten.STL_v173"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v51" vertex2="shielding2_Tungsten.STL_v190" vertex3="shielding2_Tungsten.STL_v182"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v191" vertex2="shielding2_Tungsten.STL_v183" vertex3="shielding2_Tungsten.STL_v182"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v190" vertex2="shielding2_Tungsten.STL_v191" vertex3="shielding2_Tungsten.STL_v182"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v192" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v184"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v185" vertex2="shielding2_Tungsten.STL_v192" vertex3="shielding2_Tungsten.STL_v184"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v191" vertex2="shielding2_Tungsten.STL_v166" vertex3="shielding2_Tungsten.STL_v183"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v168" vertex2="shielding2_Tungsten.STL_v193" vertex3="shielding2_Tungsten.STL_v185"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v193" vertex2="shielding2_Tungsten.STL_v192" vertex3="shielding2_Tungsten.STL_v185"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v51" vertex2="shielding2_Tungsten.STL_v194" vertex3="shielding2_Tungsten.STL_v190"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v195" vertex2="shielding2_Tungsten.STL_v191" vertex3="shielding2_Tungsten.STL_v190"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v194" vertex2="shielding2_Tungsten.STL_v195" vertex3="shielding2_Tungsten.STL_v190"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v196" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v192"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v193" vertex2="shielding2_Tungsten.STL_v196" vertex3="shielding2_Tungsten.STL_v192"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v195" vertex2="shielding2_Tungsten.STL_v166" vertex3="shielding2_Tungsten.STL_v191"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v168" vertex2="shielding2_Tungsten.STL_v197" vertex3="shielding2_Tungsten.STL_v193"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v197" vertex2="shielding2_Tungsten.STL_v196" vertex3="shielding2_Tungsten.STL_v193"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v51" vertex2="shielding2_Tungsten.STL_v198" vertex3="shielding2_Tungsten.STL_v194"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v199" vertex2="shielding2_Tungsten.STL_v195" vertex3="shielding2_Tungsten.STL_v194"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v198" vertex2="shielding2_Tungsten.STL_v199" vertex3="shielding2_Tungsten.STL_v194"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v200" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v196"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v197" vertex2="shielding2_Tungsten.STL_v200" vertex3="shielding2_Tungsten.STL_v196"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v199" vertex2="shielding2_Tungsten.STL_v166" vertex3="shielding2_Tungsten.STL_v195"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v168" vertex2="shielding2_Tungsten.STL_v201" vertex3="shielding2_Tungsten.STL_v197"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v201" vertex2="shielding2_Tungsten.STL_v200" vertex3="shielding2_Tungsten.STL_v197"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v202" vertex2="shielding2_Tungsten.STL_v187" vertex3="shielding2_Tungsten.STL_v186"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v166" vertex2="shielding2_Tungsten.STL_v202" vertex3="shielding2_Tungsten.STL_v186"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v189" vertex2="shielding2_Tungsten.STL_v168" vertex3="shielding2_Tungsten.STL_v188"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v202" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v187"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v172" vertex2="shielding2_Tungsten.STL_v203" vertex3="shielding2_Tungsten.STL_v189"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v203" vertex2="shielding2_Tungsten.STL_v168" vertex3="shielding2_Tungsten.STL_v189"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v51" vertex2="shielding2_Tungsten.STL_v204" vertex3="shielding2_Tungsten.STL_v198"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v205" vertex2="shielding2_Tungsten.STL_v199" vertex3="shielding2_Tungsten.STL_v198"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v204" vertex2="shielding2_Tungsten.STL_v205" vertex3="shielding2_Tungsten.STL_v198"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v206" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v200"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v201" vertex2="shielding2_Tungsten.STL_v206" vertex3="shielding2_Tungsten.STL_v200"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v205" vertex2="shielding2_Tungsten.STL_v166" vertex3="shielding2_Tungsten.STL_v199"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v168" vertex2="shielding2_Tungsten.STL_v207" vertex3="shielding2_Tungsten.STL_v201"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v207" vertex2="shielding2_Tungsten.STL_v206" vertex3="shielding2_Tungsten.STL_v201"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v51" vertex2="shielding2_Tungsten.STL_v208" vertex3="shielding2_Tungsten.STL_v204"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v209" vertex2="shielding2_Tungsten.STL_v205" vertex3="shielding2_Tungsten.STL_v204"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v208" vertex2="shielding2_Tungsten.STL_v209" vertex3="shielding2_Tungsten.STL_v204"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v208" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v206"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v207" vertex2="shielding2_Tungsten.STL_v208" vertex3="shielding2_Tungsten.STL_v206"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v209" vertex2="shielding2_Tungsten.STL_v166" vertex3="shielding2_Tungsten.STL_v205"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v168" vertex2="shielding2_Tungsten.STL_v209" vertex3="shielding2_Tungsten.STL_v207"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v209" vertex2="shielding2_Tungsten.STL_v208" vertex3="shielding2_Tungsten.STL_v207"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v51" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v208"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v209" vertex2="shielding2_Tungsten.STL_v202" vertex3="shielding2_Tungsten.STL_v166"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v168" vertex2="shielding2_Tungsten.STL_v203" vertex3="shielding2_Tungsten.STL_v209"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v203" vertex2="shielding2_Tungsten.STL_v202" vertex3="shielding2_Tungsten.STL_v209"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v210" vertex2="shielding2_Tungsten.STL_v75" vertex3="shielding2_Tungsten.STL_v202"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v203" vertex2="shielding2_Tungsten.STL_v210" vertex3="shielding2_Tungsten.STL_v202"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v211" vertex2="shielding2_Tungsten.STL_v212" vertex3="shielding2_Tungsten.STL_v203"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v213" vertex2="shielding2_Tungsten.STL_v211" vertex3="shielding2_Tungsten.STL_v203"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v172" vertex2="shielding2_Tungsten.STL_v214" vertex3="shielding2_Tungsten.STL_v203"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v214" vertex2="shielding2_Tungsten.STL_v213" vertex3="shielding2_Tungsten.STL_v203"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v215" vertex2="shielding2_Tungsten.STL_v210" vertex3="shielding2_Tungsten.STL_v203"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v212" vertex2="shielding2_Tungsten.STL_v215" vertex3="shielding2_Tungsten.STL_v203"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v216" vertex2="shielding2_Tungsten.STL_v70" vertex3="shielding2_Tungsten.STL_v51"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v210" vertex2="shielding2_Tungsten.STL_v216" vertex3="shielding2_Tungsten.STL_v51"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v75" vertex2="shielding2_Tungsten.STL_v210" vertex3="shielding2_Tungsten.STL_v51"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v216" vertex2="shielding2_Tungsten.STL_v74" vertex3="shielding2_Tungsten.STL_v70"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v217" vertex2="shielding2_Tungsten.STL_v74" vertex3="shielding2_Tungsten.STL_v216"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v210" vertex2="shielding2_Tungsten.STL_v217" vertex3="shielding2_Tungsten.STL_v216"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v217" vertex2="shielding2_Tungsten.STL_v218" vertex3="shielding2_Tungsten.STL_v74"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v218" vertex2="shielding2_Tungsten.STL_v219" vertex3="shielding2_Tungsten.STL_v74"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v219" vertex2="shielding2_Tungsten.STL_v220" vertex3="shielding2_Tungsten.STL_v74"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v220" vertex2="shielding2_Tungsten.STL_v221" vertex3="shielding2_Tungsten.STL_v74"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v221" vertex2="shielding2_Tungsten.STL_v222" vertex3="shielding2_Tungsten.STL_v74"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v222" vertex2="shielding2_Tungsten.STL_v223" vertex3="shielding2_Tungsten.STL_v74"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v161" vertex2="shielding2_Tungsten.STL_v83" vertex3="shielding2_Tungsten.STL_v74"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v223" vertex2="shielding2_Tungsten.STL_v161" vertex3="shielding2_Tungsten.STL_v74"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v215" vertex2="shielding2_Tungsten.STL_v217" vertex3="shielding2_Tungsten.STL_v210"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v215" vertex2="shielding2_Tungsten.STL_v218" vertex3="shielding2_Tungsten.STL_v217"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v212" vertex2="shielding2_Tungsten.STL_v218" vertex3="shielding2_Tungsten.STL_v215"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v222" vertex2="shielding2_Tungsten.STL_v224" vertex3="shielding2_Tungsten.STL_v223"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v224" vertex2="shielding2_Tungsten.STL_v225" vertex3="shielding2_Tungsten.STL_v223"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v226" vertex2="shielding2_Tungsten.STL_v161" vertex3="shielding2_Tungsten.STL_v223"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v225" vertex2="shielding2_Tungsten.STL_v226" vertex3="shielding2_Tungsten.STL_v223"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v227" vertex2="shielding2_Tungsten.STL_v172" vertex3="shielding2_Tungsten.STL_v161"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v226" vertex2="shielding2_Tungsten.STL_v227" vertex3="shielding2_Tungsten.STL_v161"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v212" vertex2="shielding2_Tungsten.STL_v219" vertex3="shielding2_Tungsten.STL_v218"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v211" vertex2="shielding2_Tungsten.STL_v219" vertex3="shielding2_Tungsten.STL_v212"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v224" vertex2="shielding2_Tungsten.STL_v228" vertex3="shielding2_Tungsten.STL_v225"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v229" vertex2="shielding2_Tungsten.STL_v226" vertex3="shielding2_Tungsten.STL_v225"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v228" vertex2="shielding2_Tungsten.STL_v229" vertex3="shielding2_Tungsten.STL_v225"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v229" vertex2="shielding2_Tungsten.STL_v227" vertex3="shielding2_Tungsten.STL_v226"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v211" vertex2="shielding2_Tungsten.STL_v220" vertex3="shielding2_Tungsten.STL_v219"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v213" vertex2="shielding2_Tungsten.STL_v220" vertex3="shielding2_Tungsten.STL_v211"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v224" vertex2="shielding2_Tungsten.STL_v230" vertex3="shielding2_Tungsten.STL_v228"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v231" vertex2="shielding2_Tungsten.STL_v229" vertex3="shielding2_Tungsten.STL_v228"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v230" vertex2="shielding2_Tungsten.STL_v231" vertex3="shielding2_Tungsten.STL_v228"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v231" vertex2="shielding2_Tungsten.STL_v227" vertex3="shielding2_Tungsten.STL_v229"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v213" vertex2="shielding2_Tungsten.STL_v221" vertex3="shielding2_Tungsten.STL_v220"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v214" vertex2="shielding2_Tungsten.STL_v221" vertex3="shielding2_Tungsten.STL_v213"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v224" vertex2="shielding2_Tungsten.STL_v232" vertex3="shielding2_Tungsten.STL_v230"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v233" vertex2="shielding2_Tungsten.STL_v231" vertex3="shielding2_Tungsten.STL_v230"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v232" vertex2="shielding2_Tungsten.STL_v233" vertex3="shielding2_Tungsten.STL_v230"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v233" vertex2="shielding2_Tungsten.STL_v227" vertex3="shielding2_Tungsten.STL_v231"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v214" vertex2="shielding2_Tungsten.STL_v222" vertex3="shielding2_Tungsten.STL_v221"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v172" vertex2="shielding2_Tungsten.STL_v222" vertex3="shielding2_Tungsten.STL_v214"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v224" vertex2="shielding2_Tungsten.STL_v234" vertex3="shielding2_Tungsten.STL_v232"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v235" vertex2="shielding2_Tungsten.STL_v233" vertex3="shielding2_Tungsten.STL_v232"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v234" vertex2="shielding2_Tungsten.STL_v235" vertex3="shielding2_Tungsten.STL_v232"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v236" vertex2="shielding2_Tungsten.STL_v227" vertex3="shielding2_Tungsten.STL_v233"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v235" vertex2="shielding2_Tungsten.STL_v236" vertex3="shielding2_Tungsten.STL_v233"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v172" vertex2="shielding2_Tungsten.STL_v224" vertex3="shielding2_Tungsten.STL_v222"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v227" vertex2="shielding2_Tungsten.STL_v224" vertex3="shielding2_Tungsten.STL_v172"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v237" vertex2="shielding2_Tungsten.STL_v238" vertex3="shielding2_Tungsten.STL_v234"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v224" vertex2="shielding2_Tungsten.STL_v237" vertex3="shielding2_Tungsten.STL_v234"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v239" vertex2="shielding2_Tungsten.STL_v235" vertex3="shielding2_Tungsten.STL_v234"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v238" vertex2="shielding2_Tungsten.STL_v239" vertex3="shielding2_Tungsten.STL_v234"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v239" vertex2="shielding2_Tungsten.STL_v236" vertex3="shielding2_Tungsten.STL_v235"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v227" vertex2="shielding2_Tungsten.STL_v237" vertex3="shielding2_Tungsten.STL_v224"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v236" vertex2="shielding2_Tungsten.STL_v237" vertex3="shielding2_Tungsten.STL_v227"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v237" vertex2="shielding2_Tungsten.STL_v240" vertex3="shielding2_Tungsten.STL_v238"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v241" vertex2="shielding2_Tungsten.STL_v239" vertex3="shielding2_Tungsten.STL_v238"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v240" vertex2="shielding2_Tungsten.STL_v241" vertex3="shielding2_Tungsten.STL_v238"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v241" vertex2="shielding2_Tungsten.STL_v236" vertex3="shielding2_Tungsten.STL_v239"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v242" vertex2="shielding2_Tungsten.STL_v243" vertex3="shielding2_Tungsten.STL_v237"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v243" vertex2="shielding2_Tungsten.STL_v240" vertex3="shielding2_Tungsten.STL_v237"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v236" vertex2="shielding2_Tungsten.STL_v242" vertex3="shielding2_Tungsten.STL_v237"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v241" vertex2="shielding2_Tungsten.STL_v244" vertex3="shielding2_Tungsten.STL_v236"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v244" vertex2="shielding2_Tungsten.STL_v242" vertex3="shielding2_Tungsten.STL_v236"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v245" vertex2="shielding2_Tungsten.STL_v241" vertex3="shielding2_Tungsten.STL_v240"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v243" vertex2="shielding2_Tungsten.STL_v245" vertex3="shielding2_Tungsten.STL_v240"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v245" vertex2="shielding2_Tungsten.STL_v244" vertex3="shielding2_Tungsten.STL_v241"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v246" vertex2="shielding2_Tungsten.STL_v245" vertex3="shielding2_Tungsten.STL_v243"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v242" vertex2="shielding2_Tungsten.STL_v246" vertex3="shielding2_Tungsten.STL_v243"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v247" vertex2="shielding2_Tungsten.STL_v248" vertex3="shielding2_Tungsten.STL_v245"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v248" vertex2="shielding2_Tungsten.STL_v244" vertex3="shielding2_Tungsten.STL_v245"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v246" vertex2="shielding2_Tungsten.STL_v247" vertex3="shielding2_Tungsten.STL_v245"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v249" vertex2="shielding2_Tungsten.STL_v246" vertex3="shielding2_Tungsten.STL_v242"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v244" vertex2="shielding2_Tungsten.STL_v248" vertex3="shielding2_Tungsten.STL_v242"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v248" vertex2="shielding2_Tungsten.STL_v249" vertex3="shielding2_Tungsten.STL_v242"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v247" vertex2="shielding2_Tungsten.STL_v246" vertex3="shielding2_Tungsten.STL_v249"/>
+             <triangular vertex1="shielding2_Tungsten.STL_v248" vertex2="shielding2_Tungsten.STL_v247" vertex3="shielding2_Tungsten.STL_v249"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="shielding2_Tungsten.STL">
+            <materialref ref="Tungsten"/>
+            <solidref ref="shielding2_Tungsten.STL-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="shielding2_Tungsten.STL"/>
+    </setup>
+</gdml>
