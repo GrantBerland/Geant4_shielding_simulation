@@ -51,7 +51,6 @@ class SteppingAction : public G4UserSteppingAction
     // method from the base class
     virtual void UserSteppingAction(const G4Step*);
 
-public:
 
   private:
     EventAction*  fEventAction;

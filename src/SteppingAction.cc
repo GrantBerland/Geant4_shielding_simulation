@@ -58,21 +58,21 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
-  // Needs this to continue/properly set scoring volume?
-  if (!fScoringVolume) {
-  const DetectorConstruction* detectorConstruction
-    = static_cast<const DetectorConstruction*>
-      (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
-  fScoringVolume = detectorConstruction->GetScoringVolume();
-  }
+    if (!fScoringVolume) {
+    const DetectorConstruction* detectorConstruction
+      = static_cast<const DetectorConstruction*>
+        (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    fScoringVolume = detectorConstruction->GetScoringVolume();
+    }
 
-  G4LogicalVolume* current_volume = step->GetPreStepPoint()->GetTouchableHandle()
-                                        ->GetVolume()->GetLogicalVolume();
+    // Get particle current volume to compare to scoring volume
+    G4LogicalVolume* current_volume = step->GetPreStepPoint()->GetTouchableHandle()
+                                          ->GetVolume()->GetLogicalVolume();
 
-  if (current_volume != fScoringVolume) return;
+    if (current_volume != fScoringVolume) return;
 
-  G4double energy_deposited = step->GetTotalEnergyDeposit();
-  fEventAction->AddEdep(energy_deposited);
+    G4double energy_deposited = step->GetTotalEnergyDeposit();
+    fEventAction->AddEdep(energy_deposited);
 
 }
 

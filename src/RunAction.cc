@@ -48,7 +48,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-
 RunAction::RunAction()
 : G4UserRunAction(),
   fEdep(0.),
@@ -97,54 +96,52 @@ void RunAction::EndOfRunAction(const G4Run* run)
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->Merge();
 
-
-  // Compute dose = total energy deposit in a run and its variance
-//
+// Compute dose = total energy deposit in a run and its variance
 G4double edep  = fEdep.GetValue();
 G4double edep2 = fEdep2.GetValue();
 
 G4double rms = edep2 - edep*edep/nofEvents;
 if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;
 
-const DetectorConstruction* detectorConstruction
- = static_cast<const DetectorConstruction*>
-   (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
-G4double mass = detectorConstruction->GetScoringVolume()->GetMass();
+  const DetectorConstruction* detectorConstruction
+   = static_cast<const DetectorConstruction*>
+     (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+  G4double mass = detectorConstruction->GetScoringVolume()->GetMass();
 
-// Can enforce mass here for dosage if you'd like
-G4double dose = edep/mass;
-G4double rmsDose = rms/mass;
+  // Can enforce mass here for dosage if you'd like
+  G4double dose = edep/mass;
+  G4double rmsDose = rms/mass;
 
-// Print (or write to file)
-//
-  if (IsMaster()) {
+  // Print (or write to file)
+  //
+    if (IsMaster()) {
+      G4cout
+       << G4endl
+       << "--------------------End of Global Run-----------------------";
+    }
+    else {
     G4cout
      << G4endl
-     << "--------------------End of Global Run-----------------------";
-  }
-  else {
-  G4cout
-   << G4endl
-   << "--------------------End of Local Run------------------------";
-   }
+     << "--------------------End of Local Run------------------------";
+     }
 
-   G4cout
-   << G4endl
-   << " The run consists of " << nofEvents << " particles"
-   << G4endl
-   << " Cumulated dose per run, in scoring volume : "
-   << G4BestUnit(dose,"Dose") << " rms = " << G4BestUnit(rmsDose,"Dose")
-   << G4endl
-   << "------------------------------------------------------------"
-   << G4endl
-   << G4endl;
-}
+     G4cout
+     << G4endl
+     << " The run consists of " << nofEvents << " particles"
+     << G4endl
+     << " Cumulated dose per run, in scoring volume 1 : "
+     << G4BestUnit(dose,"Dose") << " rms = " << G4BestUnit(rmsDose,"Dose")
+     << G4endl
+     << "------------------------------------------------------------"
+     << G4endl
+     << G4endl;
+  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::AddEdep(G4double edep)
 {
-  fEdep  += edep;
+  fEdep += edep;
   fEdep2 += edep*edep;
 }
 
