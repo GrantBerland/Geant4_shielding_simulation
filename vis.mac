@@ -67,7 +67,7 @@
 /vis/geometry/set/visibility World 0 false
 /vis/geometry/set/visibility Envelope 0 false
 /vis/geometry/set/colour Electronics 0 0 0.667 0 1
-/vis/geometry/set/colour shielding2_Tungsten.STL 0 0.667 0.667 0.616 .4
+/vis/geometry/set/colour Shielding 0 0.667 0.667 0.616 .4
 /vis/viewer/set/style surface
 /vis/viewer/set/hiddenMarker true
 /vis/viewer/set/viewpointThetaPhi 120 150

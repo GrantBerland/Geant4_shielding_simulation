@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+    <define>
+        <position name="Assembly - thin_plate_short-41.STL_v0" unit="mm" x="48.81712" y="52.37621" z="70.07327"/>
+        <position name="Assembly - thin_plate_short-41.STL_v1" unit="mm" x="48.81712" y="72.37621" z="70.07327"/>
+        <position name="Assembly - thin_plate_short-41.STL_v2" unit="mm" x="48.81712" y="52.37621" z="69.57327"/>
+        <position name="Assembly - thin_plate_short-41.STL_v3" unit="mm" x="48.81712" y="72.37621" z="69.57327"/>
+        <position name="Assembly - thin_plate_short-41.STL_v4" unit="mm" x="93.31712" y="52.37621" z="69.57327"/>
+        <position name="Assembly - thin_plate_short-41.STL_v5" unit="mm" x="93.31712" y="72.37621" z="69.57327"/>
+        <position name="Assembly - thin_plate_short-41.STL_v6" unit="mm" x="93.31712" y="52.37621" z="70.07327"/>
+        <position name="Assembly - thin_plate_short-41.STL_v7" unit="mm" x="93.31712" y="72.37621" z="70.07327"/>
+    </define>
+
+    <solids>
+        <tessellated aunit="deg" lunit="mm" name="Assembly - thin_plate_short-41.STL-SOL">
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v0" vertex2="Assembly - thin_plate_short-41.STL_v1" vertex3="Assembly - thin_plate_short-41.STL_v2"/>
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v1" vertex2="Assembly - thin_plate_short-41.STL_v3" vertex3="Assembly - thin_plate_short-41.STL_v2"/>
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v4" vertex2="Assembly - thin_plate_short-41.STL_v0" vertex3="Assembly - thin_plate_short-41.STL_v2"/>
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v3" vertex2="Assembly - thin_plate_short-41.STL_v4" vertex3="Assembly - thin_plate_short-41.STL_v2"/>
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v5" vertex2="Assembly - thin_plate_short-41.STL_v6" vertex3="Assembly - thin_plate_short-41.STL_v4"/>
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v6" vertex2="Assembly - thin_plate_short-41.STL_v0" vertex3="Assembly - thin_plate_short-41.STL_v4"/>
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v3" vertex2="Assembly - thin_plate_short-41.STL_v5" vertex3="Assembly - thin_plate_short-41.STL_v4"/>
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v7" vertex2="Assembly - thin_plate_short-41.STL_v1" vertex3="Assembly - thin_plate_short-41.STL_v0"/>
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v6" vertex2="Assembly - thin_plate_short-41.STL_v7" vertex3="Assembly - thin_plate_short-41.STL_v0"/>
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v5" vertex2="Assembly - thin_plate_short-41.STL_v7" vertex3="Assembly - thin_plate_short-41.STL_v6"/>
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v1" vertex2="Assembly - thin_plate_short-41.STL_v7" vertex3="Assembly - thin_plate_short-41.STL_v3"/>
+             <triangular vertex1="Assembly - thin_plate_short-41.STL_v7" vertex2="Assembly - thin_plate_short-41.STL_v5" vertex3="Assembly - thin_plate_short-41.STL_v3"/>
+        </tessellated>
+    </solids>
+
+    <structure>
+        <volume name="Assembly - thin_plate_short-41.STL">
+            <materialref ref="Vacuum"/>
+            <solidref ref="Assembly - thin_plate_short-41.STL-SOL"/>
+        </volume>
+    </structure>
+
+    <setup name="Default" version="1.0">
+        <world ref="Assembly - thin_plate_short-41.STL"/>
+    </setup>
+</gdml>

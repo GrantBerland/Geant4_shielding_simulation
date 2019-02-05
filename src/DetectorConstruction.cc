@@ -44,6 +44,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4IntersectionSolid.hh"
 #include "G4RotationMatrix.hh"
+#include "G4SolidStore.hh"
+
 
 #include <fstream>
 
@@ -68,7 +70,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // Envelope parameters
   //
-  G4double env_sizeXY = 20*cm, env_sizeZ = 30*cm;
+  G4double env_sizeXY = 30*cm, env_sizeZ = 30*cm;
 
     // Material: Vacuum
     //TODO: check pressures, environment for Van Allen belt altitudes
@@ -79,9 +81,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Option to switch on/off checking of volumes overlaps
   //
   G4bool checkOverlaps    = true;
-  G4bool validateSchema = false;
+  G4bool validateSchema   = false;
 
-  fParser.Read("../GDML_files/shielding_out.gdml", validateSchema);
+  fParser.Read("../GDML_files/assembly_gdml/newbox_collimator_short-1.STL.gdml", validateSchema);
 
   //
   // World
@@ -151,12 +153,27 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                   checkOverlaps);          //overlaps checking
 
 
-  G4LogicalVolume* shielding_LV = fParser.GetVolume("shielding2_Tungsten.STL");
+  //G4LogicalVolume* shielding_LV = fParser.GetWorldVolume()->GetLogicalVolume();
+  //G4LogicalVolume* shielding_LV = fParser.GetVolume("newbox_collimator_short-1.STL-SOL");
+
+
+
+  G4SolidStore* solids = G4SolidStore::GetInstance();
+
+  for(int i = 0; i < solids->size(); i++){
+    G4VSolid* psol = (*solids)[i];
+    G4cout << "Solid ID: " << i << " Name: " << psol->GetName() << G4endl;
+  };
+
+ G4LogicalVolume* shielding_LV = new G4LogicalVolume((*solids)[0],
+                                                    nist->FindOrBuildMaterial("G4_Al"),
+                                                    "Shielding");
+
 
   new G4PVPlacement(0,
                     G4ThreeVector(),
                     shielding_LV,
-                    "shielding2_Tungsten.STL",
+                    "Shielding",
                     logicEnv,
                     false,
                     0,
