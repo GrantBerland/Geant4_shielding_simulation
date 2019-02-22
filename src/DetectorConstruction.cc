@@ -70,7 +70,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // Envelope parameters
   //
-  G4double env_sizeXY = 30*cm, env_sizeZ = 30*cm;
+  G4double env_sizeXY = 50.*cm, env_sizeZ = 50.*cm;
 
     // Material: Vacuum
     //TODO: check pressures, environment for Van Allen belt altitudes
@@ -83,7 +83,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4bool checkOverlaps    = true;
   G4bool validateSchema   = false;
 
-  fParser.Read("../GDML_files/assembly_gdml/newbox_collimator_short-1.STL.gdml", validateSchema);
+  fParser.Read("./cubesat_onepart_stl_course.STL.gdml", validateSchema);
 
   //
   // World
@@ -119,7 +119,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4LogicalVolume* logicEnv =
     new G4LogicalVolume(solidEnv,            //its solid
-                        vacuum_material,             //its material
+                        vacuum_material,     //its material
                         "Envelope");         //its name
 
   new G4PVPlacement(0,                       //no rotation
@@ -160,7 +160,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4SolidStore* solids = G4SolidStore::GetInstance();
 
-  for(int i = 0; i < solids->size(); i++){
+  for(unsigned int i = 0; i < solids->size(); i++){
     G4VSolid* psol = (*solids)[i];
     G4cout << "Solid ID: " << i << " Name: " << psol->GetName() << G4endl;
   };
@@ -171,7 +171,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   new G4PVPlacement(0,
-                    G4ThreeVector(),
+                    G4ThreeVector(-10.*cm,-10.*cm,-15.*cm),
                     shielding_LV,
                     "Shielding",
                     logicEnv,

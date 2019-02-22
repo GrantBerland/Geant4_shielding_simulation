@@ -27,42 +27,6 @@
 /gps/ang/mintheta 0. deg
 /gps/ang/maxtheta 90. deg
 
-## Proton source
-/gps/source/add 2
-
-/gps/particle proton
-/gps/pos/type Surface
-/gps/pos/shape Sphere
-/gps/pos/radius 15.0 cm
-/gps/pos/centre 0. 0. 0. cm
-
-/gps/ene/type Pow
-/gps/ene/min 1 MeV
-/gps/ene/max 10 MeV
-/gps/ene/alpha -2
-
-/gps/ang/type cos
-/gps/ang/mintheta 0. deg
-/gps/ang/maxtheta 90. deg
-
-## Gamma ray source
-/gps/source/add 3
-
-/gps/particle gamma
-/gps/pos/type Surface
-/gps/pos/shape Sphere
-/gps/pos/radius 15.0 cm
-/gps/pos/centre 0. 0. 0. cm
-
-/gps/ene/type Pow
-/gps/ene/min 1 MeV
-/gps/ene/max 10 MeV
-/gps/ene/alpha -2
-
-/gps/ang/type cos
-/gps/ang/mintheta 0. deg
-/gps/ang/maxtheta 90. deg
-
 
 # Run macro
-/run/beamOn 1000
+/run/beamOn 100

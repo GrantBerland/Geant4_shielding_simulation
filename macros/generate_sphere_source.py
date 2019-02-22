@@ -3,8 +3,8 @@ import numpy as np
 
 rand.seed()	# starts the Mersenne Twister rand engine
 
-num_sources = 1000
-sphereR = 15  # cm
+num_sources = 100
+sphereR = 30  # cm
 
 counter = 1
 
@@ -17,7 +17,6 @@ with open('rand_sphere.mac', 'w') as f:
     f.write('/tracking/verbose 0 \n')
 
     for i in range(0, num_sources):
-
 
         theta_rand = rand.uniform(0, 2*np.pi)
         phi_rand   = rand.uniform(0, np.pi)
@@ -53,9 +52,8 @@ with open('rand_sphere.mac', 'w') as f:
         f.write('/gps/direction ' + direction_string + '\n')
         f.write('/gps/pos/type Point \n')
 
-
         counter = counter + 1
 
-    f.write('/run/beamOn ' + str(num_sources) + '\n')
+    f.write('\n/run/beamOn ' + str(num_sources) + '\n')
 
     f.close()
