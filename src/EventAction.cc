@@ -41,7 +41,11 @@
 EventAction::EventAction(RunAction* runAction)
 : G4UserEventAction(),
   fRunAction(runAction),
-  fEdep(0.)
+  fEdep(0.),
+  fEdep_det1(0.),
+  fEdep_det2(0.),
+  fEdep_det3(0.),
+  fEdep_det4(0.)
 {}
 
 
@@ -52,12 +56,43 @@ EventAction::~EventAction()
 void EventAction::BeginOfEventAction(const G4Event*)
 {
   fEdep = 0.;
+  fEdep_det1 = 0.;
+  fEdep_det2 = 0.;
+  fEdep_det3 = 0.;
+  fEdep_det4 = 0.;
 }
 
+void EventAction::AddEdep(G4double edep)
+{
+  edep += fEdep;
+}
 
-void EventAction::EndOfEventAction(const G4Event*)
+void EventAction::AddEdep_multiple(G4String solid, G4double edep)
+{
+  if (solid == "Electronics") {fEdep += edep;}
+  if (solid == "Electronics") {fEdep_det1 += edep;}
+  if (solid == "Electronics") {fEdep_det2 += edep;}
+  if (solid == "Electronics") {fEdep_det3 += edep;}
+  if (solid == "Electronics") {fEdep_det4 += edep;}
+
+}
+
+void EventAction::EndOfEventAction(const G4Event* event)
 {
   fRunAction->AddEdep(fEdep);
+
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+
+  G4double init_energy = event->GetPrimaryVertex()->GetPrimary()->GetKineticEnergy();
+
+  man->FillH1(1,init_energy);
+  man->FillH1(2,fEdep);
+  man->FillH1(3,fEdep_det1);
+  man->FillH1(4, fEdep_det2);
+  man->FillH1(5, fEdep_det3);
+  man->FillH1(6, fEdep_det4);
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

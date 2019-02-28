@@ -44,7 +44,7 @@
 // #include "HistoManager.hh"
 
 
-#include <fstream>
+//#include <fstream>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
@@ -54,21 +54,18 @@ RunAction::RunAction()
   fEdep2(0.)
 {
 
-  // add new units for dose
-  const G4double milligray = 1.e-3*gray;
-  const G4double microgray = 1.e-6*gray;
-  const G4double nanogray  = 1.e-9*gray;
-  const G4double picogray  = 1.e-12*gray;
-
-  new G4UnitDefinition("milligray", "milliGy" , "Dose", milligray);
-  new G4UnitDefinition("microgray", "microGy" , "Dose", microgray);
-  new G4UnitDefinition("nanogray" , "nanoGy"  , "Dose", nanogray);
-  new G4UnitDefinition("picogray" , "picoGy"  , "Dose", picogray);
-
   // Register accumulable to the accumulable manager
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->RegisterAccumulable(fEdep);
   accumulableManager->RegisterAccumulable(fEdep2);
+
+  auto man = G4AnalysisManager::Instance();
+
+  G4cout << "Using " << man->GetType() << G4endl;
+
+  histFileName = "detector_hists";
+  man->SetFirstHistoId(1);
+
   }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,9 +77,22 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
+
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+
   // reset accumulables to their initial values
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
   accumulableManager->Reset();
+
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->OpenFile(histFileName);
+
+
+  man->CreateH1("1","E",2000,-100*mm,100*mm);
+  man->CreateH1("2","E",2000,-100*mm,100*mm);
+  man->CreateH1("3","E",2000,-100*mm,100*mm);
+  man->CreateH1("4","E",1000,-100*mm,100*mm);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,7 +100,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::EndOfRunAction(const G4Run* run)
 {
   G4int nofEvents = run->GetNumberOfEvent();
-  if (nofEvents == 0) {G4cout << "No events registered" << G4endl; return;}
+  if (nofEvents == 0) return;
 
   // Merge accumulables
   G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
@@ -102,15 +112,6 @@ G4double edep2 = fEdep2.GetValue();
 
 G4double rms = edep2 - edep*edep/nofEvents;
 if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;
-
-  const DetectorConstruction* detectorConstruction
-   = static_cast<const DetectorConstruction*>
-     (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
-  G4double mass = detectorConstruction->GetScoringVolume()->GetMass();
-
-  // Can enforce mass here for dosage if you'd like
-  G4double dose = edep/mass;
-  G4double rmsDose = rms/mass;
 
   // Print (or write to file)
   //
@@ -130,11 +131,15 @@ if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;
      << " The run consists of " << nofEvents << " particles"
      << G4endl
      << " Cumulated dose per run, in scoring volume 1 : "
-     << G4BestUnit(dose,"Dose") << " rms = " << G4BestUnit(rmsDose,"Dose")
+     << G4BestUnit(edep,"Energy") << " rms = " << G4BestUnit(rms,"Energy")
      << G4endl
      << "------------------------------------------------------------"
      << G4endl
      << G4endl;
+
+     G4AnalysisManager* man = G4AnalysisManager::Instance();
+     man->Write();
+     man->CloseFile();
   }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -143,6 +148,16 @@ void RunAction::AddEdep(G4double edep)
 {
   fEdep += edep;
   fEdep2 += edep*edep;
+}
+
+void RunAction::LogEntry(G4double edep)
+{
+  (*asciiFile) << std::setiosflags(std::ios::fixed)
+   << std::setprecision(3)
+   << std::setiosflags(std::ios::right)
+   << std::setw(10);
+  (*asciiFile) << edep << G4endl;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

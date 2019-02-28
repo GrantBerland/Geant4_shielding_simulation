@@ -59,10 +59,16 @@ class RunAction : public G4UserRunAction
     virtual void   EndOfRunAction(const G4Run*);
 
     void AddEdep (G4double edep);
+    void LogEntry(G4double edep);
 
   private:
     G4Accumulable<G4double> fEdep;
     G4Accumulable<G4double> fEdep2;
+
+    G4String asciiFileName;
+    std::ofstream *asciiFile;
+
+    G4String histFileName;
 
 };
 

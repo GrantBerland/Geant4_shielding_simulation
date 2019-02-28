@@ -156,6 +156,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //G4LogicalVolume* shielding_LV = fParser.GetWorldVolume()->GetLogicalVolume();
   //G4LogicalVolume* shielding_LV = fParser.GetVolume("newbox_collimator_short-1.STL-SOL");
 
+  // Construct Cadmium Zinc Telluride for detector
+  G4Element* Cd = new G4Element("Cadmium","Cd",48., 112.41*g/mole);
+  G4Element* Zn = new G4Element("Zinc","Zn", 30., 65.38*g/mole);
+  G4Element* Te = new G4Element("Tellurium","Te", 52., 127.60*g/mole);
+  G4Material* CZT = new G4Material("CZT", 5.8*g/cm3, 3);
+  CZT->AddElement(Cd, 48*perCent);
+  CZT->AddElement(Zn, 02*perCent);
+  CZT->AddElement(Te, 50*perCent);
 
 
   G4SolidStore* solids = G4SolidStore::GetInstance();
@@ -166,8 +174,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   };
 
  G4LogicalVolume* shielding_LV = new G4LogicalVolume((*solids)[0],
-                                                    nist->FindOrBuildMaterial("G4_Al"),
-                                                    "Shielding");
+                                                     CZT,
+                                                     "Shielding");
 
 
   new G4PVPlacement(0,
