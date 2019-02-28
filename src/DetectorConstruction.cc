@@ -66,7 +66,7 @@ DetectorConstruction::~DetectorConstruction()
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // Get nist material manager
-  G4NistManager* nist = G4NistManager::Instance();
+  //G4NistManager* nist = G4NistManager::Instance();
 
   // Envelope parameters
   //
@@ -138,9 +138,29 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                                     1.5*cm, 1.5*cm, 0.1*cm);
 
 
+
+  G4Element* O  = new G4Element("Oxygen", "O" , 8., 16.00*g/mole);
+  G4Element* Si = new G4Element("Silicon", "Si" , 14., 28.09*g/mole);
+  G4Element* H  = new G4Element("Hydrogen", "H", 1., 1.01*g/mole);
+  G4Element* C  = new G4Element("Carbon", "C", 6., 12.01*g/mole);
+
+  G4Material* SiO2 = new G4Material("quartz", 2.200*g/cm3,2);
+  SiO2->AddElement(Si, 1);
+  SiO2->AddElement(O, 2);
+
+  G4Material* Epoxy = new G4Material("Epoxy" , 1.2*g/cm3, 2);
+  Epoxy->AddElement(H, 2);
+  Epoxy->AddElement(C, 2);
+
+  //FR4 (Glass + Epoxy)
+  G4Material* FR4 = new G4Material("FR4", 1.86*g/cm3, 2);
+  FR4->AddMaterial(SiO2, 0.528);
+  FR4->AddMaterial(Epoxy, 0.472);
+
+
   G4LogicalVolume* electronics_LV =
   new G4LogicalVolume(electronics_box,                     //its solid
-                      nist->FindOrBuildMaterial("G4_Si"),  //its material
+                      FR4,  //its material
                       "Electronics");                        //its name
 
   new G4PVPlacement(0,                     //no rotation

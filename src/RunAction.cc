@@ -87,11 +87,12 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->OpenFile(histFileName);
 
-
-  man->CreateH1("1","E",2000,-100*mm,100*mm);
-  man->CreateH1("2","E",2000,-100*mm,100*mm);
-  man->CreateH1("3","E",2000,-100*mm,100*mm);
-  man->CreateH1("4","E",1000,-100*mm,100*mm);
+  man->CreateH1("1","E1",2000,-100*mm,100*mm);
+  man->CreateH1("2","E2",2000,-100*mm,100*mm);
+  man->CreateH1("3","E3",2000,-100*mm,100*mm);
+  man->CreateH1("4","E4",1000,-100*mm,100*mm);
+  man->CreateH1("5","E5",2000,-100*mm,100*mm);
+  man->CreateH1("6","E6",1000,-100*mm,100*mm);
 
 }
 

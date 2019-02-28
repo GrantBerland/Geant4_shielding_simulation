@@ -70,7 +70,7 @@ void EventAction::AddEdep(G4double edep)
 void EventAction::AddEdep_multiple(G4String solid, G4double edep)
 {
   if (solid == "Electronics") {fEdep += edep;}
-  if (solid == "Electronics") {fEdep_det1 += edep;}
+  if (solid == "Shielding") {fEdep_det1 += edep;}
   if (solid == "Electronics") {fEdep_det2 += edep;}
   if (solid == "Electronics") {fEdep_det3 += edep;}
   if (solid == "Electronics") {fEdep_det4 += edep;}
@@ -85,9 +85,9 @@ void EventAction::EndOfEventAction(const G4Event* event)
 
   G4double init_energy = event->GetPrimaryVertex()->GetPrimary()->GetKineticEnergy();
 
-  man->FillH1(1,init_energy);
-  man->FillH1(2,fEdep);
-  man->FillH1(3,fEdep_det1);
+  man->FillH1(1, init_energy);
+  man->FillH1(2, fEdep);
+  man->FillH1(3, fEdep_det1);
   man->FillH1(4, fEdep_det2);
   man->FillH1(5, fEdep_det3);
   man->FillH1(6, fEdep_det4);
