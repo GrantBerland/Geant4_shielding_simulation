@@ -13,12 +13,10 @@ except:
 ##########################
 # Change parameters here #
 ##########################
-num_sources = int(1e2)
+num_sources = int(1e3)
 num_BS_sources = 0            # backscattered particle number
-sphereR = 30                  # cm
+sphereR = 25                  # cm
 exclusion_angle_deg = 64      # degrees
-
-print("Generating autorun file with %i particles..." % num_sources)
 
 exclusion_angle = exclusion_angle_deg * np.pi / 180.
 
@@ -36,12 +34,13 @@ with open('rand_cap_sphere.mac', 'w') as f:
     f.write('/tracking/verbose 0 \n')
 
     for i in range(0, num_sources):
-
+        print("Generating particle number %i"%i)
         # Rejection sampling on TRAPPED PARTICLES
+
+        u_rand     = randoms[i,1]*2-1     # [-1, 1)
         while True: 
             # Uniform sphere
             theta_rand = randoms[i,0]*2*np.pi # [0, 2pi)
-            u_rand     = randoms[i,1]*2-1     # [-1, 1)
 
             # Positions on sphere of radius R
             x_pos = sphereR * np.sqrt(1 - u_rand**2) * np.cos(theta_rand)

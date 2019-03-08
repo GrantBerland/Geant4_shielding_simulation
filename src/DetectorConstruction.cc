@@ -45,7 +45,8 @@
 #include "G4IntersectionSolid.hh"
 #include "G4RotationMatrix.hh"
 #include "G4SolidStore.hh"
-
+#include "G4SDManager.hh"
+#include "B2TrackerSD.hh"
 
 #include <fstream>
 
@@ -170,35 +171,36 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4LogicalVolume* electronics_LV =
   new G4LogicalVolume(electronics_box,                     //its solid
                       CZT,  //its material
-                      "Electronics");                        //its name
+                      "Detector1");                        //its name
   G4RotationMatrix* rotmatrix = new G4RotationMatrix();
   rotmatrix->rotateX(90.*deg);
+
 
   new G4PVPlacement(rotmatrix,                     //no rotation
                   ele_pos,                 //at position
                   electronics_LV,          //its logical volume
-                  "Electronics",           //its name
-                  logicEnv,                //its mother  volume
-                  false,                   //no boolean operation
-                  0,                       //copy number
-                  checkOverlaps);          //overlaps checking
+		  "Detector1",           //its name
+		  logicEnv,                //its mother  volume
+		  false,                   //no boolean operation:u
+	 	  0,                       //copy number
+		  checkOverlaps);          //overlaps checking
 
 
 
-  G4SolidStore* solids = G4SolidStore::GetInstance();
+	  G4SolidStore* solids = G4SolidStore::GetInstance();
 
-  for(unsigned int i = 0; i < solids->size(); i++){
-    G4VSolid* psol = (*solids)[i];
-    G4cout << "Solid ID: " << i << " Name: " << psol->GetName() << G4endl;
-  };
+	  for(unsigned int i = 0; i < solids->size(); i++){
+	    G4VSolid* psol = (*solids)[i];
+	    G4cout << "Solid ID: " << i << " Name: " << psol->GetName() << G4endl;
+	  };
 
- G4LogicalVolume* shielding_LV = new G4LogicalVolume((*solids)[0],
-                                                     CZT,
-                                                     "Shielding");
+	 G4LogicalVolume* shielding_LV = new G4LogicalVolume((*solids)[0],
+							     CZT,
+							     "Shielding");
 
 
   new G4PVPlacement(0,
-                    G4ThreeVector(-10.*cm,-10.*cm,-15.*cm),
+                    G4ThreeVector(-14.*cm,-10.*cm,-11.*cm),
                     shielding_LV,
                     "Shielding",
                     logicEnv,
@@ -207,6 +209,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     checkOverlaps);
 
   fScoringVolume = electronics_LV;
+
+  // Register the detector as a sensitive detector
+  B2TrackerSD* aTrackerSD = new B2TrackerSD("","TrackerHitsCollection");
+  SetSensitiveDetector("Detector1", aTrackerSD, true);
+
 
   // always return the physical World
   return physWorld;
