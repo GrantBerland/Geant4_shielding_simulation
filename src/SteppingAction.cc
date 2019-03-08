@@ -59,6 +59,7 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
     G4bool isEnteringDetector;
+    G4bool isEnteringShielding;
     G4Track* track = step->GetTrack();
     G4String volName, nextVolName;
 
@@ -67,10 +68,35 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
     isEnteringDetector = (volName != "Electronics" && nextVolName == "Electronics");
 
+
     if(isEnteringDetector){
+    std::ofstream hitFile;
     G4double edepStep = step->GetTotalEnergyDeposit();
-    fEventAction->AddEdep_multiple(volName, edepStep);
+    G4ThreeVector pos = track->GetPosition();
+
+    fEventAction->AddEdep_multiple(nextVolName, edepStep);
+
+    hitFile.open("./detector_hists.txt", std::ios_base::app);
+    hitFile << nextVolName << "," << edepStep/keV << "," << pos.x()/cm << ","
+    << pos.y()/cm << "," << pos.z()/cm << "\n";
+    hitFile.close();
     }
+
+    isEnteringShielding = (volName != "Shielding" && nextVolName == "Shielding");
+
+    if(isEnteringShielding){
+    std::ofstream hitFile;
+    G4double edepStep = step->GetTotalEnergyDeposit();
+    G4ThreeVector pos = track->GetPosition();
+
+    fEventAction->AddEdep_multiple(nextVolName, edepStep);
+
+    hitFile.open("./detector_hists.txt", std::ios_base::app);
+    hitFile << nextVolName << "," << edepStep/keV << "," << pos.x()/cm << ","
+    << pos.y()/cm << "," << pos.z()/cm << "\n";
+    hitFile.close();
+    }
+
 }
 
 
