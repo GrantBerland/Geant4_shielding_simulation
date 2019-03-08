@@ -61,8 +61,6 @@ RunAction::RunAction()
 
   auto man = G4AnalysisManager::Instance();
 
-  G4cout << "Using " << man->GetType() << G4endl;
-
   histFileName = "detector_hists";
   man->SetFirstHistoId(1);
 
@@ -116,27 +114,6 @@ if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;
 
   // Print (or write to file)
   //
-    if (IsMaster()) {
-      G4cout
-       << G4endl
-       << "--------------------End of Global Run-----------------------";
-    }
-    else {
-    G4cout
-     << G4endl
-     << "--------------------End of Local Run------------------------";
-     }
-
-     G4cout
-     << G4endl
-     << " The run consists of " << nofEvents << " particles"
-     << G4endl
-     << " Cumulated dose per run, in scoring volume 1 : "
-     << G4BestUnit(edep,"Energy") << " rms = " << G4BestUnit(rms,"Energy")
-     << G4endl
-     << "------------------------------------------------------------"
-     << G4endl
-     << G4endl;
 
      G4AnalysisManager* man = G4AnalysisManager::Instance();
      man->Write();

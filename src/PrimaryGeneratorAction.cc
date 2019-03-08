@@ -34,8 +34,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"
 #include "G4RunManager.hh"
-// #include "G4ParticleGun.hh"
-#include "G4GeneralParticleSource.hh"
+#include "G4ParticleGun.hh"
+//#include "G4GeneralParticleSource.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
@@ -48,8 +48,61 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0)
 {
-  // G4int n_particle = 1;
-  fParticleGun  = new G4GeneralParticleSource();
+
+  G4double PI = 3.14159265358979323846;
+  G4int n_particle = 10;
+  fParticleGun  = new G4ParticleGun();
+  G4ParticleTable* particleType = G4ParticleTable::GetParticleTable();
+
+  // Selects electron for particle type
+  fParticleGun->SetParticleDefinition(particleType->FindParticle("e-")); 
+
+
+  G4double xPos,yPos,zPos,xDir,yDir,zDir;
+  G4double sphereR = 30.*cm;
+  G4double theta_exclusion = 64.*PI/180.*rad;
+
+  for(G4int i = 0; i<n_particle; i++){
+
+    // Reset position and direction of particle
+    xPos = 0; xDir = 0;
+    yPos = 0; yDir = 0;
+    zPos = 0; zDir = 0;
+
+    // Rand on u = [-1, 1)
+    G4double u = G4UniformRand()*2.-1.;
+
+    // Rand on theta = [0, 2*pi)
+    G4double theta = G4UniformRand()*2.*PI;
+    
+    // Calculate random particle position on sphere, excluding spherical cap    
+    do{
+      xPos = sphereR * sqrt(1 - u * u) * cos(theta);
+      yPos = sphereR * sqrt(1 - u * u) * sin(theta);
+      zPos = sphereR * u;
+      }
+    while(yPos < sphereR * cos(theta_exclusion));
+
+
+    xDir = G4UniformRand();
+    yDir = G4UniformRand();
+    zDir = G4UniformRand();
+
+    // Enforces inward directionality to particles
+    if(xPos > 0) xDir = -xDir;
+    if(yPos > 0) yDir = -yDir;
+    if(zPos > 0) zDir = -zDir;
+
+    G4cout << "Generating particle " << i << G4endl;
+
+    // Selects random energy according to exponential distribution
+    G4double randEnergy = G4UniformRand()*100.*keV;
+
+
+    fParticleGun->SetParticlePosition(G4ThreeVector(xPos, yPos, zPos)); 
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xDir, yDir, zDir));
+    fParticleGun->SetParticleEnergy(randEnergy);
+  }
 
 }
 

@@ -34,6 +34,9 @@
 #include "G4Event.hh"
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4TrajectoryContainer.hh"
+#include "G4Trajectory.hh"
+
 
 #include <fstream>
 
