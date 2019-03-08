@@ -1,0 +1,59 @@
+/run/initialize 
+/control/verbose 0 
+/run/verbose 0 
+/event/verbose 0 
+/tracking/verbose 0 
+/gps/source/add 1
+/gps/particle e-
+/gps/energy 100 keV
+/gps/position 6.002655151635009 -15.553807069775415 -24.940874418647674 cm
+/gps/direction -0.7338451584314478 0.09108495470427369 0.8375197392914112
+/gps/pos/type Point 
+/gps/source/add 2
+/gps/particle e-
+/gps/energy 100 keV
+/gps/position 26.121609453253978 -10.176153472886293 10.682107473150449 cm
+/gps/direction -0.823853414828347 0.7255354606034891 -0.061320409569189605
+/gps/pos/type Point 
+/gps/source/add 3
+/gps/particle e-
+/gps/energy 100 keV
+/gps/position -29.581334574644384 -1.5556741971502868 4.746000692716961 cm
+/gps/direction 0.9413509834483764 0.961095625804962 -0.11447684067806907
+/gps/pos/type Point 
+/gps/source/add 4
+/gps/particle e-
+/gps/energy 100 keV
+/gps/position -13.565567671033001 6.578315962912101 -25.9364826615854 cm
+/gps/direction 0.04893001178914491 -0.08611343551722694 0.9373904748942584
+/gps/pos/type Point 
+/gps/source/add 5
+/gps/particle e-
+/gps/energy 100 keV
+/gps/position 19.46929036262671 -17.17897330253213 15.027628190989384 cm
+/gps/direction -0.2844876345492555 0.0963544189493678 -0.1762835815767828
+/gps/pos/type Point 
+/gps/source/add 6
+/gps/particle e-
+/gps/energy 100 keV
+/gps/position -27.657546001754604 -0.2272158822141228 11.619316765786941 cm
+/gps/direction 0.024462595111481855 0.10563233509210102 -0.6176319662465016
+/gps/pos/type Point 
+/gps/source/add 7
+/gps/particle e-
+/gps/energy 100 keV
+/gps/position 29.506410593674318 4.853260732760572 -2.411968933744426 cm
+/gps/direction -0.9261354747766126 -0.8220294014217331 0.5030798331754778
+/gps/pos/type Point 
+/gps/source/add 8
+/gps/particle e-
+/gps/energy 100 keV
+/gps/position 19.331565200835442 -21.48441155897848 8.044292812316087 cm
+/gps/direction -0.3960078960917841 0.5840771572176671 -0.5955532495183733
+/gps/pos/type Point 
+/gps/source/add 9
+/gps/particle e-
+/gps/energy 100 keV
+/gps/position 20.58486168833834 -3.77161497717883 21.495078267731447 cm
+/gps/direction -0.7774330594148625 0.8842579691737494 -0.30505189532069454
+/gps/pos/type Point 

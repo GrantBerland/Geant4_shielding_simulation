@@ -13,7 +13,7 @@ except:
 ##########################
 # Change parameters here #
 ##########################
-
+num_sources = int(1e2)
 num_BS_sources = 0            # backscattered particle number
 sphereR = 30                  # cm
 exclusion_angle_deg = 64      # degrees
@@ -38,8 +38,7 @@ with open('rand_cap_sphere.mac', 'w') as f:
     for i in range(0, num_sources):
 
         # Rejection sampling on TRAPPED PARTICLES
-        y_pos = -sphereR 
-        while y_pos < np.cos(exclusion_angle)*sphereR:  # spherical cap height
+        while True: 
             # Uniform sphere
             theta_rand = randoms[i,0]*2*np.pi # [0, 2pi)
             u_rand     = randoms[i,1]*2-1     # [-1, 1)
@@ -49,9 +48,11 @@ with open('rand_cap_sphere.mac', 'w') as f:
             y_pos = sphereR * np.sqrt(1 - u_rand**2) * np.sin(theta_rand)
             z_pos = sphereR * u_rand
 
-
-        position_string = str(x_pos) + ' ' + str(y_pos) + ' ' + str(z_pos) + ' cm'
-
+            if y_pos < np.cos(exclusion_angle)*sphereR:  # spherical cap height
+                break
+            else:
+                u_rand = np.random.rand()*2-1
+        
         # Draw random particle directions
         x_dir = rand.uniform(0, 1)
         y_dir = rand.uniform(0, 1)

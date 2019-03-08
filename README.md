@@ -1,2 +1,2 @@
-## Geant4 Pinhole Detector
+## Geant4 Shielding Simulation 
 

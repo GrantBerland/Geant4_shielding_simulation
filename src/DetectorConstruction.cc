@@ -133,12 +133,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
 
-  G4ThreeVector ele_pos  = G4ThreeVector(2.5*cm,3.5*cm,1.0*cm);
+  G4ThreeVector ele_pos  = G4ThreeVector(40.*mm,40.*mm,28.*mm);
   G4VSolid* electronics_box = new G4Box("Electronics",
                                     1.5*cm, 1.5*cm, 0.1*cm);
 
 
-
+  // Build FR4 material for circuit boards
   G4Element* O  = new G4Element("Oxygen", "O" , 8., 16.00*g/mole);
   G4Element* Si = new G4Element("Silicon", "Si" , 14., 28.09*g/mole);
   G4Element* H  = new G4Element("Hydrogen", "H", 1., 1.01*g/mole);
@@ -157,13 +157,24 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   FR4->AddMaterial(SiO2, 0.528);
   FR4->AddMaterial(Epoxy, 0.472);
 
+  // CZT for detector
+  G4Element* Cd = new G4Element("Cadmium","Cd",48., 112.41*g/mole);
+  G4Element* Zn = new G4Element("Zinc","Zn", 30., 65.38*g/mole);
+  G4Element* Te = new G4Element("Tellurium","Te", 52., 127.60*g/mole);
+  G4Material* CZT = new G4Material("CZT", 5.8*g/cm3, 3);
+  CZT->AddElement(Cd, 48*perCent);
+  CZT->AddElement(Zn, 2*perCent);
+  CZT->AddElement(Te, 50*perCent);
+
 
   G4LogicalVolume* electronics_LV =
   new G4LogicalVolume(electronics_box,                     //its solid
-                      FR4,  //its material
+                      CZT,  //its material
                       "Electronics");                        //its name
+  G4RotationMatrix* rotmatrix = new G4RotationMatrix();
+  rotmatrix->rotateX(90.*deg);
 
-  new G4PVPlacement(0,                     //no rotation
+  new G4PVPlacement(rotmatrix,                     //no rotation
                   ele_pos,                 //at position
                   electronics_LV,          //its logical volume
                   "Electronics",           //its name
@@ -172,18 +183,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                   0,                       //copy number
                   checkOverlaps);          //overlaps checking
 
-
-  //G4LogicalVolume* shielding_LV = fParser.GetWorldVolume()->GetLogicalVolume();
-  //G4LogicalVolume* shielding_LV = fParser.GetVolume("newbox_collimator_short-1.STL-SOL");
-
-  // Construct Cadmium Zinc Telluride for detector
-  G4Element* Cd = new G4Element("Cadmium","Cd",48., 112.41*g/mole);
-  G4Element* Zn = new G4Element("Zinc","Zn", 30., 65.38*g/mole);
-  G4Element* Te = new G4Element("Tellurium","Te", 52., 127.60*g/mole);
-  G4Material* CZT = new G4Material("CZT", 5.8*g/cm3, 3);
-  CZT->AddElement(Cd, 48*perCent);
-  CZT->AddElement(Zn, 02*perCent);
-  CZT->AddElement(Te, 50*perCent);
 
 
   G4SolidStore* solids = G4SolidStore::GetInstance();
