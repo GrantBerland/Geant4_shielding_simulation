@@ -41,6 +41,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
+#include <random>
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,62 +50,16 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0)
 {
-
-  G4double PI = 3.14159265358979323846;
-  G4int n_particle = 10;
+  
   fParticleGun  = new G4ParticleGun();
-  G4ParticleTable* particleType = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* electronParticle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
 
   // Selects electron for particle type
-  fParticleGun->SetParticleDefinition(particleType->FindParticle("e-")); 
+  fParticleGun->SetParticleDefinition(electronParticle); 
 
-
-  G4double xPos,yPos,zPos,xDir,yDir,zDir;
-  G4double sphereR = 30.*cm;
-  G4double theta_exclusion = 64.*PI/180.*rad;
-
-  for(G4int i = 0; i<n_particle; i++){
-
-    // Reset position and direction of particle
-    xPos = 0; xDir = 0;
-    yPos = 0; yDir = 0;
-    zPos = 0; zDir = 0;
-
-    // Rand on u = [-1, 1)
-    G4double u = G4UniformRand()*2.-1.;
-
-    // Rand on theta = [0, 2*pi)
-    G4double theta = G4UniformRand()*2.*PI;
-    
-    // Calculate random particle position on sphere, excluding spherical cap    
-    do{
-      xPos = sphereR * sqrt(1 - u * u) * cos(theta);
-      yPos = sphereR * sqrt(1 - u * u) * sin(theta);
-      zPos = sphereR * u;
-      }
-    while(yPos < sphereR * cos(theta_exclusion));
-
-
-    xDir = G4UniformRand();
-    yDir = G4UniformRand();
-    zDir = G4UniformRand();
-
-    // Enforces inward directionality to particles
-    if(xPos > 0) xDir = -xDir;
-    if(yPos > 0) yDir = -yDir;
-    if(zPos > 0) zDir = -zDir;
-
-    G4cout << "Generating particle " << i << G4endl;
-
-    // Selects random energy according to exponential distribution
-    G4double randEnergy = G4UniformRand()*100.*keV;
-
-
-    fParticleGun->SetParticlePosition(G4ThreeVector(xPos, yPos, zPos)); 
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xDir, yDir, zDir));
-    fParticleGun->SetParticleEnergy(randEnergy);
-  }
-
+  // Default parameters
+  //fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.5*m,0.));
+  //fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,7 +75,74 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of each event
 
-  fParticleGun->GeneratePrimaryVertex(anEvent);
+  G4double PI = 3.14159265358979323846;
+
+  // N particles generated per simulation run
+  G4int n_particle = 1000;
+
+  // Allocate variables for random position, direction
+  G4double xPos,yPos,zPos,xDir,yDir,zDir;
+
+  // Radius of sphere surface where particles are generated
+  G4double sphereR = 30.*cm;
+
+  // Loss cone angle (half angle w.r.t. sphere angle) at 500 km in radians
+  G4double theta_exclusion = 64.*PI/180.;
+
+  // E-folding (E0 energy)
+  double E0 = 300.;
+
+  std::default_random_engine generator;
+  std::exponential_distribution<double> exp_distribution(1/E0);
+  
+  // f0 flux
+  //G4double f0 = 2e8;
+
+
+  for(G4int i = 0; i<n_particle; i++){
+
+
+    // Reset position and direction of particle
+    xPos = 0; xDir = 0;
+    yPos = 0; yDir = 0;
+    zPos = 0; zDir = 0;
+
+    
+    // Calculate random particle position on sphere, excluding spherical cap    
+    do{
+      // Rand on [-1, 1)
+      G4double u = G4UniformRand()*2.-1.;
+
+      // Rand on [0, 2*pi)
+      G4double theta = G4UniformRand()*2.*PI;
+
+      xPos = sphereR * std::sqrt(1 - u * u) * std::cos(theta);
+      yPos = sphereR * std::sqrt(1 - u * u) * std::sin(theta);
+      zPos = sphereR * u;
+      }
+    while(yPos > sphereR * std::cos(theta_exclusion)); 
+// exits when y position falls below spherical cap
+
+    // Uniform random numbers on [0, 1)
+    xDir = G4UniformRand();
+    yDir = G4UniformRand();
+    zDir = G4UniformRand();
+
+    // Enforces inward directionality to particles
+    if(xPos > 0) xDir = -xDir;
+    if(yPos > 0) yDir = -yDir;
+    if(zPos > 0) zDir = -zDir;
+
+    // Selects random energy according to exponential distribution
+    G4double randEnergy = exp_distribution(generator)*300.*keV;
+
+    fParticleGun->SetParticlePosition(G4ThreeVector(xPos, yPos, zPos));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xDir, yDir, zDir));
+    fParticleGun->SetParticleEnergy(randEnergy);
+
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+  }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -53,7 +53,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     virtual ~PrimaryGeneratorAction();
 
     // method from the base class
-    virtual void GeneratePrimaries(G4Event*);         
+    virtual void GeneratePrimaries(G4Event* anEvent);         
   
     // // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }

@@ -28,6 +28,8 @@
 /// \file B2TrackerSD.cc
 /// \brief Implementation of the B2TrackerSD class
 
+
+#include "B2TrackerHit.hh"
 #include "B2TrackerSD.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
