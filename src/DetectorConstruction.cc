@@ -109,28 +109,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                     logicWorld,              //its mother  volume
                     false,                   //no boolean operation
                     0,                       //copy number
-checkOverlaps); //overlaps checking
+                    checkOverlaps); //overlaps checking
 
 
-
-
-  // Option to switch on/off checking of volumes overlaps
-  //
-
-
-
-  //G4cout << *(G4Material::GetMaterialTable() ) << G4endl;
-
-
-  //
-  // World
-  //
-  G4double world_sizeXY = 1.2*env_sizeXY;
-  G4double world_sizeZ  = 1.2*env_sizeZ;
-
-  G4Box* solidWorld =
-    new G4Box("World",                       //its name
-       0.5*world_sizeXY, 0.5*world_sizeXY, 0.5*world_sizeZ);     //its size
 
 
   // CZT for detector
@@ -143,39 +124,10 @@ checkOverlaps); //overlaps checking
   CZT->AddElement(Te, 50*perCent);
 
 
-  G4ThreeVector ele_pos  = G4ThreeVector(40.*mm,40.*mm,28.*mm);
-  G4VSolid* electronics_box = new G4Box("Electronics",
-                                    1.5*cm, 1.5*cm, 0.1*cm);
-
-
-
-
-  G4LogicalVolume* electronics_LV =
-  new G4LogicalVolume(electronics_box,                     //its solid
-                      CZT,  //its material
-                      "Detector1");                        //its name
-  G4RotationMatrix* rotmatrix = new G4RotationMatrix();
-  rotmatrix->rotateX(90.*deg);
-
-
-  new G4PVPlacement(rotmatrix,                     //no rotation
-                  ele_pos,                 //at position
-                  electronics_LV,          //its logical volume
-		  "Detector1",           //its name
-		  logicEnv,                //its mother  volume
-		  false,                   //no boolean operation:u
-	 	  0,                       //copy number
-		  checkOverlaps);          //overlaps checking
-
-
-
-
-	  for(unsigned int i = 0; i < solids->size(); i++){
-	    G4VSolid* psol = (*solids)[i];
-	    std::cout << "Solid ID: " << i << " Name: " << psol->GetName() << std::endl;
-	  };
-
-
+  for(unsigned int i = 0; i < solids->size(); i++){
+    G4VSolid* psol = (*solids)[i];
+    G4cout << "Solid ID: " << i << " Name: " << psol->GetName() << G4endl;
+    };
 
 
   G4VPhysicalVolume* physWorld =
@@ -187,44 +139,68 @@ checkOverlaps); //overlaps checking
                       false,                 //no boolean operation
                       0,                     //copy number
                       checkOverlaps);        //overlaps checking
-  G4LogicalVolume* logicShielding = new G4LogicalVolume((*solids)[1],
+ 
+ G4LogicalVolume* logicShielding = new G4LogicalVolume((*solids)[1],
 					nist->FindOrBuildMaterial("G4_Al"),
 							     "Shielding");
+
+
+  new G4PVPlacement(0,                     //no rotation
+                  G4ThreeVector(0.,0.,0.),                 //at position
+                  logicShielding,          //its logical volume
+		  "Shielding",           //its name
+		  logicEnv,                //its mother  volume
+		  false,                   //no boolean operation:u
+	 	  0,                       //copy number
+		  checkOverlaps);          //overlaps checking
+
 
   G4LogicalVolume* logicWindows = new G4LogicalVolume((*solids)[2],
 					nist->FindOrBuildMaterial("G4_Al"),
-							     "Windows");
+								     "Windows");
+  new G4PVPlacement(0,                       //no rotation
+	            G4ThreeVector(1.75*cm,0.,0.), //its logical volume
+	            logicWindows,            //at position
+	   	    "Windows",               //its name
+	 	    logicEnv,                //its mother  volume
+		    false,                   //no boolean operation:u
+		    0,                       //copy number
+		    checkOverlaps);          //overlaps checking
 
   G4LogicalVolume* logicDetector = new G4LogicalVolume((*solids)[3],
-								CZT,
-							      "Detector");
-
+									CZT,
+								      "Detector");
+  new G4PVPlacement(0,                     //no rotation
+	 	   G4ThreeVector(0.5*cm,0,0),   //at position
+	 	   logicDetector,          //its logical volume
+		   "Detectors",              //its name
+		   logicShielding,         //its mother  volume
+		   false,                  //no boolean operation:u
+		    0,                     //copy number
+	  	   checkOverlaps);         //overlaps checking
+	 
+ 
   G4LogicalVolume* logicBaffles = new G4LogicalVolume((*solids)[4],
-					nist->FindOrBuildMaterial("G4_Al"),
-							      "Detector");
+						nist->FindOrBuildMaterial("G4_Al"),
+								      "Baffles");
 
 
+  new G4PVPlacement(0,                     //no rotation
+		  G4ThreeVector(0,0,0),                 //at position
+		  logicBaffles,          //its logical volume
+		  "Baffles",           //its name
+		  logicEnv,                //its mother  volume
+		  false,                   //no boolean operation:u
+		  0,                       //copy number
+		  checkOverlaps);          //overlaps checking
 
-  G4LogicalVolume* shielding_LV = new G4LogicalVolume((*solids)[0],
-							     CZT,
-							     "Shielding");
 
-
-  new G4PVPlacement(0,
-                    G4ThreeVector(-14.*cm,-10.*cm,-11.*cm),
-                    shielding_LV,
-                    "Shielding",
-                    logicEnv,
-                    false,
-                    0,
-                    checkOverlaps);
-
-  fScoringVolume = electronics_LV;
+  fScoringVolume = logicDetector;
 
   // Register the detector as a sensitive detector
-  B2TrackerSD* aTrackerSD = new B2TrackerSD("shielding_sim/Detector1","TrackerHitsCollection");
+  B2TrackerSD* aTrackerSD = new B2TrackerSD("Detector1","TrackerHitsCollection");
   G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
-  SetSensitiveDetector("Detector1", aTrackerSD, true);
+  SetSensitiveDetector("Detector", aTrackerSD, true);
 
 
   // always return the physical World

@@ -82,9 +82,15 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // Allocate variables for random position, direction
   G4double xPos,yPos,zPos,xDir,yDir,zDir;
+  
+  // Sphere offsets
+  G4double xShift = 5.*cm;
+  G4double yShift = 5.*cm;
+  G4double zShift = 5.*cm;
+
 
   // Radius of sphere surface where particles are generated
-  G4double sphereR = 30.*cm;
+  G4double sphereR = 15.*cm;
 
   // Loss cone angle (half angle w.r.t. sphere angle) at 500 km in radians
   G4double theta_exclusion = 64.*PI/180.;
@@ -136,7 +142,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     // Selects random energy according to exponential distribution
     G4double randEnergy = exp_distribution(generator)*300.*keV;
 
-    fParticleGun->SetParticlePosition(G4ThreeVector(xPos, yPos, zPos));
+    fParticleGun->SetParticlePosition(G4ThreeVector(xPos+xShift, yPos+yShift, zPos+zShift));
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xDir, yDir, zDir));
     fParticleGun->SetParticleEnergy(randEnergy);
 
