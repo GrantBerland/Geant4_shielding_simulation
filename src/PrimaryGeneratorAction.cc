@@ -41,7 +41,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
-#include <random>
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,56 +67,63 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample r)
 {
-  G4int dataSize = 45;
-  G4double lossConeDataCDF[dataSize][2] = {
-    { 1.0000 , 0.0000 },
-    { 3.0000 , 0.0006 },
-    { 5.0000 , 0.0017 },
-    { 7.0000 , 0.0034 },
-    { 9.0000 , 0.0057 },
-    { 11.0000 , 0.0085 },
-    { 13.0000 , 0.0118 },
-    { 15.0000 , 0.0156 },
-    { 17.0000 , 0.0201 },
-    { 19.0000 , 0.0254 },
-    { 21.0000 , 0.0313 },
-    { 23.0000 , 0.0376 },
-    { 25.0000 , 0.0444 },
-    { 27.0000 , 0.0519 },
-    { 29.0000 , 0.0602 },
-    { 31.0000 , 0.0691 },
-    { 33.0000 , 0.0785 },
-    { 35.0000 , 0.0886 },
-    { 37.0000 , 0.0991 },
-    { 39.0000 , 0.1102 },
-    { 41.0000 , 0.1220 },
-    { 43.0000 , 0.1342 },
-    { 45.0000 , 0.1474 },
-    { 47.0000 , 0.1612 },
-    { 49.0000 , 0.1756 },
-    { 51.0000 , 0.1910 },
-    { 53.0000 , 0.2074 },
-    { 55.0000 , 0.2249 },
-    { 57.0000 , 0.2434 },
-    { 59.0000 , 0.2635 },
-    { 61.0000 , 0.2854 },
-    { 63.0000 , 0.3107 }};
+  G4int dataSize = 32;
+  G4double lossConeData[dataSize][2] = {
+  { 1.0000 , 0.0000 },
+  { 3.0000 , 0.0019 },
+  { 5.0000 , 0.0056 },
+  { 7.0000 , 0.0110 },
+  { 9.0000 , 0.0182 },
+  { 11.0000 , 0.0272 },
+  { 13.0000 , 0.0379 },
+  { 15.0000 , 0.0503 },
+  { 17.0000 , 0.0647 },
+  { 19.0000 , 0.0817 },
+  { 21.0000 , 0.1007 },
+  { 23.0000 , 0.1210 },
+  { 25.0000 , 0.1430 },
+  { 27.0000 , 0.1671 },
+  { 29.0000 , 0.1938 },
+  { 31.0000 , 0.2222 },
+  { 33.0000 , 0.2527 },
+  { 35.0000 , 0.2852 },
+  { 37.0000 , 0.3189 },
+  { 39.0000 , 0.3548 },
+  { 41.0000 , 0.3925 },
+  { 43.0000 , 0.4320 },
+  { 45.0000 , 0.4743 },
+  { 47.0000 , 0.5189 },
+  { 49.0000 , 0.5653 },
+  { 51.0000 , 0.6147 },
+  { 53.0000 , 0.6676 },
+  { 55.0000 , 0.7238 },
+  { 57.0000 , 0.7834 },
+  { 59.0000 , 0.8479 },
+  { 61.0000 , 0.9186 },
+  { 63.0000 , 1.0000 }};
 
   //G4double fluxSum = 18.155822371325151;
   double randomNumber = G4UniformRand();
-  std::cout << randomNumber << std::endl;
   G4int angleIndex = 0;
+
   // Find the random angle that corresponds to loss cone flux
   for(G4int angle = 0; angle<dataSize; angle++){
-    if(randomNumber < lossConeDataCDF[angle][1]){
-      std::cout << angle << std::endl;
-      angleIndex = angle-1;
+    if(randomNumber < lossConeData[angle][1]){
+      angleIndex = angle;
       break; }
-    else{std::cout << "No angle found!"  << std::endl;}
   }
 
-  std::cout << lossConeDataCDF[angleIndex][0] << std::endl;
-  r.x = lossConeDataCDF[angleIndex][1]*cm;
+
+  // Selects exponential folding energy E0 based on backscattered pitch angle
+  G4double E0 = -1;
+  if(     lossConeData[angleIndex][0] < 20) {E0 = 159.;}
+  else if(lossConeData[angleIndex][0] < 30) {E0 = 172.;}
+  else if(lossConeData[angleIndex][0] < 40) {E0 = 177.;}
+  else if(lossConeData[angleIndex][0] < 50) {E0 = 194.;}
+  else if(lossConeData[angleIndex][0] < 64) {E0 = 230.;}
+
+
+  r.x = lossConeData[angleIndex][1]*cm;
   r.y = 0.*cm;
   r.z = 0.*cm;
 
@@ -129,7 +135,7 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample r)
   randomNumber = G4UniformRand();
 
   // Inverse CDF sampling for exponential RV
-  r.energy = (std::log(1 - randomNumber)/1./300.);
+  r.energy = (std::log(1 - randomNumber)*-E0);
 
 }
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
@@ -139,7 +145,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double PI = 3.14159265358979323846;
 
   // N particles generated per simulation run
-  G4int n_particle = 100000;
+  G4int n_particle = 10000;
 
   // Allocate variables for random position, direction
   G4double xPos,yPos,zPos,xDir,yDir,zDir;
@@ -156,11 +162,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // Loss cone angle (half angle w.r.t. sphere angle) at 500 km in radians
   G4double theta_exclusion = 64.*PI/180.;
 
-  // E-folding (E0 energy)
-  double E0 = 300.;
-
-  std::default_random_engine generator;
-  std::exponential_distribution<double> exp_distribution(1/E0);
+  // E-folding (E0 energy) in keV (Wei)
+  double E0 = 150.;
 
   // f0 flux
   //G4double f0 = 2e8;
@@ -200,14 +203,27 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     if(yPos > 0) yDir = -yDir;
     if(zPos > 0) zDir = -zDir;
 
+    G4double norm = std::sqrt(xDir * xDir + yDir * yDir + zDir * zDir);
+
     // Selects random energy according to exponential distribution
-    G4double randEnergy = exp_distribution(generator)*300.*keV;
+    G4double randomNumber = G4UniformRand();
+    G4double randEnergy = std::log(1 - randomNumber)*-150.*keV;
+
 
     fParticleGun->SetParticlePosition(G4ThreeVector(xPos+xShift, yPos+yShift, zPos+zShift));
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xDir, yDir, zDir));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xDir/norm, yDir/norm, zDir/norm));
     fParticleGun->SetParticleEnergy(randEnergy);
 
     fParticleGun->GeneratePrimaryVertex(anEvent);
+
+    std::ofstream particleSource;
+
+    particleSource.open("./detector_sourceParts.txt", std::ios_base::app);
+
+    particleSource << xPos+xShift << "," << yPos+yShift << "," << zPos+zShift
+    << "," << xDir/norm << "," << yDir/norm << "," << zDir/norm << "," << randEnergy/keV << "\n";
+    particleSource.close();
+
   }
 
 
