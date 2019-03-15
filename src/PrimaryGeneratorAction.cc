@@ -126,15 +126,17 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   G4double sphereR = 15.*cm;
   G4double PI = 3.14159265358979323846;
 
-  // Angle about the field line
+  // Angle about the field line theta on [0 , 2pi)
   G4double theta = G4UniformRand()*2.*PI; 
   
   // Zenith angle (pitch angle)
   G4double phi = lossConeData[angleIndex][0] * PI / 180.;
   
+  // We want our Y direction to be "up"
   r->x = sphereR * std::cos(theta) * std::sin(phi);
-  r->y = sphereR * std::sin(theta) * std::sin(phi);
-  r->z = sphereR * std::cos(phi);
+  r->y = sphereR * std::cos(phi);
+  r->z = sphereR * std::sin(theta) * std::sin(phi);
+  
 
   // Uniform random numbers on [0, 1)
   r->xDir = G4UniformRand();
@@ -153,7 +155,6 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
 
   // Inverse CDF sampling for exponential RV
   r->energy = (std::log(1 - randomNumber)*-E0)*keV;
-  std::cout << r->energy/keV << std::endl;
 }
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
@@ -162,7 +163,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double PI = 3.14159265358979323846;
 
   // N particles generated per simulation run
-  G4int nParticles = 100;
+  G4int nParticles = 10000;	// trapped particles
+  G4int nLCparticles = 1000;	// loss cone particles (backscattered)
 
   // Allocate variables for random position, direction
   G4double xPos,yPos,zPos,xDir,yDir,zDir;
@@ -176,7 +178,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // Radius of sphere surface where particles are generated
   G4double sphereR = 15.*cm;
 
-  // Loss cone angle (half angle w.r.t. sphere angle) at 500 km in radians
+  // Loss cone angle (same as polar angle, phi) at 500 km, in radians
   G4double theta_exclusion = 64.*PI/180.;
 
   // E-folding (E0 energy) in keV (Wei)
@@ -204,8 +206,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4double theta = G4UniformRand()*2.*PI;
 
       xPos = sphereR * std::sqrt(1 - u * u) * std::cos(theta);
-      yPos = sphereR * std::sqrt(1 - u * u) * std::sin(theta);
-      zPos = sphereR * u;
+      yPos = sphereR * u;
+      zPos = sphereR * std::sqrt(1 - u * u) * std::sin(theta);
       }
     while(yPos > sphereR * std::cos(theta_exclusion));
 // exits when y position falls below spherical cap
@@ -235,7 +237,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     std::ofstream particleSource;
 
-    particleSource.open("./detector_sourceParts.txt", std::ios_base::app);
+    particleSource.open("./detector_trappedSourceParts.txt", std::ios_base::app);
 
     particleSource << xPos+xShift << "," << yPos+yShift << "," << zPos+zShift
     << "," << xDir/norm << "," << yDir/norm << "," << zDir/norm << "," << randEnergy/keV << "\n";
@@ -244,21 +246,29 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
 
 
-    LossConeSample* r = (struct LossConeSample*)malloc(sizeof(struct LossConeSample));
-  for(G4int i = 0; i<10; i++){
+    LossConeSample* r = new LossConeSample();
+  
+
+    std::ofstream particleLCSource;
+    particleLCSource.open("./detector_LCSourceParts.txt", std::ios_base::app);
+
+  for(G4int i = 0; i<nLCparticles; i++){
 
     GenerateLossConeSample(r);
 
-    std::cout << r->x/cm << ", " << r->y/cm << ", " << r->z/cm << ", " << r->energy/keV << " keV\n" << std::endl;
     fParticleGun->SetParticlePosition(G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(r->xDir, r->yDir, r->zDir));
     fParticleGun->SetParticleEnergy(r->energy);
 
     fParticleGun->GeneratePrimaryVertex(anEvent);
+
+    particleLCSource << r->x+xShift << "," << r->y+yShift << "," << r->z+zShift
+    << "," << r->xDir << "," << r->yDir << "," << r->zDir << "," << r->energy << "\n";
     
 }
 
-    free(r);
+    particleLCSource.close();
+    delete r;
 
 
 }

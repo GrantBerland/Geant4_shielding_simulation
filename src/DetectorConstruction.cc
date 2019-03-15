@@ -181,7 +181,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	 
  
   G4LogicalVolume* logicBaffles = new G4LogicalVolume((*solids)[4],
-						nist->FindOrBuildMaterial("G4_Al"),
+						nist->FindOrBuildMaterial("G4_W"),
 								      "Baffles");
 
 
