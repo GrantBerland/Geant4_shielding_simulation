@@ -61,7 +61,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     // method from the base class
     virtual void GeneratePrimaries(G4Event* anEvent);         
 
-    void GenerateLossConeSample(LossConeSample r);
+    void GenerateLossConeSample(LossConeSample* r);
   
     // // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }

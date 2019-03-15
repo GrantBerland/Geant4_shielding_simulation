@@ -65,10 +65,10 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample r)
+void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
 {
   G4int dataSize = 32;
-  G4double lossConeData[dataSize][2] = {
+  G4double lossConeData[32][2] = {
   { 1.0000 , 0.0000 },
   { 3.0000 , 0.0019 },
   { 5.0000 , 0.0056 },
@@ -103,8 +103,8 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample r)
   { 63.0000 , 1.0000 }};
 
   //G4double fluxSum = 18.155822371325151;
-  double randomNumber = G4UniformRand();
-  G4int angleIndex = 0;
+  G4double randomNumber = G4UniformRand();
+  G4int angleIndex = -1;
 
   // Find the random angle that corresponds to loss cone flux
   for(G4int angle = 0; angle<dataSize; angle++){
@@ -114,29 +114,46 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample r)
   }
 
 
-  // Selects exponential folding energy E0 based on backscattered pitch angle
+  // Selects exponential folding energy E0 based on backscattered pitch angle range
   G4double E0 = -1;
   if(     lossConeData[angleIndex][0] < 20) {E0 = 159.;}
   else if(lossConeData[angleIndex][0] < 30) {E0 = 172.;}
   else if(lossConeData[angleIndex][0] < 40) {E0 = 177.;}
   else if(lossConeData[angleIndex][0] < 50) {E0 = 194.;}
   else if(lossConeData[angleIndex][0] < 64) {E0 = 230.;}
+  
+  // Mathematics spherical coordinates definition!!!
+  G4double sphereR = 15.*cm;
+  G4double PI = 3.14159265358979323846;
 
+  // Angle about the field line
+  G4double theta = G4UniformRand()*2.*PI; 
+  
+  // Zenith angle (pitch angle)
+  G4double phi = lossConeData[angleIndex][0] * PI / 180.;
+  
+  r->x = sphereR * std::cos(theta) * std::sin(phi);
+  r->y = sphereR * std::sin(theta) * std::sin(phi);
+  r->z = sphereR * std::cos(phi);
 
-  r.x = lossConeData[angleIndex][1]*cm;
-  r.y = 0.*cm;
-  r.z = 0.*cm;
+  // Uniform random numbers on [0, 1)
+  r->xDir = G4UniformRand();
+  r->yDir = G4UniformRand();
+  r->zDir = G4UniformRand();
 
-  r.xDir = 0;
-  r.yDir = 0;
-  r.zDir = 0;
+  G4double norm = std::sqrt(r->xDir * r->xDir + r->yDir * r->yDir + r->zDir * r->zDir);
+
+  // Enforces inward directionality to particles
+  if(r->x > 0) {r->xDir = -r->xDir/norm;} else{r->xDir = r->xDir/norm;}
+  if(r->y > 0) {r->yDir = -r->yDir/norm;} else{r->yDir = r->yDir/norm;}
+  if(r->z > 0) {r->zDir = -r->zDir/norm;} else{r->zDir = r->zDir/norm;}
 
 
   randomNumber = G4UniformRand();
 
   // Inverse CDF sampling for exponential RV
-  r.energy = (std::log(1 - randomNumber)*-E0);
-
+  r->energy = (std::log(1 - randomNumber)*-E0)*keV;
+  std::cout << r->energy/keV << std::endl;
 }
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
@@ -145,7 +162,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double PI = 3.14159265358979323846;
 
   // N particles generated per simulation run
-  G4int n_particle = 10000;
+  G4int nParticles = 100;
 
   // Allocate variables for random position, direction
   G4double xPos,yPos,zPos,xDir,yDir,zDir;
@@ -163,13 +180,13 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double theta_exclusion = 64.*PI/180.;
 
   // E-folding (E0 energy) in keV (Wei)
-  double E0 = 150.;
+  G4double E0 = 150.;
 
   // f0 flux
   //G4double f0 = 2e8;
 
 
-  for(G4int i = 0; i<n_particle; i++){
+  for(G4int i = 0; i<nParticles; i++){
 
 
     // Reset position and direction of particle
@@ -207,7 +224,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     // Selects random energy according to exponential distribution
     G4double randomNumber = G4UniformRand();
-    G4double randEnergy = std::log(1 - randomNumber)*-150.*keV;
+    G4double randEnergy = std::log(1 - randomNumber)*-E0*keV;
 
 
     fParticleGun->SetParticlePosition(G4ThreeVector(xPos+xShift, yPos+yShift, zPos+zShift));
@@ -227,17 +244,21 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
 
 
-  LossConeSample r;
-  for(G4int i = 0; i<2; i++){
+    LossConeSample* r = (struct LossConeSample*)malloc(sizeof(struct LossConeSample));
+  for(G4int i = 0; i<10; i++){
+
     GenerateLossConeSample(r);
-/*
-    fParticleGun->SetParticlePosition(G4ThreeVector(r.x+xShift, r.y+yShift, r.z+zShift));
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(r.xDir, r.yDir, r.zDir));
-    fParticleGun->SetParticleEnergy(r.energy);
+
+    std::cout << r->x/cm << ", " << r->y/cm << ", " << r->z/cm << ", " << r->energy/keV << " keV\n" << std::endl;
+    fParticleGun->SetParticlePosition(G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(r->xDir, r->yDir, r->zDir));
+    fParticleGun->SetParticleEnergy(r->energy);
 
     fParticleGun->GeneratePrimaryVertex(anEvent);
-*/
+    
 }
+
+    free(r);
 
 
 }
