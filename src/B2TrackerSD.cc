@@ -36,7 +36,8 @@
 #include "G4ThreeVector.hh"
 #include "G4SDManager.hh"
 #include "G4ios.hh"
-
+#include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B2TrackerSD::B2TrackerSD(const G4String& name,
@@ -97,13 +98,26 @@ G4bool B2TrackerSD::ProcessHits(G4Step* aStep,
 
 void B2TrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
-  if ( verboseLevel>1 ) { 
+
+G4double totalEnergy = 0;
+G4double energyThreshold = 50.*keV;
+G4int hitCounter = 0; 
      G4int nofHits = fHitsCollection->entries();
      G4cout << G4endl
             << "-------->Hits Collection: in this event they are " << nofHits 
             << " hits in the tracker chambers: " << G4endl;
-     for ( G4int i=0; i<nofHits; i++ ) (*fHitsCollection)[i]->Print();
-  }
+     for ( G4int i=0; i<nofHits; i++ ) 
+       {
+       (*fHitsCollection)[i]->Print();
+       totalEnergy += (*fHitsCollection)[i]->fEdep;
+       
+       if((*fHitsCollection)[i]->fEdep >= energyThreshold) hitCounter += 1;
+       
+       }
+     
+      G4cout << "Total energy deposited in detectors: " << G4BestUnit(totalEnergy,"Energy") << G4endl;
+     G4cout << "Total hits on detector > 50 keV: " << hitCounter << G4endl;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

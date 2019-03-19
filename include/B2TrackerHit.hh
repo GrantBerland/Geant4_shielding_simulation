@@ -58,7 +58,6 @@ class B2TrackerHit : public G4VHit
     inline void  operator delete(void*);
 
     // methods from base class
-    virtual void Draw();
     virtual void Print();
 
     // Set methods
@@ -73,7 +72,7 @@ class B2TrackerHit : public G4VHit
     G4double GetEdep() const     { return fEdep; };
     G4ThreeVector GetPos() const { return fPos; };
 
-  private:
+  public:
 
       G4int         fTrackID;
       G4int         fChamberNb;

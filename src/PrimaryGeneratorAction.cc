@@ -164,17 +164,23 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // N particles generated per simulation run
   G4int nParticles = 10000;	// trapped particles
-  G4int nLCparticles = 1000;	// loss cone particles (backscattered)
+  G4int nLCparticles = std::floor(0.3701*nParticles);	
+  // loss cone particles (backscattered)
 
   // Allocate variables for random position, direction
   G4double xPos,yPos,zPos,xDir,yDir,zDir;
 
   // Constant sphere offsets
-  G4double xShift = 5.*cm;
-  G4double yShift = 5.*cm;
-  G4double zShift = 5.*cm;
+  //G4double xShift = 5.*cm;
+  //G4double yShift = 5.*cm;
+  //G4double zShift = 5.*cm;
+  //TODO: why do these lines fuck everything up?-> try no cm multiplication
+  // it worked! but why?
 
-
+  G4double xShift = 5.;
+  G4double yShift = 5.;
+  G4double zShift = 5.;
+  
   // Radius of sphere surface where particles are generated
   G4double sphereR = 15.*cm;
 
@@ -210,7 +216,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       zPos = sphereR * std::sqrt(1 - u * u) * std::sin(theta);
       }
     while(yPos > sphereR * std::cos(theta_exclusion));
-// exits when y position falls below spherical cap
+    // exits when y position falls below spherical cap
 
     // Uniform random numbers on [0, 1)
     xDir = G4UniformRand();
@@ -240,7 +246,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     particleSource.open("./detector_trappedSourceParts.txt", std::ios_base::app);
 
     particleSource << xPos+xShift << "," << yPos+yShift << "," << zPos+zShift
-    << "," << xDir/norm << "," << yDir/norm << "," << zDir/norm << "," << randEnergy/keV << "\n";
+    << "," << xDir/norm << "," << yDir/norm << "," << zDir/norm << "," << randEnergy/keV << "," << sphereR <<"\n";
     particleSource.close();
 
   }
