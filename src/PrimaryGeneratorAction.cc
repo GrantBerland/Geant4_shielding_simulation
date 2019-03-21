@@ -143,12 +143,12 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   r->yDir = G4UniformRand();
   r->zDir = G4UniformRand();
 
-  G4double norm = std::sqrt(r->xDir * r->xDir + r->yDir * r->yDir + r->zDir * r->zDir);
+  //G4double norm = std::sqrt(r->xDir * r->xDir + r->yDir * r->yDir + r->zDir * r->zDir);
 
   // Enforces inward directionality to particles
-  if(r->x > 0) {r->xDir = -r->xDir/norm;} else{r->xDir = r->xDir/norm;}
-  if(r->y > 0) {r->yDir = -r->yDir/norm;} else{r->yDir = r->yDir/norm;}
-  if(r->z > 0) {r->zDir = -r->zDir/norm;} else{r->zDir = r->zDir/norm;}
+  if(r->x > 0) {r->xDir = -r->xDir;}// else{r->xDir = r->xDir/norm;}
+  if(r->y > 0) {r->yDir = -r->yDir;}// else{r->yDir = r->yDir/norm;}
+  if(r->z > 0) {r->zDir = -r->zDir;}// else{r->zDir = r->zDir/norm;}
 
 
   randomNumber = G4UniformRand();
@@ -163,7 +163,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double PI = 3.14159265358979323846;
 
   // N particles generated per simulation run
-  G4int nParticles = 10000;	// trapped particles
+  G4int nParticles = 100000;	// trapped particles
   G4int nLCparticles = std::floor(0.3701*nParticles);	
   // loss cone particles (backscattered)
 
@@ -177,9 +177,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //TODO: why do these lines fuck everything up?-> try no cm multiplication
   // it worked! but why?
 
-  G4double xShift = 5.;
-  G4double yShift = 5.;
-  G4double zShift = 5.;
+  G4double xShift = 0.;
+  G4double yShift = 0.;
+  G4double zShift = 0.;
   
   // Radius of sphere surface where particles are generated
   G4double sphereR = 15.*cm;
@@ -189,11 +189,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // E-folding (E0 energy) in keV (Wei)
   G4double E0 = 150.;
-
-  // f0 flux
-  //G4double f0 = 2e8;
-
-
   for(G4int i = 0; i<nParticles; i++){
 
 
@@ -210,10 +205,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
       // Rand on [0, 2*pi)
       G4double theta = G4UniformRand()*2.*PI;
-
-      xPos = sphereR * std::sqrt(1 - u * u) * std::cos(theta);
+      xPos = sphereR * std::sqrt(1 - u * u) * std::cos(theta); 
       yPos = sphereR * u;
-      zPos = sphereR * std::sqrt(1 - u * u) * std::sin(theta);
+      zPos = sphereR * std::sqrt(1 - u * u) * std::sin(theta); 
       }
     while(yPos > sphereR * std::cos(theta_exclusion));
     // exits when y position falls below spherical cap
@@ -223,12 +217,13 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     yDir = G4UniformRand();
     zDir = G4UniformRand();
 
+    //G4double norm = std::sqrt(xDir * xDir + yDir * yDir + zDir * zDir);
+    
     // Enforces inward directionality to particles
-    if(xPos > 0) xDir = -xDir;
-    if(yPos > 0) yDir = -yDir;
-    if(zPos > 0) zDir = -zDir;
+    if(xPos > 0) {xDir = -xDir;}// else {xDir = xDir/norm;}
+    if(yPos > 0) {yDir = -yDir;}// else {yDir = yDir/norm;}
+    if(zPos > 0) {zDir = -zDir;}// else {zDir = zDir/norm;}
 
-    G4double norm = std::sqrt(xDir * xDir + yDir * yDir + zDir * zDir);
 
     // Selects random energy according to exponential distribution
     G4double randomNumber = G4UniformRand();
@@ -236,44 +231,48 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 
     fParticleGun->SetParticlePosition(G4ThreeVector(xPos+xShift, yPos+yShift, zPos+zShift));
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xDir/norm, yDir/norm, zDir/norm));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xDir, yDir, zDir));
     fParticleGun->SetParticleEnergy(randEnergy);
 
     fParticleGun->GeneratePrimaryVertex(anEvent);
 
+    // for debuggin
+    /*    
     std::ofstream particleSource;
 
     particleSource.open("./detector_trappedSourceParts.txt", std::ios_base::app);
 
-    particleSource << xPos+xShift << "," << yPos+yShift << "," << zPos+zShift
-    << "," << xDir/norm << "," << yDir/norm << "," << zDir/norm << "," << randEnergy/keV << "," << sphereR <<"\n";
+    particleSource << (xPos+xShift)/cm << "," << (yPos+yShift)/cm << "," << (zPos+zShift)/cm
+    << "," << xDir << "," << yDir << "," << zDir << "," << randEnergy/keV << "," << sphereR <<"\n";
     particleSource.close();
-
+    */
   }
 
 
     LossConeSample* r = new LossConeSample();
   
 
-    std::ofstream particleLCSource;
-    particleLCSource.open("./detector_LCSourceParts.txt", std::ios_base::app);
+    //std::ofstream particleLCSource;
+    //particleLCSource.open("./detector_LCSourceParts.txt", std::ios_base::app);
 
   for(G4int i = 0; i<nLCparticles; i++){
 
     GenerateLossConeSample(r);
-
+    
+    // For debugging
+    /*
     fParticleGun->SetParticlePosition(G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(r->xDir, r->yDir, r->zDir));
     fParticleGun->SetParticleEnergy(r->energy);
 
     fParticleGun->GeneratePrimaryVertex(anEvent);
 
-    particleLCSource << r->x+xShift << "," << r->y+yShift << "," << r->z+zShift
+    particleLCSource << (r->x+xShift)/cm << "," << (r->y+yShift)/cm << "," << (r->z+zShift)/cm
     << "," << r->xDir << "," << r->yDir << "," << r->zDir << "," << r->energy << "\n";
-    
+    */
 }
 
-    particleLCSource.close();
+    //particleLCSource.close();
     delete r;
 
 

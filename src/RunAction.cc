@@ -43,6 +43,8 @@
 #include "G4SystemOfUnits.hh"
 // #include "HistoManager.hh"
 
+#include "Randomize.hh"
+#include <ctime>
 
 //#include <fstream>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,6 +93,14 @@ void RunAction::BeginOfRunAction(const G4Run*)
   man->CreateH1("4","E4",1000,-100*mm,100*mm);
   man->CreateH1("5","E5",2000,-100*mm,100*mm);
   man->CreateH1("6","E6",1000,-100*mm,100*mm);
+
+  long seeds[2];
+  time_t systime = time(NULL);
+  seeds[0] = (long) systime;
+  seeds[1] = (long) (systime*G4UniformRand());
+  G4Random::setTheSeeds(seeds);
+
+
 
 }
 

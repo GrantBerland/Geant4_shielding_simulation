@@ -89,7 +89,7 @@ G4bool B2TrackerSD::ProcessHits(G4Step* aStep,
 
   fHitsCollection->insert( newHit );
 
-  newHit->Print();
+  //newHit->Print();
 
   return true;
 }
@@ -108,7 +108,7 @@ G4int hitCounter = 0;
             << " hits in the tracker chambers: " << G4endl;
      for ( G4int i=0; i<nofHits; i++ ) 
        {
-       (*fHitsCollection)[i]->Print();
+       //(*fHitsCollection)[i]->Print();
        totalEnergy += (*fHitsCollection)[i]->fEdep;
        
        if((*fHitsCollection)[i]->fEdep >= energyThreshold) hitCounter += 1;
