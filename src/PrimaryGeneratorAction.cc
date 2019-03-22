@@ -117,7 +117,7 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   // Selects exponential folding energy E0 based on backscattered pitch angle range
   G4double E0 = -1;
   if(     lossConeData[angleIndex][0] < 20) {E0 = 159.;}
-  else if(lossConeData[angleIndex][0] < 30) {E0 = 172.;}
+  else if(lossConeData[angleIndex][0] < 30) {E0 = 141.;}
   else if(lossConeData[angleIndex][0] < 40) {E0 = 177.;}
   else if(lossConeData[angleIndex][0] < 50) {E0 = 194.;}
   else if(lossConeData[angleIndex][0] < 64) {E0 = 230.;}

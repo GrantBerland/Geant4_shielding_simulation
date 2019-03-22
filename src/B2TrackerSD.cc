@@ -40,6 +40,8 @@
 #include "G4SystemOfUnits.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include <fstream>
+
 B2TrackerSD::B2TrackerSD(const G4String& name,
                          const G4String& hitsCollectionName) 
  : G4VSensitiveDetector(name),
@@ -117,6 +119,11 @@ G4int hitCounter = 0;
      
       G4cout << "Total energy deposited in detectors: " << G4BestUnit(totalEnergy,"Energy") << G4endl;
      G4cout << "Total hits on detector > 50 keV: " << hitCounter << G4endl;
+
+     std::ofstream resultsFile;
+     resultsFile.open("../../analysis/resultsFile.txt", std::ios_base::app);
+     resultsFile << hitCounter << "\n";
+     resultsFile.close();
 
 }
 
