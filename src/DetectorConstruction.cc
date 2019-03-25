@@ -159,7 +159,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 					nist->FindOrBuildMaterial("G4_Be"),
 							     "Windows");
   new G4PVPlacement(0,                       //no rotation
-	            G4ThreeVector(1.75*cm,0.,0.), //its logical volume
+	            G4ThreeVector(0.,0.,0.), //its logical volume
 	            logicWindows,            //at position
 	   	    "Windows",               //its name
 	 	    logicEnv,                //its mother  volume
@@ -167,26 +167,37 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		    0,                       //copy number
 		    checkOverlaps);          //overlaps checking
 
-  G4LogicalVolume* logicDetector = new G4LogicalVolume((*solids)[3],
+  G4LogicalVolume* logicDetectorTop = new G4LogicalVolume((*solids)[3],
 								CZT,
-							      "Detector");
+							      "DetectorCZT");
   new G4PVPlacement(0,                     //no rotation
-	 	   G4ThreeVector(0.5*cm,0,0),   //at position
-	 	   logicDetector,          //its logical volume
-		   "Detectors",              //its name
+	 	   G4ThreeVector(0.,0.,0.),   //at position
+	 	   logicDetectorTop,          //its logical volume
+		   "DetectorCZT",              //its name
 		   logicShielding,         //its mother  volume
 		   false,                  //no boolean operation:u
 		    0,                     //copy number
 	  	   checkOverlaps);         //overlaps checking
 	 
+  G4LogicalVolume* logicDetectorBottom = new G4LogicalVolume((*solids)[4],
+								CZT,
+							      "DetectorFR4");
+  new G4PVPlacement(0,                     //no rotation
+	 	   G4ThreeVector(0.,0.,0.),   //at position
+	 	   logicDetectorBottom,          //its logical volume
+		   "DetectorFR4",              //its name
+		   logicShielding,         //its mother  volume
+		   false,                  //no boolean operation:u
+		    0,                     //copy number
+	  	   checkOverlaps);         //overlaps checking
  
-  G4LogicalVolume* logicBaffles = new G4LogicalVolume((*solids)[4],
+  G4LogicalVolume* logicBaffles = new G4LogicalVolume((*solids)[5],
 						nist->FindOrBuildMaterial("G4_W"),
 								      "Baffles");
 
 
   new G4PVPlacement(0,                     //no rotation
-		  G4ThreeVector(0,0,0),                 //at position
+		  G4ThreeVector(0.,0.,0.),                 //at position
 		  logicBaffles,          //its logical volume
 		  "Baffles",           //its name
 		  logicEnv,                //its mother  volume
@@ -195,12 +206,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  checkOverlaps);          //overlaps checking
 
 
-  fScoringVolume = logicDetector;
+  fScoringVolume = logicDetectorTop;
 
   // Register the detector as a sensitive detector
   B2TrackerSD* aTrackerSD = new B2TrackerSD("Detector1","TrackerHitsCollection");
   G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
-  SetSensitiveDetector("Detector", aTrackerSD, true);
+  SetSensitiveDetector("DetectorCZT", aTrackerSD, true);
 
 
   // always return the physical World
