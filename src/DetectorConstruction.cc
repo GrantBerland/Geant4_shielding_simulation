@@ -156,8 +156,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   G4LogicalVolume* logicWindows = new G4LogicalVolume((*solids)[2],
-					nist->FindOrBuildMaterial("G4_Al"),
-								     "Windows");
+					nist->FindOrBuildMaterial("G4_Be"),
+							     "Windows");
   new G4PVPlacement(0,                       //no rotation
 	            G4ThreeVector(1.75*cm,0.,0.), //its logical volume
 	            logicWindows,            //at position
@@ -168,8 +168,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		    checkOverlaps);          //overlaps checking
 
   G4LogicalVolume* logicDetector = new G4LogicalVolume((*solids)[3],
-									CZT,
-								      "Detector");
+								CZT,
+							      "Detector");
   new G4PVPlacement(0,                     //no rotation
 	 	   G4ThreeVector(0.5*cm,0,0),   //at position
 	 	   logicDetector,          //its logical volume
