@@ -209,7 +209,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   fScoringVolume = logicDetectorTop;
 
   // Register the detector as a sensitive detector
-  B2TrackerSD* aTrackerSD = new B2TrackerSD("Detector1","TrackerHitsCollection");
+  B2TrackerSD* aTrackerSD = new B2TrackerSD("DetectorCZT","TrackerHitsCollection");
   G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
   SetSensitiveDetector("DetectorCZT", aTrackerSD, true);
 
@@ -217,5 +217,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // always return the physical World
   return physWorld;
 }
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

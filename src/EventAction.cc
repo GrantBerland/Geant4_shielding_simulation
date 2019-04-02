@@ -72,16 +72,18 @@ void EventAction::AddEdep(G4double edep)
 
 void EventAction::AddEdep_multiple(G4String solid, G4double edep)
 {
+/*
   if (solid == "Electronics") {fEdep += edep;}
   if (solid == "Shielding") {fEdep_det1 += edep;}
   if (solid == "Electronics") {fEdep_det2 += edep;}
   if (solid == "Electronics") {fEdep_det3 += edep;}
   if (solid == "Electronics") {fEdep_det4 += edep;}
-
+*/
 }
 
 void EventAction::EndOfEventAction(const G4Event* event)
 {
+  /*
   fRunAction->AddEdep(fEdep);
 
   G4AnalysisManager* man = G4AnalysisManager::Instance();
@@ -94,7 +96,7 @@ void EventAction::EndOfEventAction(const G4Event* event)
   man->FillH1(4, fEdep_det2);
   man->FillH1(5, fEdep_det3);
   man->FillH1(6, fEdep_det4);
-
+*/
 
 }
 

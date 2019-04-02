@@ -99,7 +99,9 @@ void RunAction::BeginOfRunAction(const G4Run*)
   seeds[0] = (long) systime;
   seeds[1] = (long) (systime*G4UniformRand());
   G4Random::setTheSeeds(seeds);
-
+  
+  std::cout << seeds[0] << std::endl;
+  std::cout << seeds[1] << std::endl;
 
 
 }

@@ -58,6 +58,7 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* step)
 {
+/*
     G4bool isEnteringDetector;
     G4bool isInDetector;
     G4Track* track = step->GetTrack();
@@ -90,7 +91,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       energyFile.close();
    }
 
-
+*/
 }
 
 

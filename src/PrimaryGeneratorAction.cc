@@ -143,12 +143,11 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   r->yDir = G4UniformRand();
   r->zDir = G4UniformRand();
 
-  //G4double norm = std::sqrt(r->xDir * r->xDir + r->yDir * r->yDir + r->zDir * r->zDir);
 
   // Enforces inward directionality to particles
-  if(r->x > 0) {r->xDir = -r->xDir;}// else{r->xDir = r->xDir/norm;}
-  if(r->y > 0) {r->yDir = -r->yDir;}// else{r->yDir = r->yDir/norm;}
-  if(r->z > 0) {r->zDir = -r->zDir;}// else{r->zDir = r->zDir/norm;}
+  if(r->x > 0) {r->xDir = -r->xDir;}
+  if(r->y > 0) {r->yDir = -r->yDir;}
+  if(r->z > 0) {r->zDir = -r->zDir;}
 
 
   randomNumber = G4UniformRand();
@@ -163,7 +162,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double PI = 3.14159265358979323846;
 
   // N particles generated per simulation run
-  G4int nParticles = 100;	// trapped particles
+  G4int nParticles = 1e6;	// trapped particles
   G4int nLCparticles = std::floor(0.1851*nParticles);	
   // loss cone particles (backscattered)
 
@@ -177,9 +176,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //TODO: why do these lines fuck everything up?-> try no cm multiplication
   // it worked! but why?
 
-  G4double xShift = 0.;
-  G4double yShift = 0.;
-  G4double zShift = 0.;
+  G4double xShift = 50.;
+  G4double yShift = 50.;
+  G4double zShift = 150.;
   
   // Radius of sphere surface where particles are generated
   G4double sphereR = 15.*cm;
