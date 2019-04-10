@@ -103,7 +103,7 @@ G4bool B2TrackerSD::ProcessHits(G4Step* aStep,
 void B2TrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
 
-// Generates /tmp/randomFileNameHere (typically DkjOen56dsf, etc.)
+// Generates /tmp/randomFileNameHere (named file_ _ _ _ _ _, etc.)
 std::string hitsFileName = tmpnam(nullptr);
 
 // Removes /tmp/ path prefix from hitsFileName

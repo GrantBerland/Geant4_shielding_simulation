@@ -2,3 +2,5 @@
 */*.swp
 .cproject
 .project
+*.macro
+**/data
