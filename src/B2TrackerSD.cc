@@ -41,6 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include <fstream>
+#include <cstdio>
+#include <string>
 
 B2TrackerSD::B2TrackerSD(const G4String& name,
                          const G4String& hitsCollectionName) 
@@ -101,6 +103,17 @@ G4bool B2TrackerSD::ProcessHits(G4Step* aStep,
 void B2TrackerSD::EndOfEvent(G4HCofThisEvent*)
 {
 
+// Generates /tmp/randomFileNameHere (typically DkjOen56dsf, etc.)
+std::string hitsFileName = tmpnam(nullptr);
+
+// Removes /tmp/ path prefix from hitsFileName
+hitsFileName.erase(0, 5);
+
+// Combines path, file name, and file extension
+std::string fullFileName = "../data/"; 
+fullFileName += hitsFileName;
+fullFileName += ".txt";
+
 G4double totalEnergy = 0;
 G4double energyThreshold = 50.*keV;
 G4int hitCounter = 0; 
@@ -121,7 +134,7 @@ G4int hitCounter = 0;
      G4cout << "Total hits on detector > 50 keV: " << hitCounter << G4endl;
 
      std::ofstream resultsFile;
-     resultsFile.open("../../analysis/resultsFile.txt", std::ios_base::app);
+     resultsFile.open(fullFileName, std::ios_base::app);
      resultsFile << hitCounter << "\n";
      resultsFile.close();
 
