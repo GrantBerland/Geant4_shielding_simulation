@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aida SYSTEM "http://aida.freehep.org/schemas/3.2.1/aida.dtd">
+<aida version="3.2.1">
+  <implementation package="tools" version="4.2.1"/>
+  <histogram1d path="/" name="1" title="E1">
+    <annotation>
+      <item key="axis_x.title" value=""/>
+    </annotation>
+    <axis direction="x" numberOfBins="2000" min="-100" max="100"/>
+    <statistics entries="0">
+      <statistic direction="x" mean="0" rms="0"/>
+    </statistics>
+    <data1d>
+    </data1d>
+  </histogram1d>
+  <histogram1d path="/" name="2" title="E2">
+    <annotation>
+      <item key="axis_x.title" value=""/>
+    </annotation>
+    <axis direction="x" numberOfBins="2000" min="-100" max="100"/>
+    <statistics entries="0">
+      <statistic direction="x" mean="0" rms="0"/>
+    </statistics>
+    <data1d>
+    </data1d>
+  </histogram1d>
+  <histogram1d path="/" name="3" title="E3">
+    <annotation>
+      <item key="axis_x.title" value=""/>
+    </annotation>
+    <axis direction="x" numberOfBins="2000" min="-100" max="100"/>
+    <statistics entries="0">
+      <statistic direction="x" mean="0" rms="0"/>
+    </statistics>
+    <data1d>
+    </data1d>
+  </histogram1d>
+  <histogram1d path="/" name="4" title="E4">
+    <annotation>
+      <item key="axis_x.title" value=""/>
+    </annotation>
+    <axis direction="x" numberOfBins="1000" min="-100" max="100"/>
+    <statistics entries="0">
+      <statistic direction="x" mean="0" rms="0"/>
+    </statistics>
+    <data1d>
+    </data1d>
+  </histogram1d>
+  <histogram1d path="/" name="5" title="E5">
+    <annotation>
+      <item key="axis_x.title" value=""/>
+    </annotation>
+    <axis direction="x" numberOfBins="2000" min="-100" max="100"/>
+    <statistics entries="0">
+      <statistic direction="x" mean="0" rms="0"/>
+    </statistics>
+    <data1d>
+    </data1d>
+  </histogram1d>
+  <histogram1d path="/" name="6" title="E6">
+    <annotation>
+      <item key="axis_x.title" value=""/>
+    </annotation>
+    <axis direction="x" numberOfBins="1000" min="-100" max="100"/>
+    <statistics entries="0">
+      <statistic direction="x" mean="0" rms="0"/>
+    </statistics>
+    <data1d>
+    </data1d>
+  </histogram1d>
+</aida>
