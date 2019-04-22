@@ -3,3 +3,8 @@
 .project
 *.macro
 **/data
+build/CMakeFiles/
+*.o
+*.settings
+*.cc.o
+build/*.txt

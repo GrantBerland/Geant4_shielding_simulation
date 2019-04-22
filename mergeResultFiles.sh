@@ -1,7 +1,7 @@
 
 #!/bin/bash
 
-paste -d "\n" ./data/*.txt > ./data/resultsFile.csv;
+paste -d "\n" ./data/*.txt >> ./data/resultsFile.csv;
 
 rm ./data/*.txt;
 
