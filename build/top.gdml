@@ -409,21 +409,23 @@
             <solidref ref="world_solid"/>
 
             <physvol>
-                <file name="parts_v1/Shielding_prt_v1-1.STL.gdml"/>
+                <file name="parts_v2/Shielding_prt_v2-2.STL.gdml"/>
              </physvol>
  	    <physvol>
-		<file name="parts_v1/Windows_prt-1.STL.gdml"/>
+		<file name="parts_v2/Windows_prt_v2-1.STL.gdml"/>
              </physvol>
             <physvol>
-                <file name="parts_v1/detectors_czt_prt-1.STL.gdml"/>
+                <file name="parts_v2/detectors_czt_prt_v2-1.STL.gdml"/>
              </physvol>
             <physvol>
-                <file name="parts_v1/detectors_fr4_prt-1.STL.gdml"/>
+                <file name="parts_v2/detectors_fr4_prt_v2-1.STL.gdml"/>
              </physvol>
             <physvol>
-                <file name="parts_v1/Baffles_prt-1.STL.gdml"/>
+                <file name="parts_v2/Baffles_prt_v2-1.STL.gdml"/>
              </physvol>
-
+            <physvol>
+                <file name="parts_v2/W_shielding_prt_v2-1.STL.gdml"/>
+             </physvol>
 
         </volume>
     </structure>
