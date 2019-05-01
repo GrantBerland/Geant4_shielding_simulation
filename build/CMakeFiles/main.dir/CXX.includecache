@@ -46,14 +46,6 @@ globals.hh
 G4AccumulableManager.hh
 ../include/G4AccumulableManager.hh
 
-../include/PhysicsList.hh
-G4VUserPhysicsList.hh
-../include/G4VUserPhysicsList.hh
-G4VModularPhysicsList.hh
-../include/G4VModularPhysicsList.hh
-globals.hh
-../include/globals.hh
-
 ../include/PrimaryGeneratorAction.hh
 G4VUserPrimaryGeneratorAction.hh
 ../include/G4VUserPrimaryGeneratorAction.hh
@@ -185,8 +177,6 @@ G4SDManager.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4SDManager.hh
 B2TrackerSD.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/B2TrackerSD.hh
-fstream
--
 
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/EventAction.cc
 EventAction.hh
@@ -205,26 +195,6 @@ G4Trajectory.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4Trajectory.hh
 fstream
 -
-
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/PhysicsList.cc
-PhysicsList.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/PhysicsList.hh
-G4ParticleTypes.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4ParticleTypes.hh
-G4DecayPhysics.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4DecayPhysics.hh
-G4EmStandardPhysics_option1.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4EmStandardPhysics_option1.hh
-G4EmStandardPhysics_option2.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4EmStandardPhysics_option2.hh
-G4EmStandardPhysics.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4EmStandardPhysics.hh
-G4EmExtraPhysics.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4EmExtraPhysics.hh
-G4EmProcessOptions.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4EmProcessOptions.hh
-G4SystemOfUnits.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4SystemOfUnits.hh
 
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/PrimaryGeneratorAction.cc
 PrimaryGeneratorAction.hh
@@ -5426,22 +5396,6 @@ G4EmParticleList.hh
 globals.hh
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/constructors/electromagnetic/include/globals.hh
 
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/constructors/electromagnetic/include/G4EmStandardPhysics_option1.hh
-G4VPhysicsConstructor.hh
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/constructors/electromagnetic/include/G4VPhysicsConstructor.hh
-G4EmParticleList.hh
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/constructors/electromagnetic/include/G4EmParticleList.hh
-globals.hh
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/constructors/electromagnetic/include/globals.hh
-
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/constructors/electromagnetic/include/G4EmStandardPhysics_option2.hh
-G4VPhysicsConstructor.hh
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/constructors/electromagnetic/include/G4VPhysicsConstructor.hh
-G4EmParticleList.hh
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/constructors/electromagnetic/include/G4EmParticleList.hh
-globals.hh
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/constructors/electromagnetic/include/globals.hh
-
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/constructors/gamma_lepto_nuclear/include/G4EmExtraPhysics.hh
 G4VPhysicsConstructor.hh
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/constructors/gamma_lepto_nuclear/include/G4VPhysicsConstructor.hh
@@ -5623,16 +5577,6 @@ G4DecayProcessType.hh
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/processes/decay/include/G4DecayProcessType.hh
 
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/processes/decay/include/G4DecayProcessType.hh
-
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/processes/electromagnetic/utils/include/G4EmProcessOptions.hh
-vector
--
-globals.hh
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/processes/electromagnetic/utils/include/globals.hh
-G4MscStepLimitType.hh
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/processes/electromagnetic/utils/include/G4MscStepLimitType.hh
-
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/processes/electromagnetic/utils/include/G4MscStepLimitType.hh
 
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/processes/hadronic/cross_sections/include/G4CrossSectionDataStore.hh
 globals.hh

@@ -57,14 +57,14 @@ RunAction::RunAction()
 {
 
   // Register accumulable to the accumulable manager
-  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-  accumulableManager->RegisterAccumulable(fEdep);
-  accumulableManager->RegisterAccumulable(fEdep2);
+  //G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  //accumulableManager->RegisterAccumulable(fEdep);
+  //accumulableManager->RegisterAccumulable(fEdep2);
 
-  auto man = G4AnalysisManager::Instance();
+  //auto man = G4AnalysisManager::Instance();
 
-  histFileName = "detector_hists";
-  man->SetFirstHistoId(1);
+  //histFileName = "detector_hists";
+  //man->SetFirstHistoId(1);
 
   }
 
@@ -81,28 +81,24 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 
   // reset accumulables to their initial values
-  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-  accumulableManager->Reset();
+  //G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
+  //accumulableManager->Reset();
 
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
-  man->OpenFile(histFileName);
+  //G4AnalysisManager* man = G4AnalysisManager::Instance();
+  //man->OpenFile(histFileName);
 
-  man->CreateH1("1","E1",2000,-100*mm,100*mm);
+  /*man->CreateH1("1","E1",2000,-100*mm,100*mm);
   man->CreateH1("2","E2",2000,-100*mm,100*mm);
   man->CreateH1("3","E3",2000,-100*mm,100*mm);
   man->CreateH1("4","E4",1000,-100*mm,100*mm);
   man->CreateH1("5","E5",2000,-100*mm,100*mm);
   man->CreateH1("6","E6",1000,-100*mm,100*mm);
-
+*/
   long seeds[2];
   time_t systime = time(NULL);
   seeds[0] = (long) systime;
   seeds[1] = (long) (systime*G4UniformRand());
   G4Random::setTheSeeds(seeds);
-  
-  std::cout << seeds[0] << std::endl;
-  std::cout << seeds[1] << std::endl;
-
 
 }
 
@@ -110,6 +106,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 void RunAction::EndOfRunAction(const G4Run* run)
 {
+/*
   G4int nofEvents = run->GetNumberOfEvent();
   if (nofEvents == 0) return;
 
@@ -123,13 +120,13 @@ G4double edep2 = fEdep2.GetValue();
 
 G4double rms = edep2 - edep*edep/nofEvents;
 if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;
-
+*/
   // Print (or write to file)
   //
 
-     G4AnalysisManager* man = G4AnalysisManager::Instance();
-     man->Write();
-     man->CloseFile();
+     //G4AnalysisManager* man = G4AnalysisManager::Instance();
+     //man->Write();
+     //man->CloseFile();
   }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -142,12 +139,13 @@ void RunAction::AddEdep(G4double edep)
 
 void RunAction::LogEntry(G4double edep)
 {
+/*
   (*asciiFile) << std::setiosflags(std::ios::fixed)
    << std::setprecision(3)
    << std::setiosflags(std::ios::right)
    << std::setw(10);
   (*asciiFile) << edep << G4endl;
-
+*/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

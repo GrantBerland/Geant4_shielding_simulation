@@ -336,33 +336,6 @@ src/EventAction.cc.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/EventAction.cc.s
 .PHONY : src/EventAction.cc.s
 
-src/PhysicsList.o: src/PhysicsList.cc.o
-
-.PHONY : src/PhysicsList.o
-
-# target to build an object file
-src/PhysicsList.cc.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/PhysicsList.cc.o
-.PHONY : src/PhysicsList.cc.o
-
-src/PhysicsList.i: src/PhysicsList.cc.i
-
-.PHONY : src/PhysicsList.i
-
-# target to preprocess a source file
-src/PhysicsList.cc.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/PhysicsList.cc.i
-.PHONY : src/PhysicsList.cc.i
-
-src/PhysicsList.s: src/PhysicsList.cc.s
-
-.PHONY : src/PhysicsList.s
-
-# target to generate assembly for a file
-src/PhysicsList.cc.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/PhysicsList.cc.s
-.PHONY : src/PhysicsList.cc.s
-
 src/PrimaryGeneratorAction.o: src/PrimaryGeneratorAction.cc.o
 
 .PHONY : src/PrimaryGeneratorAction.o
@@ -475,9 +448,6 @@ help:
 	@echo "... src/EventAction.o"
 	@echo "... src/EventAction.i"
 	@echo "... src/EventAction.s"
-	@echo "... src/PhysicsList.o"
-	@echo "... src/PhysicsList.i"
-	@echo "... src/PhysicsList.s"
 	@echo "... src/PrimaryGeneratorAction.o"
 	@echo "... src/PrimaryGeneratorAction.i"
 	@echo "... src/PrimaryGeneratorAction.s"

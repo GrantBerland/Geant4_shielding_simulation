@@ -48,7 +48,6 @@
 #include "G4SDManager.hh"
 #include "B2TrackerSD.hh"
 
-#include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -123,6 +122,32 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   CZT->AddElement(Zn, 2*perCent);
   CZT->AddElement(Te, 50*perCent);
 
+  G4int natoms;
+  G4double z, a;
+
+  G4Element* O  = new G4Element("Oxygen"  ,"O" , z= 8., a= 16.00*g/mole);
+  G4Element* Si = new G4Element("Silicon","Si" , z= 14., a= 28.09*g/mole);
+  G4Element* H  = new G4Element("Hydrogen","H" , z= 1., a= 1.01*g/mole);
+  G4Element* C  = new G4Element("Carbon"  ,"C" , z= 6., a= 12.01*g/mole);
+
+  // Si02 for silicon
+  G4Material* SiO2 = new G4Material("quartz", 2.200*g/cm3, 2);
+  SiO2->AddElement(Si, natoms=1);
+  SiO2->AddElement(O , natoms=2);
+
+
+  //Epoxy (for FR4 )
+  G4Material* Epoxy = new G4Material("Epoxy" , 1.2*g/cm3,2);
+  Epoxy->AddElement(H, natoms=2);
+  Epoxy->AddElement(C, natoms=2);
+  
+  //FR4 (Glass + Epoxy)
+  G4Material* FR4 = new G4Material("FR4",1.86*g/cm3, 2);
+  FR4->AddMaterial(SiO2, 0.528);
+  FR4->AddMaterial(Epoxy, 0.472);
+
+
+
 
   for(unsigned int i = 0; i < solids->size(); i++){
     G4VSolid* psol = (*solids)[i];
@@ -180,7 +205,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	  	   checkOverlaps);         //overlaps checking
 	 
   G4LogicalVolume* logicDetectorBottom = new G4LogicalVolume((*solids)[4],
-								CZT,
+								FR4,
 							      "DetectorFR4");
   new G4PVPlacement(0,                     //no rotation
 	 	   G4ThreeVector(0.,0.,0.),   //at position
@@ -205,6 +230,20 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  0,                       //copy number
 		  checkOverlaps);          //overlaps checking
 
+
+  G4LogicalVolume* logicPlates = new G4LogicalVolume((*solids)[6],
+						nist->FindOrBuildMaterial("G4_W"),
+								      "Plates");
+
+
+  new G4PVPlacement(0,                     //no rotation
+		  G4ThreeVector(0.,0.,0.),                 //at position
+		  logicPlates,          //its logical volume
+		  "Plates",           //its name
+		  logicEnv,                //its mother  volume
+		  false,                   //no boolean operation:u
+		  0,                       //copy number
+		  checkOverlaps);          //overlaps checking
 
   fScoringVolume = logicDetectorTop;
 
