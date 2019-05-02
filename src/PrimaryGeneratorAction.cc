@@ -122,6 +122,9 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   else if(lossConeData[angleIndex][0] < 50) {E0 = 194.;}
   else if(lossConeData[angleIndex][0] < 64) {E0 = 230.;}
   
+  // TEST
+  E0 *= 10; 
+
   // Mathematics spherical coordinates definition!!!
   G4double sphereR = 15.*cm;
   G4double PI = 3.14159265358979323846;
@@ -162,7 +165,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double PI = 3.14159265358979323846;
 
   // N particles generated per simulation run
-  G4int nParticles = 1e6;	// trapped particles
+  G4int nParticles = 1e5;	// trapped particles
   G4int nLCparticles = std::floor(0.1851*nParticles);	
   // loss cone particles (backscattered)
 
@@ -181,7 +184,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double theta_exclusion = 64.*PI/180.;
 
   // E-folding (E0 energy) in keV (Wei from DEMETER data)
-  G4double E0 = 150.;
+  // TEST
+  G4double E0 = 150.*10;
   for(G4int i = 0; i<nParticles; i++){
 
 
