@@ -122,8 +122,6 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   else if(lossConeData[angleIndex][0] < 50) {E0 = 194.;}
   else if(lossConeData[angleIndex][0] < 64) {E0 = 230.;}
   
-  // TEST
-  E0 *= 10; 
 
   // Mathematics spherical coordinates definition!!!
   G4double sphereR = 15.*cm;
@@ -185,7 +183,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // E-folding (E0 energy) in keV (Wei from DEMETER data)
   // TEST
-  G4double E0 = 150.*10;
+  G4double E0 = 150.;
   for(G4int i = 0; i<nParticles; i++){
 
 

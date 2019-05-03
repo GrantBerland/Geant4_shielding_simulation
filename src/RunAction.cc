@@ -104,7 +104,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* run)
+void RunAction::EndOfRunAction(const G4Run*)
 {
 /*
   G4int nofEvents = run->GetNumberOfEvent();
@@ -137,7 +137,7 @@ void RunAction::AddEdep(G4double edep)
   fEdep2 += edep*edep;
 }
 
-void RunAction::LogEntry(G4double edep)
+void RunAction::LogEntry(G4double)
 {
 /*
   (*asciiFile) << std::setiosflags(std::ios::fixed)
