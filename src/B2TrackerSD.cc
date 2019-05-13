@@ -127,7 +127,7 @@ G4int hitCounter = 0;
        totalEnergy += (*fHitsCollection)[i]->fEdep;
        
        if((*fHitsCollection)[i]->fEdep >= energyThreshold) hitCounter += 1;
-       
+      
        }
      
       G4cout << "Total energy deposited in detectors: " << G4BestUnit(totalEnergy,"Energy") << G4endl;

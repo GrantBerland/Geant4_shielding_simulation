@@ -42,7 +42,7 @@
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
-
+#include <fstream>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
@@ -218,7 +218,7 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   randomNumber = G4UniformRand();
 
   // Inverse CDF sampling for exponential RV
-  r->energy = (std::log(1 - randomNumber)*-E0)*keV;
+  r->energy = ((std::log(1 - randomNumber)*-E0) + 5000.)*keV;
 }
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
@@ -237,7 +237,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // Constant sphere offsets
   G4double xShift = 50.;
   G4double yShift = 50.;
-  G4double zShift = 150.;
+  G4double zShift = 50.;
   
   // Radius of sphere surface where particles are generated
   G4double sphereR = 15.*cm;
@@ -246,7 +246,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double theta_exclusion = 64.*PI/180.;
 
   // E-folding (E0 energy) in keV (Wei from DEMETER data)
-  // TEST
   G4double E0 = 150.;
   for(G4int i = 0; i<nParticles; i++){
 
@@ -285,12 +284,17 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     // Selects random energy according to exponential distribution
     G4double randomNumber = G4UniformRand();
-    G4double randEnergy = std::log(1 - randomNumber)*-E0*keV;
+    G4double randEnergy = ((std::log(1 - randomNumber)*-E0) + 5000.)*keV;
 
 
     fParticleGun->SetParticlePosition(G4ThreeVector(xPos+xShift, yPos+yShift, zPos+zShift));
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xDir, yDir, zDir));
     fParticleGun->SetParticleEnergy(randEnergy);
+    
+    std::ofstream energyFile;
+    energyFile.open("./particle_energy.txt", std::ios_base::app);
+    energyFile << randEnergy/keV << "\n";
+    energyFile.close();
 
     fParticleGun->GeneratePrimaryVertex(anEvent);
 
