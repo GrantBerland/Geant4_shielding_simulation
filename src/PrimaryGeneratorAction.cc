@@ -227,8 +227,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double PI = 3.14159265358979323846;
 
   // N particles generated per simulation run
-  G4int nParticles = 1e5;	// trapped particles
-  G4int nLCparticles = std::floor(0.1851*nParticles);	
+  G4int totalParticles = 1e5;
+  G4int nLCparticles = std::floor(0.1851*totalParticles);	
+  G4int nParticles = totalParticles - nLCparticles;
   // loss cone particles (backscattered)
 
   // Allocate variables for random position, direction
