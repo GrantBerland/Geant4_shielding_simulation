@@ -227,7 +227,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double PI = 3.14159265358979323846;
 
   // N particles generated per simulation run
-  G4int nParticles = 1e5;
+  std::fstream particleNumberFile;
+  particleNumberFile.open("./numberOfParticles.txt", std::ios_base::in);
+  G4int nParticles;
+  particleNumberFile >> nParticles;
+  particleNumberFile.close();
   G4int nLCparticles = std::floor(0.316*nParticles);	
   // loss cone particles (backscattered)
 
@@ -291,11 +295,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xDir, yDir, zDir));
     fParticleGun->SetParticleEnergy(randEnergy);
     
-    std::ofstream energyFile;
-    energyFile.open("./particle_energy.txt", std::ios_base::app);
-    energyFile << randEnergy/keV << "\n";
-    energyFile.close();
-
     fParticleGun->GeneratePrimaryVertex(anEvent);
 
   }
