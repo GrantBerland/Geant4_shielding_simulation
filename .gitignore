@@ -8,4 +8,4 @@ build/CMakeFiles/
 *.settings
 *.cc.o
 build/*.txt
-**/build
+/build

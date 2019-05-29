@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -89,6 +89,8 @@ G4EmLivermorePhysics.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/G4EmLivermorePhysics.hh
 G4PhysListFactory.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/G4PhysListFactory.hh
+QBBC.hh
+/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/QBBC.hh
 G4VisExecutive.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/G4VisExecutive.hh
 G4UIExecutive.hh
@@ -5509,6 +5511,12 @@ G4VModularPhysicsList.hh
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/lists/include/G4VModularPhysicsList.hh
 globals.hh
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/lists/include/globals.hh
+
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/lists/include/QBBC.hh
+globals.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/lists/include/globals.hh
+G4VModularPhysicsList.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/lists/include/G4VModularPhysicsList.hh
 
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/physics_lists/util/include/CompileTimeConstraints.hh
 

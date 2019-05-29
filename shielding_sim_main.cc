@@ -45,6 +45,7 @@
 #include "FTFP_BERT.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4PhysListFactory.hh"
+#include "QBBC.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -83,9 +84,9 @@ int main(int argc,char** argv)
 
 
   // Physics list
-  // G4VModularPhysicsList* physicsList = new FTFP_BERT; //QBBC;
+  // G4VModularPhysicsList* physicsList = new QBBC;
   G4PhysListFactory factory;
-  G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("FTFP_BERT_LIV");
+  G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("QBBC");
   physicsList->SetVerboseLevel(1);
   runManager->SetUserInitialization(new DetectorConstruction());
   runManager->SetUserInitialization(physicsList);
