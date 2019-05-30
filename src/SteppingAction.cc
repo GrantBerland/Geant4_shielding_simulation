@@ -56,42 +56,9 @@ SteppingAction::~SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::UserSteppingAction(const G4Step* step)
+void SteppingAction::UserSteppingAction(const G4Step*)
 {
-/*
-    G4bool isEnteringDetector;
-    G4bool isInDetector;
-    G4Track* track = step->GetTrack();
-    G4String volName, nextVolName;
 
-    if(track->GetVolume()) volName = track->GetVolume()->GetName();
-    if(track->GetNextVolume()) nextVolName = track->GetNextVolume()->GetName();
-
-    isEnteringDetector = (volName != "Detectors" && nextVolName == "Detectors");
-
-
-    if(isEnteringDetector){
-    std::ofstream hitFile;
-    G4ThreeVector pos = track->GetPosition();
-
-    hitFile.open("./detector_hists.txt", std::ios_base::app);
-    hitFile << pos.x()/cm << ","
-    << pos.y()/cm << "," << pos.z()/cm << "\n";
-    hitFile.close();
-
-    }
-
-    isInDetector = (volName == "Detectors" && nextVolName == "Detectors");
-
-    if(isInDetector){
-      std::ofstream energyFile;
-      G4double edepStep = step->GetTotalEnergyDeposit();
-      energyFile.open("./detector_energy.txt", std::ios_base::app);
-      energyFile << edepStep/keV << "\n";
-      energyFile.close();
-   }
-
-*/
 }
 
 

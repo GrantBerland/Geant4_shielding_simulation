@@ -84,9 +84,9 @@ int main(int argc,char** argv)
 
 
   // Physics list
-  // G4VModularPhysicsList* physicsList = new QBBC;
   G4PhysListFactory factory;
-  G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("QBBC");
+  //G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("QBBC");
+  G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("FTFP_BERT_LIV");
   physicsList->SetVerboseLevel(1);
   runManager->SetUserInitialization(new DetectorConstruction());
   runManager->SetUserInitialization(physicsList);

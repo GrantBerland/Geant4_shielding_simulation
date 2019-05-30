@@ -166,7 +166,7 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
 { 62.3474 , 0.9734 },
 { 63.0000 , 1.0000 },
 };
-  //G4double fluxSum = 18.155822371325151;
+  
   G4double randomNumber = G4UniformRand();
   G4int angleIndex = -1;
 
@@ -218,7 +218,7 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   randomNumber = G4UniformRand();
 
   // Inverse CDF sampling for exponential RV
-  r->energy = ((std::log(1 - randomNumber)*-E0) + 5000.)*keV;
+  r->energy = ((std::log(1 - randomNumber)*-E0))*keV;
 }
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
@@ -250,7 +250,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double theta_exclusion = 64.*PI/180.;
 
   // E-folding (E0 energy) in keV (Wei from DEMETER data)
-  G4double E0 = 150.;
+  G4double E0 = 300.;
   for(G4int i = 0; i<nParticles; i++){
 
 
@@ -288,7 +288,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     // Selects random energy according to exponential distribution
     G4double randomNumber = G4UniformRand();
-    G4double randEnergy = ((std::log(1 - randomNumber)*-E0) + 5000.)*keV;
+    G4double randEnergy = ((std::log(1 - randomNumber)*-E0))*keV;
 
 
     fParticleGun->SetParticlePosition(G4ThreeVector(xPos+xShift, yPos+yShift, zPos+zShift));
