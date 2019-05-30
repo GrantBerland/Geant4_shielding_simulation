@@ -71,7 +71,6 @@
 /vis/geometry/set/colour Baffles  0.8 0.8 0.9 1 0.8
 /vis/geometry/set/colour Windows  0 0.125 0.08 0.667 0.8
 /vis/geometry/set/colour Shielding 0 0.667 0.667 0.616 .75
-/vis/geometry/set/colour Plates 0 0.667 0.667 0.616 .40
 /vis/viewer/set/style surface
 /vis/viewer/set/hiddenMarker true
 /vis/viewer/set/viewpointThetaPhi 120 150

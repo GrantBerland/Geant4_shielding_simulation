@@ -75,7 +75,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4bool checkOverlaps    = true;
   G4bool validateSchema   = false;
 
-  fParser.Read("./top_v2.gdml", validateSchema);
+  fParser.Read("./top_v1.gdml", validateSchema);
   G4SolidStore* solids = G4SolidStore::GetInstance();
 
 
@@ -193,23 +193,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		    checkOverlaps);          //overlaps checking
 
 
-  
-  G4LogicalVolume* logicPlates = new G4LogicalVolume((*solids)[6],
-						nist->FindOrBuildMaterial("G4_W"),
-								      "Plates");
-
-
-  new G4PVPlacement(0,                     //no rotation
-		  G4ThreeVector(0.,0.,0.),                 //at position
-		  logicPlates,          //its logical volume
-		  "Plates",           //its name
-		  logicShielding,                //its mother  volume
-		  false,                   //no boolean operation:u
-		  0,                       //copy number
-		  checkOverlaps);          //overlaps checking
-
-
-
   G4LogicalVolume* logicDetectorTop = new G4LogicalVolume((*solids)[3],
 								CZT,
 							      "DetectorCZT");
@@ -217,7 +200,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	 	   G4ThreeVector(0.,0.,0.),   //at position
 	 	   logicDetectorTop,          //its logical volume
 		   "DetectorCZT",              //its name
-		   logicPlates,         //its mother  volume
+		   logicShielding,         //its mother  volume
 		   false,                  //no boolean operation:u
 		    0,                     //copy number
 	  	   checkOverlaps);         //overlaps checking
@@ -229,7 +212,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	 	   G4ThreeVector(0.,0.,0.),   //at position
 	 	   logicDetectorBottom,          //its logical volume
 		   "DetectorFR4",              //its name
-		   logicPlates,         //its mother  volume
+		   logicShielding,
 		   false,                  //no boolean operation:u
 		    0,                     //copy number
 	  	   checkOverlaps);         //overlaps checking
