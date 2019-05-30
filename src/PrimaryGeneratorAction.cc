@@ -47,7 +47,9 @@
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
-  fParticleGun(0)
+  fParticleGun(0),
+  E_folding(300.),
+  E_shift(2000.)
 {
 
   fParticleGun  = new G4ParticleGun();
@@ -218,7 +220,7 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   randomNumber = G4UniformRand();
 
   // Inverse CDF sampling for exponential RV
-  r->energy = ((std::log(1 - randomNumber)*-E0))*keV;
+  r->energy = ((std::log(1 - randomNumber)*-E0 + E_shift))*keV;
 }
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
@@ -249,10 +251,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // Loss cone angle (same as polar angle, phi) at 500 km, in radians
   G4double theta_exclusion = 64.*PI/180.;
 
-  // E-folding (E0 energy) in keV (Wei from DEMETER data)
-  G4double E0 = 300.;
+  // E-folding (E0 energy) in keV (Wei from DEMETER data) [now defined in as class member!]
+  
   for(G4int i = 0; i<nParticles; i++){
-
 
     // Reset position and direction of particle
     xPos = 0; xDir = 0;
@@ -288,7 +289,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     // Selects random energy according to exponential distribution
     G4double randomNumber = G4UniformRand();
-    G4double randEnergy = ((std::log(1 - randomNumber)*-E0))*keV;
+    G4double randEnergy = ((std::log(1 - randomNumber)*-E_folding + E_shift))*keV;
 
 
     fParticleGun->SetParticlePosition(G4ThreeVector(xPos+xShift, yPos+yShift, zPos+zShift));
