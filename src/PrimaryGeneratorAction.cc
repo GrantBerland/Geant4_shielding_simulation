@@ -48,8 +48,8 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
-  E_folding(300.),
-  E_shift(2000.)
+  E_folding(150.),
+  E_shift(0.)
 {
 
   fParticleGun  = new G4ParticleGun();

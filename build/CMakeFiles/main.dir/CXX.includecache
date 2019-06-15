@@ -10,26 +10,6 @@
 G4VUserActionInitialization.hh
 ../include/G4VUserActionInitialization.hh
 
-../include/B2TrackerHit.hh
-G4VHit.hh
-../include/G4VHit.hh
-G4THitsCollection.hh
-../include/G4THitsCollection.hh
-G4Allocator.hh
-../include/G4Allocator.hh
-G4ThreeVector.hh
-../include/G4ThreeVector.hh
-tls.hh
-../include/tls.hh
-
-../include/B2TrackerSD.hh
-G4VSensitiveDetector.hh
-../include/G4VSensitiveDetector.hh
-B2TrackerHit.hh
-../include/B2TrackerHit.hh
-vector
--
-
 ../include/DetectorConstruction.hh
 G4VUserDetectorConstruction.hh
 ../include/G4VUserDetectorConstruction.hh
@@ -67,6 +47,8 @@ g4xml.hh
 ../include/SteppingAction.hh
 G4UserSteppingAction.hh
 ../include/G4UserSteppingAction.hh
+G4ThreeVector.hh
+../include/G4ThreeVector.hh
 globals.hh
 ../include/globals.hh
 
@@ -112,48 +94,6 @@ EventAction.hh
 SteppingAction.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/SteppingAction.hh
 
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/B2TrackerHit.cc
-B2TrackerHit.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/B2TrackerHit.hh
-G4UnitsTable.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4UnitsTable.hh
-G4VVisManager.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4VVisManager.hh
-G4Circle.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4Circle.hh
-G4Colour.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4Colour.hh
-G4VisAttributes.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4VisAttributes.hh
-iomanip
--
-
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/B2TrackerSD.cc
-B2TrackerHit.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/B2TrackerHit.hh
-B2TrackerSD.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/B2TrackerSD.hh
-G4HCofThisEvent.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4HCofThisEvent.hh
-G4Step.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4Step.hh
-G4ThreeVector.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4ThreeVector.hh
-G4SDManager.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4SDManager.hh
-G4ios.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4ios.hh
-G4UnitsTable.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4UnitsTable.hh
-G4SystemOfUnits.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4SystemOfUnits.hh
-fstream
--
-cstdio
--
-string
--
-
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/DetectorConstruction.cc
 DetectorConstruction.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/DetectorConstruction.hh
@@ -177,8 +117,6 @@ G4SolidStore.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4SolidStore.hh
 G4SDManager.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4SDManager.hh
-B2TrackerSD.hh
-/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/B2TrackerSD.hh
 
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/EventAction.cc
 EventAction.hh
@@ -269,6 +207,8 @@ G4LogicalVolume.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4LogicalVolume.hh
 G4SystemOfUnits.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4SystemOfUnits.hh
+G4AutoLock.hh
+/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4AutoLock.hh
 fstream
 -
 
@@ -3851,10 +3791,6 @@ climits
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/global/management/include/windefs.hh
 windows.h
 -
-
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/graphics_reps/include/G4Circle.hh
-G4VMarker.hh
-/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/graphics_reps/include/G4VMarker.hh
 
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/graphics_reps/include/G4Color.hh
 G4Colour.hh

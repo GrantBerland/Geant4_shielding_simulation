@@ -6,8 +6,6 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/shielding_sim_main.cc" "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/build/CMakeFiles/main.dir/shielding_sim_main.cc.o"
   "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/ActionInitialization.cc" "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/build/CMakeFiles/main.dir/src/ActionInitialization.cc.o"
-  "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/B2TrackerHit.cc" "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/build/CMakeFiles/main.dir/src/B2TrackerHit.cc.o"
-  "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/B2TrackerSD.cc" "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/build/CMakeFiles/main.dir/src/B2TrackerSD.cc.o"
   "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/DetectorConstruction.cc" "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/build/CMakeFiles/main.dir/src/DetectorConstruction.cc.o"
   "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/EventAction.cc" "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/build/CMakeFiles/main.dir/src/EventAction.cc.o"
   "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/PrimaryGeneratorAction.cc" "/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/build/CMakeFiles/main.dir/src/PrimaryGeneratorAction.cc.o"

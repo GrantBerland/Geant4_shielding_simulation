@@ -5,7 +5,6 @@
 /control/verbose 0
 /control/saveHistory
 /run/verbose 0
-/run/setCut 0.01 mm
 #
 #
 # Initialize kernel

@@ -46,7 +46,6 @@
 #include "G4RotationMatrix.hh"
 #include "G4SolidStore.hh"
 #include "G4SDManager.hh"
-#include "B2TrackerSD.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -234,12 +233,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   fScoringVolume = logicDetectorTop;
-
-  // Register the detector as a sensitive detector
-  B2TrackerSD* aTrackerSD = new B2TrackerSD("DetectorCZT","TrackerHitsCollection");
-  G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
-  SetSensitiveDetector("DetectorCZT", aTrackerSD, true);
-
 
   // always return the physical World
   return physWorld;

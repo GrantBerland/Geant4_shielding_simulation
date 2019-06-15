@@ -38,15 +38,21 @@
 #include "G4RunManager.hh"
 #include "G4LogicalVolume.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AutoLock.hh"
 
 #include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+
+namespace { G4Mutex myParticleLog = G4MUTEX_INITIALIZER; }
+
+
 SteppingAction::SteppingAction(EventAction* eventAction)
 : G4UserSteppingAction(),
   fEventAction(eventAction),
-  fScoringVolume(0)
+  fScoringVolume(0),
+  fileName("hits.csv")
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,9 +62,55 @@ SteppingAction::~SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::UserSteppingAction(const G4Step*)
+void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
 
+  G4bool isEnteringDetector, isInDetector;
+  G4String volName, nextVolName;
+  G4int flag;
+
+  G4Track* track = aStep->GetTrack();
+  const G4StepPoint* postPoint = aStep->GetPostStepPoint();
+
+  if (track->GetVolume()) {volName = track->GetVolume()->GetName();}
+  if (track->GetNextVolume()) {nextVolName = track->GetNextVolume()->GetName();}
+
+  isInDetector = (volName == "Detector" && nextVolName == "Detector");
+  isEnteringDetector = (volName != "Detector" && nextVolName == "Detector");
+
+  if(isInDetector)
+  {
+    flag = 0;
+    G4ThreeVector pos = postPoint->GetPosition();
+    G4double ene = postPoint->GetKineticEnergy();
+  
+    LogParticle(pos, ene, fileName, flag);
+  }
+  else if(isEnteringDetector)
+  {
+    flag = 1;
+    G4ThreeVector pos = postPoint->GetPosition();
+    G4double ene = postPoint->GetKineticEnergy();
+  
+    LogParticle(pos, ene, fileName, flag);
+  }
+
+  
+}
+
+
+void SteppingAction::LogParticle(G4ThreeVector pos, G4double ene, G4String
+ detectorFileName, G4int flag)
+{
+
+    G4AutoLock lock(&myParticleLog);
+
+    std::ofstream hitFile_detector;
+    hitFile_detector.open(detectorFileName, std::ios_base::app);
+
+    hitFile_detector << flag << "," << ene/keV << "\n";
+
+    hitFile_detector.close();
 }
 
 

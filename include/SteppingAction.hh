@@ -32,6 +32,7 @@
 #define SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
+#include "G4ThreeVector.hh"
 #include "globals.hh"
 
 class EventAction;
@@ -50,11 +51,12 @@ class SteppingAction : public G4UserSteppingAction
 
     // method from the base class
     virtual void UserSteppingAction(const G4Step*);
-
+    void LogParticle(G4ThreeVector, G4double, G4String, G4int);
 
   private:
     EventAction*  fEventAction;
     G4LogicalVolume* fScoringVolume;
+    G4String fileName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

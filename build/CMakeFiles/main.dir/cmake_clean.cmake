@@ -1,8 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/main.dir/shielding_sim_main.cc.o"
   "CMakeFiles/main.dir/src/ActionInitialization.cc.o"
-  "CMakeFiles/main.dir/src/B2TrackerHit.cc.o"
-  "CMakeFiles/main.dir/src/B2TrackerSD.cc.o"
   "CMakeFiles/main.dir/src/DetectorConstruction.cc.o"
   "CMakeFiles/main.dir/src/EventAction.cc.o"
   "CMakeFiles/main.dir/src/PrimaryGeneratorAction.cc.o"

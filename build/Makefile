@@ -236,60 +236,6 @@ src/ActionInitialization.cc.s:
 	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/ActionInitialization.cc.s
 .PHONY : src/ActionInitialization.cc.s
 
-src/B2TrackerHit.o: src/B2TrackerHit.cc.o
-
-.PHONY : src/B2TrackerHit.o
-
-# target to build an object file
-src/B2TrackerHit.cc.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/B2TrackerHit.cc.o
-.PHONY : src/B2TrackerHit.cc.o
-
-src/B2TrackerHit.i: src/B2TrackerHit.cc.i
-
-.PHONY : src/B2TrackerHit.i
-
-# target to preprocess a source file
-src/B2TrackerHit.cc.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/B2TrackerHit.cc.i
-.PHONY : src/B2TrackerHit.cc.i
-
-src/B2TrackerHit.s: src/B2TrackerHit.cc.s
-
-.PHONY : src/B2TrackerHit.s
-
-# target to generate assembly for a file
-src/B2TrackerHit.cc.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/B2TrackerHit.cc.s
-.PHONY : src/B2TrackerHit.cc.s
-
-src/B2TrackerSD.o: src/B2TrackerSD.cc.o
-
-.PHONY : src/B2TrackerSD.o
-
-# target to build an object file
-src/B2TrackerSD.cc.o:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/B2TrackerSD.cc.o
-.PHONY : src/B2TrackerSD.cc.o
-
-src/B2TrackerSD.i: src/B2TrackerSD.cc.i
-
-.PHONY : src/B2TrackerSD.i
-
-# target to preprocess a source file
-src/B2TrackerSD.cc.i:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/B2TrackerSD.cc.i
-.PHONY : src/B2TrackerSD.cc.i
-
-src/B2TrackerSD.s: src/B2TrackerSD.cc.s
-
-.PHONY : src/B2TrackerSD.s
-
-# target to generate assembly for a file
-src/B2TrackerSD.cc.s:
-	$(MAKE) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/B2TrackerSD.cc.s
-.PHONY : src/B2TrackerSD.cc.s
-
 src/DetectorConstruction.o: src/DetectorConstruction.cc.o
 
 .PHONY : src/DetectorConstruction.o
@@ -445,12 +391,6 @@ help:
 	@echo "... src/ActionInitialization.o"
 	@echo "... src/ActionInitialization.i"
 	@echo "... src/ActionInitialization.s"
-	@echo "... src/B2TrackerHit.o"
-	@echo "... src/B2TrackerHit.i"
-	@echo "... src/B2TrackerHit.s"
-	@echo "... src/B2TrackerSD.o"
-	@echo "... src/B2TrackerSD.i"
-	@echo "... src/B2TrackerSD.s"
 	@echo "... src/DetectorConstruction.o"
 	@echo "... src/DetectorConstruction.i"
 	@echo "... src/DetectorConstruction.s"
