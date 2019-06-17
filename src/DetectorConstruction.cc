@@ -46,6 +46,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4SolidStore.hh"
 #include "G4SDManager.hh"
+#include "G4SubtractionSolid.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,24 +73,24 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double env_sizeXY = 50.*cm, env_sizeZ = 50.*cm;
 
   G4bool checkOverlaps    = true;
-  G4bool validateSchema   = false;
-
-  fParser.Read("./top_v1.gdml", validateSchema);
-  G4SolidStore* solids = G4SolidStore::GetInstance();
-
-
     // Material: Vacuum
     //TODO: check pressures, environment for Van Allen belt altitudes
   G4Material* vacuum_material = new G4Material("Vacuum",
               1.0 , 1.01*g/mole, 1.0E-25*g/cm3,
               kStateGas, 2.73*kelvin, 3.0E-18*pascal );
   
+  G4Box* worldBox = new G4Box("World", 0.5*env_sizeXY, 0.5*env_sizeXY, 0.5*env_sizeZ);
+  G4LogicalVolume* logicWorld = new G4LogicalVolume(worldBox,
+						     vacuum_material,
+						     "World");
 
-  G4LogicalVolume* logicWorld = new G4LogicalVolume((*solids)[0],
-							     vacuum_material,
-							     "World");
-
-
+  G4VPhysicalVolume* physWorld = new G4PVPlacement(0,
+		  			     G4ThreeVector(),
+					     logicWorld,
+					     "World",
+					     0,
+					     false,
+					     0);
 
   G4Box* solidEnv =
     new G4Box("Envelope",                    //its name
@@ -145,94 +146,76 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   FR4->AddMaterial(SiO2, 0.528);
   FR4->AddMaterial(Epoxy, 0.472);
 
+  //////////////////////////////////////////
+  /////////// Detector Construction ////////
+  //////////////////////////////////////////
+
+
+  G4double outerShieldingThickness = 2.44*cm;
+  G4double innerShieldingThickness = 0.5*cm;
+  G4double detectorXY = 3.9*cm;
+  G4double detectorZ  = 1.5*cm;
+  G4double boxInnerSizeXY = 4.5*cm;
+  G4double boxInnerSizeZ = 2.5*cm;
+
+  G4VSolid* detectorBox = new G4Box("Detector",
+		  		    detectorXY,
+				    detectorZ,
+				    detectorXY);
+
+  G4LogicalVolume* logicDetector = new G4LogicalVolume(detectorBox,
+							CZT,
+							"Detector");
+  new G4PVPlacement(0,
+		    G4ThreeVector(),
+		    logicDetector,
+		    "Detector",
+		    logicWorld,
+		    false,
+		    0);
 
 
 
-  for(unsigned int i = 0; i < solids->size(); i++){
-    G4VSolid* psol = (*solids)[i];
-    G4cout << "Solid ID: " << i << " Name: " << psol->GetName() << G4endl;
-    };
+  G4VSolid* outerShieldingBox = new G4Box("Outer-shielding",
+	  boxInnerSizeXY+innerShieldingThickness+outerShieldingThickness,
+	  boxInnerSizeZ+innerShieldingThickness+outerShieldingThickness,
+	  boxInnerSizeXY+innerShieldingThickness+outerShieldingThickness);
 
+  G4VSolid* innerShieldingBox = new G4Box("Inner-shielding",
+	   boxInnerSizeXY+innerShieldingThickness,
+	   boxInnerSizeZ+innerShieldingThickness,
+	   boxInnerSizeXY+innerShieldingThickness);
 
-  G4VPhysicalVolume* physWorld =
-    new G4PVPlacement(0,                     //no rotation
-                      G4ThreeVector(),       //at (0,0,0)
-                      logicWorld,            //its logical volume
-                      "World",               //its name
-                      0,                     //its mother  volume
-                      false,                 //no boolean operation
-                      0,                     //copy number
-                      checkOverlaps);        //overlaps checking
- 
- G4LogicalVolume* logicShielding = new G4LogicalVolume((*solids)[1],
-					nist->FindOrBuildMaterial("G4_Al"),
-							     "Shielding");
+  G4VSolid* slit = new G4Box("Slit",
+		  	1.0*mm,
+			innerShieldingThickness+outerShieldingThickness,
+			boxInnerSizeXY);
 
+  G4VSolid* subtractionBox = new G4Box("Subtraction-box",
+		  		       boxInnerSizeXY,
+				       boxInnerSizeZ,
+				       boxInnerSizeXY);
+  
+  G4SubtractionSolid* shieldingBoxOuter = new G4SubtractionSolid("OS",
+		                          outerShieldingBox,
+		  			  subtractionBox);
 
-  new G4PVPlacement(0,                     //no rotation
-                  G4ThreeVector(0.,0.,-10.*cm),                 //at position
-                  logicShielding,          //its logical volume
-		  "Shielding",           //its name
-		  logicEnv,                //its mother  volume
-		  false,                   //no boolean operation:u
-	 	  0,                       //copy number
-		  checkOverlaps);          //overlaps checking
+  G4LogicalVolume* logicalOuterShielding = new G4LogicalVolume(shieldingBoxOuter,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "OS");
+  
+  new G4PVPlacement(0,
+		  G4ThreeVector(),
+		  logicalOuterShielding,
+		  "OS",
+		  logicWorld,
+		  false,
+		  0);
+  
+  
+  
+  
 
-
-  G4LogicalVolume* logicWindows = new G4LogicalVolume((*solids)[2],
-					nist->FindOrBuildMaterial("G4_Be"),
-							     "Windows");
-  new G4PVPlacement(0,                       //no rotation
-	            G4ThreeVector(0.,0.,0.), //its logical volume
-	            logicWindows,            //at position
-	   	    "Windows",               //its name
-	 	    logicShielding,                //its mother  volume
-		    false,                   //no boolean operation:u
-		    0,                       //copy number
-		    checkOverlaps);          //overlaps checking
-
-
-  G4LogicalVolume* logicDetectorTop = new G4LogicalVolume((*solids)[3],
-								CZT,
-							      "DetectorCZT");
-  new G4PVPlacement(0,                     //no rotation
-	 	   G4ThreeVector(0.,0.,0.),   //at position
-	 	   logicDetectorTop,          //its logical volume
-		   "DetectorCZT",              //its name
-		   logicShielding,         //its mother  volume
-		   false,                  //no boolean operation:u
-		    0,                     //copy number
-	  	   checkOverlaps);         //overlaps checking
-	 
-  G4LogicalVolume* logicDetectorBottom = new G4LogicalVolume((*solids)[4],
-								FR4,
-							      "DetectorFR4");
-  new G4PVPlacement(0,                     //no rotation
-	 	   G4ThreeVector(0.,0.,0.),   //at position
-	 	   logicDetectorBottom,          //its logical volume
-		   "DetectorFR4",              //its name
-		   logicShielding,
-		   false,                  //no boolean operation:u
-		    0,                     //copy number
-	  	   checkOverlaps);         //overlaps checking
- 
-  G4LogicalVolume* logicBaffles = new G4LogicalVolume((*solids)[5],
-						nist->FindOrBuildMaterial("G4_W"),
-								      "Baffles");
-
-
-  new G4PVPlacement(0,                     //no rotation
-		  G4ThreeVector(0.,0.,0.),                 //at position
-		  logicBaffles,          //its logical volume
-		  "Baffles",           //its name
-		  logicShielding,                //its mother  volume
-		  false,                   //no boolean operation:u
-		  0,                       //copy number
-		  checkOverlaps);          //overlaps checking
-
-
-
-  fScoringVolume = logicDetectorTop;
 
   // always return the physical World
   return physWorld;
