@@ -12,6 +12,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.10.2/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.10.2/CMakeSystem.cmake"
   "../init_vis.mac"
+  "../runBeamOn.mac"
   "../vis.mac"
   "/home/grant/Documents/Research/Marshall_Research/geant4_build/Geant4Config.cmake"
   "/home/grant/Documents/Research/Marshall_Research/geant4_build/Geant4ConfigVersion.cmake"
@@ -48,6 +49,7 @@ set(CMAKE_MAKEFILE_OUTPUTS
 set(CMAKE_MAKEFILE_PRODUCTS
   "init_vis.mac"
   "vis.mac"
+  "runBeamOn.mac"
   "CMakeFiles/CMakeDirectoryInformation.cmake"
   )
 

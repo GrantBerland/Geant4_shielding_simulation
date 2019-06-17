@@ -117,6 +117,8 @@ G4SolidStore.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4SolidStore.hh
 G4SDManager.hh
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4SDManager.hh
+G4SubtractionSolid.hh
+/home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/G4SubtractionSolid.hh
 
 /home/grant/Documents/Research/Marshall_Research/AEPEX/shielding_simulation/src/EventAction.cc
 EventAction.hh
@@ -2798,6 +2800,32 @@ G4VoxelNavigation.icc
 
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/navigation/include/G4VoxelNavigation.icc
 
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4BooleanSolid.hh
+G4DisplacedSolid.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4DisplacedSolid.hh
+G4ThreeVector.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4ThreeVector.hh
+G4RotationMatrix.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4RotationMatrix.hh
+G4Transform3D.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4Transform3D.hh
+G4BooleanSolid.icc
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4BooleanSolid.icc
+
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4BooleanSolid.icc
+
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4DisplacedSolid.hh
+G4VSolid.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4VSolid.hh
+G4RotationMatrix.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4RotationMatrix.hh
+G4ThreeVector.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4ThreeVector.hh
+G4Transform3D.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4Transform3D.hh
+G4AffineTransform.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4AffineTransform.hh
+
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4MultiUnion.hh
 vector
 -
@@ -2815,6 +2843,20 @@ G4SurfBits.hh
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4SurfBits.hh
 G4Voxelizer.hh
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4Voxelizer.hh
+
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4SubtractionSolid.hh
+G4BooleanSolid.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4BooleanSolid.hh
+G4VSolid.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4VSolid.hh
+G4RotationMatrix.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4RotationMatrix.hh
+G4ThreeVector.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4ThreeVector.hh
+G4Transform3D.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4Transform3D.hh
+G4AffineTransform.hh
+/home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4AffineTransform.hh
 
 /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/CSG/include/G4Box.hh
 G4UBox.hh

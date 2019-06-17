@@ -78,29 +78,28 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   isInDetector = (volName == "Detector" && nextVolName == "Detector");
   isEnteringDetector = (volName != "Detector" && nextVolName == "Detector");
 
+
+  std::cout << volName << " , " << nextVolName << std::endl;
   if(isInDetector)
   {
     flag = 0;
-    G4ThreeVector pos = postPoint->GetPosition();
     G4double ene = postPoint->GetKineticEnergy();
   
-    LogParticle(pos, ene, fileName, flag);
+    LogParticle(ene, fileName, flag);
   }
   else if(isEnteringDetector)
   {
     flag = 1;
-    G4ThreeVector pos = postPoint->GetPosition();
     G4double ene = postPoint->GetKineticEnergy();
   
-    LogParticle(pos, ene, fileName, flag);
+    LogParticle(ene, fileName, flag);
   }
 
   
 }
 
 
-void SteppingAction::LogParticle(G4ThreeVector pos, G4double ene, G4String
- detectorFileName, G4int flag)
+void SteppingAction::LogParticle(G4double ene, G4String detectorFileName, G4int flag)
 {
 
     G4AutoLock lock(&myParticleLog);

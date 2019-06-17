@@ -1117,7 +1117,11 @@ CMakeFiles/main.dir/src/DetectorConstruction.cc.o
  /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/navigation/include/G4TransportationManager.icc
  /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/navigation/include/G4VoxelNavigation.hh
  /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/navigation/include/G4VoxelNavigation.icc
+ /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4BooleanSolid.hh
+ /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4BooleanSolid.icc
+ /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4DisplacedSolid.hh
  /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4MultiUnion.hh
+ /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4SubtractionSolid.hh
  /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/CSG/include/G4Box.hh
  /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/CSG/include/G4Box.icc
  /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/CSG/include/G4CSGSolid.hh

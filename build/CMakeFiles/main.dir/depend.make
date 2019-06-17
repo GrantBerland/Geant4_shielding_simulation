@@ -1116,7 +1116,11 @@ CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Researc
 CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/navigation/include/G4TransportationManager.icc
 CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/navigation/include/G4VoxelNavigation.hh
 CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/navigation/include/G4VoxelNavigation.icc
+CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4BooleanSolid.hh
+CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4BooleanSolid.icc
+CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4DisplacedSolid.hh
 CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4MultiUnion.hh
+CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/Boolean/include/G4SubtractionSolid.hh
 CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/CSG/include/G4Box.hh
 CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/CSG/include/G4Box.icc
 CMakeFiles/main.dir/src/DetectorConstruction.cc.o: /home/grant/Documents/Research/Marshall_Research/geant4.10.04.p02/source/geometry/solids/CSG/include/G4CSGSolid.hh

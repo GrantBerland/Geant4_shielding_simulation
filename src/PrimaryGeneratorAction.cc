@@ -48,7 +48,7 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
-  E_folding(150.),
+  E_folding(300.),
   E_shift(0.)
 {
 
@@ -229,21 +229,23 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double PI = 3.14159265358979323846;
 
   // N particles generated per simulation run
+  // Read in number of particle from file in build directory
   std::fstream particleNumberFile;
   particleNumberFile.open("./numberOfParticles.txt", std::ios_base::in);
   G4int nParticles;
   particleNumberFile >> nParticles;
   particleNumberFile.close();
+
+  // loss cone particles (backscattered), fractional flux derived from Marshall, Bortnik work
   G4int nLCparticles = std::floor(0.316*nParticles);	
-  // loss cone particles (backscattered)
 
   // Allocate variables for random position, direction
   G4double xPos,yPos,zPos,xDir,yDir,zDir;
 
   // Constant sphere offsets
-  G4double xShift = 50.;
-  G4double yShift = 50.;
-  G4double zShift = 50.;
+  G4double xShift = 0.;
+  G4double yShift = 0.;
+  G4double zShift = 0.;
   
   // Radius of sphere surface where particles are generated
   G4double sphereR = 15.*cm;
