@@ -151,12 +151,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //////////////////////////////////////////
 
 
-  G4double outerShieldingThickness = 2.44*cm;
-  G4double innerShieldingThickness = 0.5*cm;
-  G4double detectorXY = 3.9*cm;
-  G4double detectorZ  = 1.5*cm;
+  G4double outerShieldingThickness = 2.44*mm;
+  G4double innerShieldingThickness = 0.5*mm;
+  G4double detectorXY = 40.*mm;
+  G4double detectorZ  = 28.*mm;
   G4double boxInnerSizeXY = 4.5*cm;
-  G4double boxInnerSizeZ = 2.5*cm;
+  G4double boxInnerSizeZ = 4.5*cm;
 
   G4VSolid* detectorBox = new G4Box("Detector",
 		  		    detectorXY,
@@ -175,20 +175,25 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		    0);
 
 
+  ////// Geometry
 
   G4VSolid* outerShieldingBox = new G4Box("Outer-shielding",
-	  boxInnerSizeXY+innerShieldingThickness+outerShieldingThickness,
-	  boxInnerSizeZ+innerShieldingThickness+outerShieldingThickness,
-	  boxInnerSizeXY+innerShieldingThickness+outerShieldingThickness);
+boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness,
+boxInnerSizeZ+2*innerShieldingThickness+2*outerShieldingThickness,
+boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 
   G4VSolid* innerShieldingBox = new G4Box("Inner-shielding",
-	   boxInnerSizeXY+innerShieldingThickness,
-	   boxInnerSizeZ+innerShieldingThickness,
-	   boxInnerSizeXY+innerShieldingThickness);
+	  boxInnerSizeXY+2*innerShieldingThickness,
+	  boxInnerSizeZ+2*innerShieldingThickness,
+	  boxInnerSizeXY+2*innerShieldingThickness);
 
-  G4VSolid* slit = new G4Box("Slit",
+  G4VSolid* slit1 = new G4Box("Slit",
 		  	1.0*mm,
-			innerShieldingThickness+outerShieldingThickness,
+			outerShieldingThickness+1.*cm,
+			boxInnerSizeXY);
+  G4VSolid* slit2 = new G4Box("Slit",
+		  	1.0*mm,
+			innerShieldingThickness+1.*cm,
 			boxInnerSizeXY);
 
   G4VSolid* subtractionBox = new G4Box("Subtraction-box",
@@ -196,22 +201,68 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				       boxInnerSizeZ,
 				       boxInnerSizeXY);
   
-  G4SubtractionSolid* shieldingBoxOuter = new G4SubtractionSolid("OS",
+  
+  
+  ////// Subtractions
+ 
+  G4RotationMatrix* rotm = new G4RotationMatrix(); // empty rotation matrix for SubtractionSolid constructor
+  
+  G4SubtractionSolid* shieldingBoxOuter = new G4SubtractionSolid("Al_Shielding",
 		                          outerShieldingBox,
+		  			  innerShieldingBox);
+
+  G4SubtractionSolid* shieldingBoxOuter_slit = new G4SubtractionSolid("Al_Shielding",
+		                          shieldingBoxOuter,
+		  			  slit1,
+					  rotm,
+			G4ThreeVector(0., boxInnerSizeZ + outerShieldingThickness, 0.));
+  
+  G4SubtractionSolid* shieldingBoxInner = new G4SubtractionSolid("W_Shielding",
+		                          innerShieldingBox,
 		  			  subtractionBox);
 
-  G4LogicalVolume* logicalOuterShielding = new G4LogicalVolume(shieldingBoxOuter,
+  G4SubtractionSolid* shieldingBoxInner_slit = new G4SubtractionSolid("W_Shielding",
+		                          shieldingBoxInner,
+		  			  slit2,
+					  rotm,
+			G4ThreeVector(0., boxInnerSizeZ + innerShieldingThickness, 0.));
+  
+  
+  
+  ////// Logical Volumes
+  
+  
+  
+  G4LogicalVolume* logicalOuterShielding = new G4LogicalVolume(shieldingBoxOuter_slit,
 		  nist->FindOrBuildMaterial("G4_Al"),
-		  "OS");
+		  "Al_Shielding");
+  
+  G4LogicalVolume* logicalInnerShielding = new G4LogicalVolume(shieldingBoxInner_slit,
+		  nist->FindOrBuildMaterial("G4_W"),
+		  "W_Shielding");
+  
+
+  
+  
+  
+  ////// Placements
+  
   
   new G4PVPlacement(0,
 		  G4ThreeVector(),
 		  logicalOuterShielding,
-		  "OS",
+		  "Al_Shielding",
 		  logicWorld,
 		  false,
 		  0);
   
+  new G4PVPlacement(0,
+		  G4ThreeVector(),
+		  logicalInnerShielding,
+		  "W_Shielding",
+		  logicWorld,
+		  false,
+		  0);
   
   
   
