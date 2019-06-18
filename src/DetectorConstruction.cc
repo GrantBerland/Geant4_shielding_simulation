@@ -73,13 +73,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double env_sizeXY = 40.*cm, env_sizeZ = 40.*cm;
 
   G4bool checkOverlaps    = true;
-    // Material: Vacuum
-    //TODO: check pressures, environment for Van Allen belt altitudes
+  
+  // Material: Vacuum
   G4Material* vacuum_material = new G4Material("Vacuum",
               1.0 , 1.01*g/mole, 1.0E-25*g/cm3,
               kStateGas, 2.73*kelvin, 3.0E-18*pascal );
   
-  G4Box* worldBox = new G4Box("World", 0.5*env_sizeXY, 0.5*env_sizeXY, 0.5*env_sizeZ);
+  G4Box* worldBox = new G4Box("World", 0.6*env_sizeXY, 0.6*env_sizeXY, 0.6*env_sizeZ);
   G4LogicalVolume* logicWorld = new G4LogicalVolume(worldBox,
 						     vacuum_material,
 						     "World");
@@ -170,9 +170,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		    G4ThreeVector(0.,-1.*cm,0.),
 		    logicDetector,
 		    "Detector",
-		    logicWorld,
+		    logicEnv,
 		    false,
-		    0);
+		    checkOverlaps);
 
 
   ////// Geometry
@@ -252,22 +252,18 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 		  G4ThreeVector(),
 		  logicalOuterShielding,
 		  "Al_Shielding",
-		  logicWorld,
-		  false,
-		  0);
+		  logicEnv,
+		  true,
+		  checkOverlaps);
   
   new G4PVPlacement(0,
 		  G4ThreeVector(),
 		  logicalInnerShielding,
 		  "W_Shielding",
-		  logicWorld,
-		  false,
-		  0);
+		  logicEnv,
+		  true,
+		  checkOverlaps);
   
-  
-  
-
-
   // always return the physical World
   return physWorld;
 }

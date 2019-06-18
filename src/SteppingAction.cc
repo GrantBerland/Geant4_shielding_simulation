@@ -52,7 +52,7 @@ SteppingAction::SteppingAction(EventAction* eventAction)
 : G4UserSteppingAction(),
   fEventAction(eventAction),
   fScoringVolume(0),
-  fileName("hits.csv")
+  fileName("../data/hits.csv")
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,7 +79,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   isEnteringDetector = (volName != "Detector" && nextVolName == "Detector");
 
 
-  std::cout << volName << " , " << nextVolName << std::endl;
   if(isInDetector)
   {
     flag = 0;

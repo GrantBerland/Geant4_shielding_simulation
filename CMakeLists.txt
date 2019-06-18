@@ -51,6 +51,8 @@ set(EXAMPLEB1_SCRIPTS
   init_vis.mac
   vis.mac
   runBeamOn.mac  
+  autoRun.sh
+  numberOfParticles.txt
   )
 
 foreach(_script ${EXAMPLEB1_SCRIPTS})

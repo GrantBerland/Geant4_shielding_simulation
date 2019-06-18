@@ -38,9 +38,6 @@
 #include "G4Trajectory.hh"
 
 
-#include <fstream>
-
-
 EventAction::EventAction(RunAction* runAction)
 : G4UserEventAction(),
   fRunAction(runAction)
