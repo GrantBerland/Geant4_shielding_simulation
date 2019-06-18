@@ -49,14 +49,19 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
   E_folding(100.),
-  E_shift(0.)
+  E_shift(0.),
+  fPI(3.14159265358979323846),
+  sphereR(12.*cm),
+  electronParticle(0),
+  photonParticle(0)
 {
 
   fParticleGun  = new G4ParticleGun();
-  G4ParticleDefinition* electronParticle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-
-  // Selects electron for particle type
-  fParticleGun->SetParticleDefinition(electronParticle);
+  
+  electronParticle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+  
+  photonParticle = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
+  
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -190,14 +195,12 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   
 
   // Mathematics spherical coordinates definition!!!
-  G4double sphereR = 12.*cm;
-  G4double PI = 3.14159265358979323846;
 
   // Angle about the field line theta on [0 , 2pi)
-  G4double theta = G4UniformRand()*2.*PI; 
+  G4double theta = G4UniformRand()*2.*fPI; 
   
   // Zenith angle (pitch angle)
-  G4double phi = lossConeData[angleIndex][0] * PI / 180.;
+  G4double phi = lossConeData[angleIndex][0] * fPI / 180.;
   
   // We want our Y direction to be "up"
   r->x = sphereR * std::cos(theta) * std::sin(phi);
@@ -222,11 +225,46 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   // Inverse CDF sampling for exponential RV
   r->energy = ((std::log(1 - randomNumber)*-E0 + E_shift))*keV;
 }
+
+void PrimaryGeneratorAction::GenerateSignalSource(LossConeSample* r)
+{
+ 
+  G4double theta, phi, E0_signal;
+
+  theta = 0.;
+  phi   = 0.;
+  E0_signal = 0.;
+
+  // We want our Y direction to be "up"
+  r->x = sphereR * std::cos(theta) * std::sin(phi);
+  r->y = sphereR * std::cos(phi);
+  r->z = sphereR * std::sin(theta) * std::sin(phi);
+  
+
+  // Uniform random numbers on [0, 1)
+  r->xDir = G4UniformRand();
+  r->yDir = G4UniformRand();
+  r->zDir = G4UniformRand();
+
+
+  // Enforces inward directionality to particles
+  if(r->x > 0) {r->xDir = -r->xDir;}
+  if(r->y > 0) {r->yDir = -r->yDir;}
+  if(r->z > 0) {r->zDir = -r->zDir;}
+
+
+  G4double randomNumber = G4UniformRand();
+  r->energy = ((std::log(1 - randomNumber)*-E0_signal + E_shift))*keV;
+
+}
+
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of each event
 
-  G4double PI = 3.14159265358979323846;
+  // Selects electron for particle type
+  fParticleGun->SetParticleDefinition(electronParticle);
+
+  //this function is called at the begining of each event
 
   // N particles generated per simulation run
   // Read in number of particle from file in build directory
@@ -239,6 +277,10 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // loss cone particles (backscattered), fractional flux derived from Marshall, Bortnik work
   G4int nLCparticles = std::floor(0.316*nParticles);	
 
+
+  G4int nSignalParticles = 0;
+
+
   // Allocate variables for random position, direction
   G4double xPos,yPos,zPos,xDir,yDir,zDir;
 
@@ -247,11 +289,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double yShift = 0.;
   G4double zShift = 0.;
   
-  // Radius of sphere surface where particles are generated
-  G4double sphereR = 12.*cm;
 
   // Loss cone angle (same as polar angle, phi) at 500 km, in radians
-  G4double theta_exclusion = 64.*PI/180.;
+  G4double theta_exclusion = 64.*fPI/180.;
 
   // E-folding (E0 energy) in keV (Wei from DEMETER data) [now defined in as class member!]
   
@@ -269,7 +309,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4double u = G4UniformRand()*2.-1.;
 
       // Rand on [0, 2*pi)
-      G4double theta = G4UniformRand()*2.*PI;
+      G4double theta = G4UniformRand()*2.*fPI;
       xPos = sphereR * std::sqrt(1 - u * u) * std::cos(theta); 
       yPos = sphereR * u; // Y direction is "up"
       zPos = sphereR * std::sqrt(1 - u * u) * std::sin(theta); 
@@ -316,8 +356,24 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
-    delete r;
 
+  // Selects photon for particle type
+  fParticleGun->SetParticleDefinition(photonParticle);
+  
+  
+  for(G4int i = 0; i<nSignalParticles; i++){
+
+    GenerateSignalSource(r);
+    
+    fParticleGun->SetParticlePosition(G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(r->xDir, r->yDir, r->zDir));
+    fParticleGun->SetParticleEnergy(r->energy);
+
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+}
+
+
+  delete r;
 
 }
 
