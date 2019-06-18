@@ -101,7 +101,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
 void SteppingAction::LogParticle(G4double ene, G4String detectorFileName, G4int flag)
 {
-
     G4AutoLock lock(&myParticleLog);
 
     std::ofstream hitFile_detector;

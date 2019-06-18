@@ -70,7 +70,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // Envelope parameters
   //
-  G4double env_sizeXY = 50.*cm, env_sizeZ = 50.*cm;
+  G4double env_sizeXY = 40.*cm, env_sizeZ = 40.*cm;
 
   G4bool checkOverlaps    = true;
     // Material: Vacuum
@@ -167,7 +167,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 							CZT,
 							"Detector");
   new G4PVPlacement(0,
-		    G4ThreeVector(),
+		    G4ThreeVector(0.,-1.*cm,0.),
 		    logicDetector,
 		    "Detector",
 		    logicWorld,
@@ -188,11 +188,11 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 	  boxInnerSizeXY+2*innerShieldingThickness);
 
   G4VSolid* slit1 = new G4Box("Slit",
-		  	1.0*mm,
+		  	2.0*mm,
 			outerShieldingThickness+1.*cm,
 			boxInnerSizeXY);
   G4VSolid* slit2 = new G4Box("Slit",
-		  	1.0*mm,
+		  	2.0*mm,
 			innerShieldingThickness+1.*cm,
 			boxInnerSizeXY);
 

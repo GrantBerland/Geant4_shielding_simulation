@@ -190,7 +190,7 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   
 
   // Mathematics spherical coordinates definition!!!
-  G4double sphereR = 15.*cm;
+  G4double sphereR = 12.*cm;
   G4double PI = 3.14159265358979323846;
 
   // Angle about the field line theta on [0 , 2pi)
@@ -248,7 +248,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double zShift = 0.;
   
   // Radius of sphere surface where particles are generated
-  G4double sphereR = 15.*cm;
+  G4double sphereR = 12.*cm;
 
   // Loss cone angle (same as polar angle, phi) at 500 km, in radians
   G4double theta_exclusion = 64.*PI/180.;
