@@ -75,7 +75,7 @@ int main(int argc,char** argv)
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
-#ifndef G4MULTITHREADED
+#ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   runManager->SetNumberOfThreads(4);  // (Grant's computer)
 #else
@@ -90,10 +90,10 @@ int main(int argc,char** argv)
   //G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("QBBC");
 
   // Livermore physics list
-  G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("FTFP_BERT_LIV");
+  //G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("FTFP_BERT_LIV");
   
   // Modified QBBC list
-  //QBBC_modified* physicsList = new QBBC_modified();
+  QBBC_modified* physicsList = new QBBC_modified();
   
   runManager->SetUserInitialization(new DetectorConstruction());
   runManager->SetUserInitialization(physicsList);

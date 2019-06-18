@@ -85,7 +85,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4double ene = postPoint->GetKineticEnergy();
     G4ThreeVector pos = postPoint->GetPosition();
     G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
-    LogParticle(pos, ene, fileName, flag, particleName);
+    
+    if(ene > 50.*keV) 
+    {
+      LogParticle(pos, ene, fileName, flag, particleName);
+    }
+  
   }
   else if(isEnteringDetector)
   {
@@ -93,7 +98,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4double ene = postPoint->GetKineticEnergy();
     G4ThreeVector pos = postPoint->GetPosition();
     G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
-    LogParticle(pos, ene, fileName, flag, particleName);
+    
+    if(ene > 50.*keV) 
+    {
+      LogParticle(pos, ene, fileName, flag, particleName);
+    }
+  
   }
 
   
@@ -107,8 +117,8 @@ void SteppingAction::LogParticle(G4ThreeVector pos, G4double ene, G4String detec
     std::ofstream hitFile_detector;
     hitFile_detector.open(detectorFileName, std::ios_base::app);
 
-    hitFile_detector << flag << "," << pos.x() << "," << pos.y() << "," <<
-	    pos.z() << "," << ene/keV << "," << PID << "\n";
+    hitFile_detector << flag << "," << pos.x()/cm << "," << pos.y()/cm 
+	    << "," << pos.z()/cm << "," << ene/keV << "," << PID << "\n";
 
     hitFile_detector.close();
 }
