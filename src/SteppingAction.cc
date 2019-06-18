@@ -83,29 +83,29 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   {
     flag = 0;
     G4double ene = postPoint->GetKineticEnergy();
-  
-    LogParticle(ene, fileName, flag);
+    G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
+    LogParticle(ene, fileName, flag, particleName);
   }
   else if(isEnteringDetector)
   {
     flag = 1;
     G4double ene = postPoint->GetKineticEnergy();
-  
-    LogParticle(ene, fileName, flag);
+    G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
+    LogParticle(ene, fileName, flag, particleName);
   }
 
   
 }
 
 
-void SteppingAction::LogParticle(G4double ene, G4String detectorFileName, G4int flag)
+void SteppingAction::LogParticle(G4double ene, G4String detectorFileName, G4int flag, G4String PID)
 {
     G4AutoLock lock(&myParticleLog);
 
     std::ofstream hitFile_detector;
     hitFile_detector.open(detectorFileName, std::ios_base::app);
 
-    hitFile_detector << flag << "," << ene/keV << "\n";
+    hitFile_detector << flag << "," << ene/keV << "," << PID << "\n";
 
     hitFile_detector.close();
 }
