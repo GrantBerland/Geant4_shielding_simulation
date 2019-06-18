@@ -156,12 +156,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double detectorXY = 40.*mm;
   G4double detectorZ  = 28.*mm;
   G4double boxInnerSizeXY = 4.5*cm;
-  G4double boxInnerSizeZ = 4.5*cm;
+  G4double boxInnerSizeZ = 2.5*cm;
 
   G4VSolid* detectorBox = new G4Box("Detector",
-		  		    detectorXY,
-				    detectorZ,
-				    detectorXY);
+		  		    0.5*detectorXY,
+				    0.5*detectorZ,
+				    0.5*detectorXY);
 
   G4LogicalVolume* logicDetector = new G4LogicalVolume(detectorBox,
 							CZT,
