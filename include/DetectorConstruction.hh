@@ -49,8 +49,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
     G4LogicalVolume* GetScoringVolume() const {return fScoringVolume;}
 
-  private:
-    G4GDMLParser fParser;
 
   protected:
     G4LogicalVolume*  fScoringVolume;

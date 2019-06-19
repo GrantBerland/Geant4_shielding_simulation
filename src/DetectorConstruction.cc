@@ -214,11 +214,11 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   G4VSolid* slit1 = new G4Box("Slit",
 		  	1.1*mm,
 			outerShieldingThickness+1.*cm,
-			boxInnerSizeXY);
+			boxInnerSizeXY-0.5*mm);
   G4VSolid* slit2 = new G4Box("Slit",
 		  	1.1*mm,
 			innerShieldingThickness+1.*cm,
-			boxInnerSizeXY);
+			boxInnerSizeXY-0.5*mm);
 
   G4VSolid* subtractionBox = new G4Box("Subtraction-box",
 		  		       boxInnerSizeXY,
@@ -317,7 +317,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 		    checkOverlaps);
   
   new G4PVPlacement(0,
-		    G4ThreeVector(0.,-1.25*cm+frontEndBoardThickness,0.),
+		    G4ThreeVector(0.,-1.25*cm+frontEndBoardThickness+0.1*mm,0.),
 		    logicDetector,
 		    "Detector",
 		    logicEnv,
@@ -390,7 +390,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 		     logicEnv,
 		     false,
 		     i,
-		     checkOverlaps);
+		     false);
 
   }
 
