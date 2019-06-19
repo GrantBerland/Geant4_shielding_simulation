@@ -228,9 +228,10 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
 
 void PrimaryGeneratorAction::GenerateSignalSource(LossConeSample* r)
 {
- 
-  G4double theta, phi, E0_signal;
+  // Define signal distribution here
 
+  G4double theta, phi, E0_signal;
+  
   theta = 0.;
   phi   = 0.;
   E0_signal = 0.;
@@ -254,7 +255,7 @@ void PrimaryGeneratorAction::GenerateSignalSource(LossConeSample* r)
 
 
   G4double randomNumber = G4UniformRand();
-  r->energy = ((std::log(1 - randomNumber)*-E0_signal + E_shift))*keV;
+  r->energy = (std::log(1 - randomNumber)*-E0_signal)*keV;
 
 }
 

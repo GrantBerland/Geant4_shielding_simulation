@@ -149,8 +149,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //////////////////////////////////////////
 
   // 0.5 factor due to full height definition
-  G4double outerShieldingThickness = 2.44*mm * 0.5;  
-  G4double innerShieldingThickness = 0.5*mm * 0.5;
+  G4double outerShieldingThickness = 0.75*mm * 0.5;  
+  G4double innerShieldingThickness = 2.44*mm * 0.5;
   G4double detectorXY      = 40.*mm;
   G4double detectorZ       = 5.*mm;
   G4double detectorElectronicsZ = 10.185*mm;
@@ -169,30 +169,30 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				    0.5*detectorXY);
 
   G4VSolid* detectorElectronics = new G4Box("DetectorFR4",
-		  			    0.5*detectorXY,
-					    0.5*detectorElectronicsZ,
-					    0.5*detectorXY);
+		  		    0.5*detectorXY,
+				    0.5*detectorElectronicsZ,
+				    0.5*detectorXY);
 
   G4VSolid* frontEndBoard = new G4Box("Electronics",
-		  			    boxInnerSizeXY,
-					    0.5*frontEndBoardThickness,
-					    boxInnerSizeXY);
+		  		    boxInnerSizeXY,
+				    0.5*frontEndBoardThickness,
+				    boxInnerSizeXY);
 
 
   G4VSolid* berylliumWindow = new G4Box("Be_Window",
-		  			0.5*15.*mm,
-					0.5*windowThickness,
-					boxInnerSizeXY);
+		  		    0.5*15.*mm,
+				    0.5*windowThickness,
+				    boxInnerSizeXY);
   
   G4VSolid* topWindow = new G4Box("top_Be_Window",
-		  			boxInnerSizeXY,
-					0.5*windowThickness,
-					boxInnerSizeXY);
+		  		    boxInnerSizeXY,
+				    0.5*windowThickness,
+				    boxInnerSizeXY);
 
   G4VSolid* baffles = new G4Box("Baffles",
-		  		0.5*baffleThickness,
-				0.5*baffleHeight,
-				boxInnerSizeXY);
+		  		    0.5*baffleThickness,
+				    0.5*baffleHeight,
+				    boxInnerSizeXY);
 
   G4VSolid* collimeterOuterBox = new G4Box("Outer-collimeter",
 boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness,
@@ -230,34 +230,34 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   ////// Subtractions
  
   G4RotationMatrix* rotm = new G4RotationMatrix(); // empty rotation matrix for SubtractionSolid constructor
-  G4double windowPlacement = boxInnerSizeZ + innerShieldingThickness + outerShieldingThickness + windowThickness;
+  G4double windowPlacement = boxInnerSizeZ + innerShieldingThickness + outerShieldingThickness + windowThickness*1.5;
 
   G4SubtractionSolid* collimeterOuter = new G4SubtractionSolid("Outer-collimeter",
 		                          collimeterOuterBox,
 		  			  subtractionBox);
 
-  G4SubtractionSolid* shieldingBoxOuter = new G4SubtractionSolid("Al_Shielding",
+  G4SubtractionSolid* shieldingBoxOuter = new G4SubtractionSolid("W_Shielding",
 		                          outerShieldingBox,
 		  			  innerShieldingBox);
 
-  G4SubtractionSolid* shieldingBoxOuter_slit = new G4SubtractionSolid("Al_Shielding",
+  G4SubtractionSolid* shieldingBoxOuter_slit = new G4SubtractionSolid("W_Shielding",
 		                          shieldingBoxOuter,
 		  			  slit1,
 					  rotm,
 			G4ThreeVector(0., boxInnerSizeZ + outerShieldingThickness, 0.));
 
 
-  G4SubtractionSolid* shieldingBoxOuter_slit_window = new G4SubtractionSolid("Al_Shielding",
+  G4SubtractionSolid* shieldingBoxOuter_slit_window = new G4SubtractionSolid("W_Shielding",
 		                          shieldingBoxOuter_slit,
 		  			  berylliumWindow,
 					  rotm,
 			G4ThreeVector(0., windowPlacement, 0.));
 
-  G4SubtractionSolid* shieldingBoxInner = new G4SubtractionSolid("W_Shielding",
+  G4SubtractionSolid* shieldingBoxInner = new G4SubtractionSolid("Al_Shielding",
 		                          innerShieldingBox,
 		  			  subtractionBox);
 
-  G4SubtractionSolid* shieldingBoxInner_slit = new G4SubtractionSolid("W_Shielding",
+  G4SubtractionSolid* shieldingBoxInner_slit = new G4SubtractionSolid("Al_Shielding",
 		                          shieldingBoxInner,
 		  			  slit2,
 					  rotm,
@@ -287,12 +287,12 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 							"Electronics");
   
   G4LogicalVolume* logicalOuterShielding = new G4LogicalVolume(shieldingBoxOuter_slit_window,
-		  nist->FindOrBuildMaterial("G4_Al"),
-		  "Al_Shielding");
-  
-  G4LogicalVolume* logicalInnerShielding = new G4LogicalVolume(shieldingBoxInner_slit,
 		  nist->FindOrBuildMaterial("G4_W"),
 		  "W_Shielding");
+  
+  G4LogicalVolume* logicalInnerShielding = new G4LogicalVolume(shieldingBoxInner_slit,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Al_Shielding");
   
   G4LogicalVolume* logicalWindow = new G4LogicalVolume(berylliumWindow,
 		  nist->FindOrBuildMaterial("G4_Be"),
@@ -309,7 +309,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   ////// Placements
   
   new G4PVPlacement(0,
-		    G4ThreeVector(0.,boxInnerSizeZ+13.*mm,0.),
+		    G4ThreeVector(0.,boxInnerSizeZ+13.25*mm,0.),
 		    logicCollimeter,
 		    "Collimeter",
 		    logicEnv,
@@ -343,7 +343,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   new G4PVPlacement(0,
 		  G4ThreeVector(),
 		  logicalOuterShielding,
-		  "Al_Shielding",
+		  "W_Shielding",
 		  logicEnv,
 		  true,
 		  checkOverlaps);
@@ -351,7 +351,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   new G4PVPlacement(0,
 		  G4ThreeVector(),
 		  logicalInnerShielding,
-		  "W_Shielding",
+		  "Al_Shielding",
 		  logicEnv,
 		  true,
 		  checkOverlaps);
@@ -365,7 +365,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 		  checkOverlaps);
   
   new G4PVPlacement(0,
-		  G4ThreeVector(0., windowPlacement+20.*mm+1.*mm,0.),
+		  G4ThreeVector(0., windowPlacement+20.*mm+2.*mm,0.),
 		  logicalTopWindow,
 		  "top_Be_Window",
 		  logicEnv,
@@ -375,7 +375,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   // Baffle parameterisation
   G4int numberBaffles = 15;
 
-  G4double bafflePlacement = windowPlacement+0.5*baffleHeight+0.5*mm;
+  G4double bafflePlacement = windowPlacement+0.5*baffleHeight+outerShieldingThickness+0.3*mm;
   G4double axialDistance;
   rotm->rotateY(90.*deg); 
 
