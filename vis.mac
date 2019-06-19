@@ -67,6 +67,8 @@
 /vis/geometry/set/visibility World 0 false
 /vis/geometry/set/visibility Envelope 0 false
 /vis/geometry/set/colour Al_Shielding 0 0.667 0.667 0.616 .75
+/vis/geometry/set/colour Collimeter 0 0.667 0.667 0.616 .75
+/vis/geometry/set/colour Baffles 0 0.667 0.667 0.616 .75
 /vis/geometry/set/colour W_Shielding  0.8 0.8 0.9 0.75 0.8
 /vis/geometry/set/colour Detector 0 0.1 0.9 0 1
 /vis/geometry/set/colour DetectorFR4 0 0 1 0 1

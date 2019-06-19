@@ -34,9 +34,6 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-#include "G4GDMLParser.hh"
-
-
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
