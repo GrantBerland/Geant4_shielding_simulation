@@ -67,8 +67,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4NistManager* nist = G4NistManager::Instance();
 
   // Envelope parameters
-  //
-  G4double env_sizeXY = 20.*cm, env_sizeZ = 20.*cm;
+  G4double env_sizeXY = 40.*cm, env_sizeZ = 40.*cm;
 
   G4bool checkOverlaps    = true;
   
@@ -154,8 +153,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double detectorXY      = 40.*mm;
   G4double detectorZ       = 5.*mm;
   G4double detectorElectronicsZ = 10.185*mm;
-  G4double boxInnerSizeXY  = 2.5*cm;
-  G4double boxInnerSizeZ   = 3.0*cm;
+  G4double boxInnerSizeXY  = 90.*mm * 0.5;
+  G4double boxInnerSizeZ   = 50.*mm * 0.5;
   G4double windowThickness = 1.*mm;
   G4double baffleHeight    = 20.*mm;
   G4double baffleThickness = 0.5*mm;
@@ -224,50 +223,86 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 			boxInnerSizeXY-0.5*mm);
 
   G4VSolid* subtractionBox = new G4Box("Subtraction-box",
-		  		       boxInnerSizeXY,
-				       boxInnerSizeZ,
-				       boxInnerSizeXY);
+    		        boxInnerSizeXY,
+			boxInnerSizeZ,
+			boxInnerSizeXY);
   
   
-
   //////////////////////////////////////////
   ///////////// Subtractions ///////////////
   //////////////////////////////////////////
- 
-  G4RotationMatrix* rotm = new G4RotationMatrix(); // empty rotation matrix for SubtractionSolid constructor
+
+
+  // empty rotation matrix for SubtractionSolid constructor
+  G4RotationMatrix* rotm = new G4RotationMatrix();   
+  
   G4double windowPlacement = boxInnerSizeZ + innerShieldingThickness + outerShieldingThickness + windowThickness*1.5;
 
-  G4SubtractionSolid* collimeterOuter = new G4SubtractionSolid("Outer-collimeter",
-		                          collimeterOuterBox,
-		  			  subtractionBox);
+  G4double windowSlitShiftX = 2.5*cm;
 
-  G4SubtractionSolid* shieldingBoxOuter = new G4SubtractionSolid("W_Shielding",
-		                          outerShieldingBox,
-		  			  innerShieldingBox);
+  // Hollows out collimeter
+  G4SubtractionSolid* collimeterOuter = 
+	  new G4SubtractionSolid("Outer-collimeter",
+	  collimeterOuterBox,
+	  subtractionBox);
 
-  G4SubtractionSolid* shieldingBoxOuter_slit = new G4SubtractionSolid("W_Shielding",
-		                          shieldingBoxOuter,
-		  			  slit1,
-					  rotm,
-			G4ThreeVector(0., boxInnerSizeZ + outerShieldingThickness, 0.));
+  // Hollows out outer shielding (tungsten)
+  G4SubtractionSolid* shieldingBoxOuter = 
+	  new G4SubtractionSolid("W_Shielding",
+	  outerShieldingBox,
+	  innerShieldingBox);
 
 
-  G4SubtractionSolid* shieldingBoxOuter_slit_window = new G4SubtractionSolid("W_Shielding",
-		                          shieldingBoxOuter_slit,
-		  			  berylliumWindow,
-					  rotm,
-			G4ThreeVector(0., windowPlacement, 0.));
-
-  G4SubtractionSolid* shieldingBoxInner = new G4SubtractionSolid("Al_Shielding",
-		                          innerShieldingBox,
-		  			  subtractionBox);
-
-  G4SubtractionSolid* shieldingBoxInner_slit = new G4SubtractionSolid("Al_Shielding",
-		                          shieldingBoxInner,
-		  			  slit2,
-					  rotm,
-			G4ThreeVector(0., boxInnerSizeZ + innerShieldingThickness, 0.));
+  // Outer shielding window depressions 1 & 2 and slits 1 & 2
+  G4SubtractionSolid* shieldingBoxOuter_slit1 = 
+	  new G4SubtractionSolid("W_Shielding",
+	  shieldingBoxOuter,
+	  slit1,
+	  rotm,
+	  G4ThreeVector(windowSlitShiftX, boxInnerSizeZ + outerShieldingThickness, 0.));
   
+  G4SubtractionSolid* shieldingBoxOuter_slit2 = 
+	  new G4SubtractionSolid("W_Shielding",
+	  shieldingBoxOuter_slit1,
+	  slit1,
+	  rotm,
+	  G4ThreeVector(-windowSlitShiftX, boxInnerSizeZ + outerShieldingThickness, 0.));
+
+
+  G4SubtractionSolid* shieldingBoxOuter_slit_window1 = 
+	  new G4SubtractionSolid("W_Shielding",
+	  shieldingBoxOuter_slit2,
+	  berylliumWindow,
+	  rotm,
+	  G4ThreeVector(windowSlitShiftX, windowPlacement, 0.));
+
+  G4SubtractionSolid* shieldingBoxOuter_slit_window2 = 
+	  new G4SubtractionSolid("W_Shielding",
+	  shieldingBoxOuter_slit_window1,
+	  berylliumWindow,
+	  rotm,
+	  G4ThreeVector(-windowSlitShiftX, windowPlacement, 0.));
+
+  // Hollows out inner shielding (aluminum)
+  G4SubtractionSolid* shieldingBoxInner = 
+	  new G4SubtractionSolid("Al_Shielding",
+	  innerShieldingBox,
+	  subtractionBox);
+
+  // Inner shielding slits 1 & 2
+  G4SubtractionSolid* shieldingBoxInner_slit1 = 
+	  new G4SubtractionSolid("Al_Shielding",
+	  shieldingBoxInner,
+	  slit2,
+	  rotm,
+	  G4ThreeVector(windowSlitShiftX, boxInnerSizeZ + innerShieldingThickness, 0.));
+  
+  G4SubtractionSolid* shieldingBoxInner_slit2 = 
+	  new G4SubtractionSolid("Al_Shielding",
+	  shieldingBoxInner_slit1,
+	  slit2,
+	  rotm,
+	  G4ThreeVector(-windowSlitShiftX, boxInnerSizeZ + innerShieldingThickness, 0.));
   
 
   ////////////////////////////////////////////
@@ -291,11 +326,11 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 							FR4,
 							"Electronics");
   
-  G4LogicalVolume* logicalOuterShielding = new G4LogicalVolume(shieldingBoxOuter_slit_window,
+  G4LogicalVolume* logicalOuterShielding = new G4LogicalVolume(shieldingBoxOuter_slit_window2,
 		  nist->FindOrBuildMaterial("G4_W"),
 		  "W_Shielding");
   
-  G4LogicalVolume* logicalInnerShielding = new G4LogicalVolume(shieldingBoxInner_slit,
+  G4LogicalVolume* logicalInnerShielding = new G4LogicalVolume(shieldingBoxInner_slit2,
 		  nist->FindOrBuildMaterial("G4_Al"),
 		  "Al_Shielding");
   
@@ -323,25 +358,44 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 		    logicEnv,
 		    false,
 		    checkOverlaps);
-  
-  new G4PVPlacement(0,
-		    G4ThreeVector(0.,-1.25*cm+frontEndBoardThickness+0.1*mm,0.),
+ 
+  G4double detectorPosX = -22.5*mm;
+  G4double detectorPosZ = -21.*mm;
+  G4double detectorPosY = frontEndBoardThickness + 0.5*cm;
+
+  // position multiplier
+  G4int pm1[4] = {1, -1, 1, -1};
+  G4int pm2[4] = {1, 1, -1, -1};
+
+
+  for(G4int nDet=0; nDet<4;nDet++)
+  {
+
+    new G4PVPlacement(0,
+		    G4ThreeVector(pm1[nDet]*detectorPosX,
+			    -1.25*cm+0.1*mm+detectorPosY,
+			    pm2[nDet]*detectorPosZ),
 		    logicDetector,
 		    "Detector",
 		    logicEnv,
 		    false,
+		    nDet,
 		    checkOverlaps);
-  
-  new G4PVPlacement(0,
-		    G4ThreeVector(0.,-2.*cm+frontEndBoardThickness,0.),
+
+    new G4PVPlacement(0,
+		    G4ThreeVector(pm1[nDet]*detectorPosX,
+			    -2.*cm+detectorPosY,
+			    pm2[nDet]*detectorPosZ),
 		    logicDetectorElectronics,
 		    "DetectorFR4",
 		    logicEnv,
 		    false,
+		    nDet,
 		    checkOverlaps);
-  
+  } 
+
   new G4PVPlacement(0,
-		    G4ThreeVector(0.,-2.5*cm,0.),
+		    G4ThreeVector(0.,-2.0*cm,0.),
 		    logicFrontEndBoard,
 		    "Electronics",
 		    logicEnv,
@@ -365,13 +419,24 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 		  checkOverlaps);
   
   new G4PVPlacement(0,
-		  G4ThreeVector(0., windowPlacement,0.),
+		  G4ThreeVector(windowSlitShiftX, windowPlacement,0.),
 		  logicalWindow,
 		  "Be_Window",
 		  logicEnv,
 		  false,
+		  0,
 		  checkOverlaps);
-  
+
+  new G4PVPlacement(0,
+		  G4ThreeVector(-windowSlitShiftX, windowPlacement,0.),
+		  logicalWindow,
+		  "Be_Window",
+		  logicEnv,
+		  false,
+		  1,
+		  checkOverlaps);
+
+
   new G4PVPlacement(0,
 		  G4ThreeVector(0., windowPlacement+20.*mm+2.*mm,0.),
 		  logicalTopWindow,
@@ -381,15 +446,17 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 		  checkOverlaps);
   
   // Baffle parameterisation
-  G4int numberBaffles = 15;
+  G4int numberBaffles = 28;
 
   G4double bafflePlacement = windowPlacement+0.5*baffleHeight+outerShieldingThickness+0.3*mm;
+  
   G4double axialDistance;
   rotm->rotateY(90.*deg); 
 
   for(G4int i = 0; i<numberBaffles; i++)
   {
-    axialDistance = (i-7) * (2.53 + 0.5) * mm;
+    // baffles are spaced 2.53 mm apart
+    axialDistance = (i-14) * (2.53 + 0.5) * mm;
 
     new G4PVPlacement(rotm,
 		     G4ThreeVector(0., bafflePlacement, axialDistance),
@@ -399,7 +466,6 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 		     false,
 		     i,
 		     false);
-
   }
 
 

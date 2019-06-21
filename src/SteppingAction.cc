@@ -79,6 +79,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   if (track->GetVolume()) {volName = track->GetVolume()->GetName();}
   if (track->GetNextVolume()) {nextVolName = track->GetNextVolume()->GetName();}
 
+
   // Logical check between pre- and post- steps to determine if 
   // the particle is either in or entering the detector volume 
   isInDetector = (volName == "Detector" && nextVolName == "Detector");

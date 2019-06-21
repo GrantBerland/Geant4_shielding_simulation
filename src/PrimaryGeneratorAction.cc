@@ -51,7 +51,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   E_folding(100.),
   E_shift(0.),
   fPI(3.14159265358979323846),
-  sphereR(12.*cm),
+  sphereR(15.*cm),
   electronParticle(0),
   photonParticle(0)
 {
@@ -236,7 +236,7 @@ void PrimaryGeneratorAction::GenerateSignalSource(LossConeSample* r)
   
   // Phi (half angle) takes values in a cone determined by 
   // spacecraft altitude, precipitation event altitude and size
-  G4double phiLimit   = 15. * fPI / 180.;       
+  G4double phiLimit   = 25. * fPI / 180.;       
   phi = G4UniformRand()*phiLimit;
 
   E0_signal = 200.;   // in units of keV
