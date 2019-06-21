@@ -121,8 +121,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       // write to background hits file	    
       if(isBackground) LogParticle(pos, ene, backgroundFileName, flag, particleName);
       
-      // write to signal hits file
-      else LogParticle(pos, ene, signalFileName, flag, particleName);
+      // write to signal hits file (no part. name since all are gammas)
+      else LogParticle(pos, ene, signalFileName, flag, "");
     }
   }    
     
