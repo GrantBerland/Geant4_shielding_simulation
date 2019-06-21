@@ -149,8 +149,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //////////////////////////////////////////
 
   // 0.5 factor due to full height definition
-  G4double outerShieldingThickness = 0.75*mm * 0.5;  
-  G4double innerShieldingThickness = 2.44*mm * 0.5;
+  G4double outerShieldingThickness = 1.5*mm * 0.5;  
+  G4double innerShieldingThickness = 3.0*mm * 0.5;
   G4double detectorXY      = 40.*mm;
   G4double detectorZ       = 5.*mm;
   G4double detectorElectronicsZ = 10.185*mm;
@@ -161,7 +161,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double baffleThickness = 0.5*mm;
   G4double frontEndBoardThickness = 2.86*mm;
 
-  ////// Geometry
+
+  /////////////////////////////////////////
+  //////////////// Geometry ///////////////
+  /////////////////////////////////////////
 
   G4VSolid* detectorBox = new G4Box("Detector",
 		  		    0.5*detectorXY,
@@ -196,7 +199,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4VSolid* collimeterOuterBox = new G4Box("Outer-collimeter",
 boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness,
-20.*mm * 0.5,
+25.*mm * 0.5,
 boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 
   G4VSolid* outerShieldingBox = new G4Box("Outer-shielding",
@@ -226,8 +229,10 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 				       boxInnerSizeXY);
   
   
-  
-  ////// Subtractions
+
+  //////////////////////////////////////////
+  ///////////// Subtractions ///////////////
+  //////////////////////////////////////////
  
   G4RotationMatrix* rotm = new G4RotationMatrix(); // empty rotation matrix for SubtractionSolid constructor
   G4double windowPlacement = boxInnerSizeZ + innerShieldingThickness + outerShieldingThickness + windowThickness*1.5;
@@ -264,10 +269,10 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 			G4ThreeVector(0., boxInnerSizeZ + innerShieldingThickness, 0.));
   
   
-  
-  ////// Logical Volumes
- 
 
+  ////////////////////////////////////////////
+  ////////////// Logical Volumes /////////////
+  ////////////////////////////////////////////
 
   G4LogicalVolume* logicCollimeter = new G4LogicalVolume(collimeterOuter,
 				   nist->FindOrBuildMaterial("G4_Al"),
@@ -305,11 +310,14 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   G4LogicalVolume* logicalBaffles = new G4LogicalVolume(baffles,
 		  nist->FindOrBuildMaterial("G4_W"),
 		  "Baffles");
-  
-  ////// Placements
+
+
+  ////////////////////////////////////////////////
+  ///////////////// Placements ///////////////////
+  ////////////////////////////////////////////////
   
   new G4PVPlacement(0,
-		    G4ThreeVector(0.,boxInnerSizeZ+13.25*mm,0.),
+		    G4ThreeVector(0.,boxInnerSizeZ+16.15*mm+855*um,0.),
 		    logicCollimeter,
 		    "Collimeter",
 		    logicEnv,

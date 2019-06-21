@@ -48,7 +48,7 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
-  E_folding(300.),
+  E_folding(100.),
   E_shift(0.),
   fPI(3.14159265358979323846),
   sphereR(12.*cm),

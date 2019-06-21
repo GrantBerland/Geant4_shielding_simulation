@@ -15,10 +15,4 @@ for sims in $(seq 1 $loops);
 
 done;
 
-paste -d "\n" ../data/*.txt >> ../data/resultsFile.csv;
-
-rm ../data/*.txt;
-
-echo "All files merged into data/resultsFile.csv"
-
 
