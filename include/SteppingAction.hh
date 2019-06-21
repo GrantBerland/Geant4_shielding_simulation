@@ -56,7 +56,8 @@ class SteppingAction : public G4UserSteppingAction
   private:
     EventAction*  fEventAction;
     G4LogicalVolume* fScoringVolume;
-    G4String fileName;
+    G4String backgroundFileName;
+    G4String signalFileName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -229,12 +229,17 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
 void PrimaryGeneratorAction::GenerateSignalSource(LossConeSample* r)
 {
   // Define signal distribution here
-
   G4double theta, phi, E0_signal;
+ 
+  // Uniformly distributed around field line 
+  theta = G4UniformRand()*2.*fPI;  
   
-  theta = 0.;
-  phi   = 0.;
-  E0_signal = 0.;
+  // Phi (half angle) takes values in a cone determined by 
+  // spacecraft altitude, precipitation event altitude and size
+  G4double phiLimit   = 15. * fPI / 180.;       
+  phi = G4UniformRand()*phiLimit;
+
+  E0_signal = 200.;   // in units of keV
 
   // We want our Y direction to be "up"
   r->x = sphereR * std::cos(theta) * std::sin(phi);
@@ -242,17 +247,10 @@ void PrimaryGeneratorAction::GenerateSignalSource(LossConeSample* r)
   r->z = sphereR * std::sin(theta) * std::sin(phi);
   
 
-  // Uniform random numbers on [0, 1)
-  r->xDir = G4UniformRand();
-  r->yDir = G4UniformRand();
-  r->zDir = G4UniformRand();
-
-
-  // Enforces inward directionality to particles
-  if(r->x > 0) {r->xDir = -r->xDir;}
-  if(r->y > 0) {r->yDir = -r->yDir;}
-  if(r->z > 0) {r->zDir = -r->zDir;}
-
+  // Uniform distributed downwards, towards detector
+  r->xDir = 0;
+  r->yDir = -1;
+  r->zDir = 0;
 
   G4double randomNumber = G4UniformRand();
   r->energy = (std::log(1 - randomNumber)*-E0_signal)*keV;
@@ -278,8 +276,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // loss cone particles (backscattered), fractional flux derived from Marshall, Bortnik work
   G4int nLCparticles = std::floor(0.316*nParticles);	
 
-
-  G4int nSignalParticles = 0;
+  // Determined through flux -> nParticles calculation (see docs)
+  G4int nSignalParticles = 10000;
 
 
   // Allocate variables for random position, direction

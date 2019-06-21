@@ -44,7 +44,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
+// Initialize autolock for multiple threads writing into a single file
 namespace { G4Mutex myParticleLog = G4MUTEX_INITIALIZER; }
 
 
@@ -52,7 +52,8 @@ SteppingAction::SteppingAction(EventAction* eventAction)
 : G4UserSteppingAction(),
   fEventAction(eventAction),
   fScoringVolume(0),
-  fileName("../data/hits.csv")
+  backgroundFileName("../data/hits.csv"),
+  signalFileName("../data/signal.csv")
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,49 +65,67 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-
+  // Allocate variable for particle logging checks
   G4bool isEnteringDetector, isInDetector;
   G4String volName, nextVolName;
   G4int flag;
-
+  
   G4Track* track = aStep->GetTrack();
-  const G4StepPoint* postPoint = aStep->GetPostStepPoint();
 
+  // Particles are background by default
+  G4bool isBackground = true;
+
+  // Get pre and post step logical volume names
   if (track->GetVolume()) {volName = track->GetVolume()->GetName();}
   if (track->GetNextVolume()) {nextVolName = track->GetNextVolume()->GetName();}
 
+  // Logical check between pre- and post- steps to determine if 
+  // the particle is either in or entering the detector volume 
   isInDetector = (volName == "Detector" && nextVolName == "Detector");
   isEnteringDetector = (volName != "Detector" && nextVolName == "Detector");
 
+  // Get particle name string, either "e-" or "gamma" 
+  G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
 
-  if(isInDetector)
+  // Creator process corresponds to particle generation via ParticleGun or 
+  // a physics process, in this case electron bremsstrahlung (eBrem) 
+  // or electron ionization (eIoni)
+  // **N.B.: need to check CreatorProcess is not null since primary tracks have 
+  // no process name and will segfault if dereferenced**
+  if(particleName == "gamma")
   {
-    flag = 0;
-    G4double ene = postPoint->GetKineticEnergy();
-    G4ThreeVector pos = postPoint->GetPosition();
-    G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
     
-    if(ene > 50.*keV) 
-    {
-      LogParticle(pos, ene, fileName, flag, particleName);
-    }
-  
-  }
-  else if(isEnteringDetector)
-  {
-    flag = 1;
-    G4double ene = postPoint->GetKineticEnergy();
-    G4ThreeVector pos = postPoint->GetPosition();
-    G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
+    isBackground = false;
     
-    if(ene > 50.*keV) 
-    {
-      LogParticle(pos, ene, fileName, flag, particleName);
-    }
+    if(track->GetCreatorProcess() != NULL){
+      const G4String& processName = track->GetCreatorProcess()->GetProcessName();
   
+      // If the particle is not a primary track, then checked if it's created
+      // via electron bremsstrahlung (eBrem); if so, reset to isBackgroung == true
+      isBackground = (processName == "eBrem");
+  
+      } 
   }
 
+  if(isInDetector){flag = 0;}
+  else if(isEnteringDetector){flag = 1;}
+
+  if(isInDetector || isEnteringDetector)
+  {
+    const G4StepPoint* postPoint = aStep->GetPostStepPoint();
+    G4double ene = postPoint->GetKineticEnergy();
+    G4ThreeVector pos = postPoint->GetPosition();
   
+    if(ene > 50.*keV)
+    {
+      // write to background hits file	    
+      if(isBackground) LogParticle(pos, ene, backgroundFileName, flag, particleName);
+      
+      // write to signal hits file
+      else LogParticle(pos, ene, signalFileName, flag, particleName);
+    }
+  }    
+    
 }
 
 
