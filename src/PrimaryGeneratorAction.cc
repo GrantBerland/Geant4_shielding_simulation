@@ -72,8 +72,16 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
+void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 {
+  // This method generates electrons that were in the loss cone, but have
+  // backscattered off of the atmosphere and are direction anti-Earthward
+  // and towards the satellite.
+
+
+  // Discrete CDF of particles within the loss cone and backscattered
+  // from the atmosphere with 0.6527 degree resolution from [0, 63] 
+  // degrees (i.e. the loss cone at approximately 500 km altitude)
   G4int dataSize = 96;
   G4double lossConeData[96][2] = {
 { 1.0000 , 0.0000 },
@@ -177,7 +185,8 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   G4double randomNumber = G4UniformRand();
   G4int angleIndex = -1;
 
-  // Find the random angle that corresponds to loss cone flux
+  // Discrete inverse CDF sampling to determine the spatial distribution
+  // of backscattered particles from the atmosphere
   for(G4int angle = 0; angle<dataSize; angle++){
     if(randomNumber < lossConeData[angle][1]){
       angleIndex = angle;
@@ -185,7 +194,8 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   }
 
 
-  // Selects exponential folding energy E0 based on backscattered pitch angle range
+  // Selects exponential folding energy E0 based on backscattered 
+  // pitch angle range
   G4double E0 = -1;
   if(     lossConeData[angleIndex][0] < 20) {E0 = 159.;}
   else if(lossConeData[angleIndex][0] < 30) {E0 = 141.;}
@@ -194,21 +204,22 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   else if(lossConeData[angleIndex][0] < 64) {E0 = 230.;}
   
 
-  // Mathematics spherical coordinates definition!!!
-
-  // Angle about the field line theta on [0 , 2pi)
+  // N.B.: Mathematics spherical coordinates definition used below
+  
+  // Uniform angle about the field line theta on [0 , 2pi)
   G4double theta = G4UniformRand()*2.*fPI; 
   
-  // Zenith angle (pitch angle)
+  // Zenith angle (pitch angle), converted to radians
   G4double phi = lossConeData[angleIndex][0] * fPI / 180.;
   
-  // We want our Y direction to be "up"
+  // We want our Y direction to be "up," otherwise standard
+  // spherical to cartesian coordinate transform
   r->x = sphereR * std::cos(theta) * std::sin(phi);
   r->y = sphereR * std::cos(phi);
   r->z = sphereR * std::sin(theta) * std::sin(phi);
   
 
-  // Uniform random numbers on [0, 1)
+  // Uniform random numbers on [0, 1) for particle direction
   r->xDir = G4UniformRand();
   r->yDir = G4UniformRand();
   r->zDir = G4UniformRand();
@@ -220,15 +231,18 @@ void PrimaryGeneratorAction::GenerateLossConeSample(LossConeSample* r)
   if(r->z > 0) {r->zDir = -r->zDir;}
 
 
+  // Continous inverse CDF sampling for exponential energy distribution
   randomNumber = G4UniformRand();
-
-  // Inverse CDF sampling for exponential RV
   r->energy = ((std::log(1 - randomNumber)*-E0 + E_shift))*keV;
 }
 
-void PrimaryGeneratorAction::GenerateSignalSource(LossConeSample* r)
+void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 {
-  // Define signal distribution here
+  // This method generates a photon signal from a energetic particle
+  // precipitation event that occurs at approximately 50 - 100 km 
+  // altitude. Variables are exponential folding energy E0 and the 
+  // pitch, or zenith angle distribution of the photons.
+
   G4double theta, phi, E0_signal;
  
   // Uniformly distributed around field line 
@@ -254,8 +268,47 @@ void PrimaryGeneratorAction::GenerateSignalSource(LossConeSample* r)
 
   G4double randomNumber = G4UniformRand();
   r->energy = (std::log(1 - randomNumber)*-E0_signal)*keV;
-
 }
+
+
+void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
+{
+  
+    // Loss cone angle (same as polar angle, phi) at 500 km, in radians
+    G4double theta_exclusion = 64.*fPI/180.;
+
+    // Calculate random particle position on sphere via rejection 
+    // sampling, excluding spherical cap that makes up the loss cone
+    do{
+      // Rand on [-1, 1)
+      G4double u = G4UniformRand()*2.-1.;
+
+      // Rand on [0, 2*pi)
+      G4double theta = G4UniformRand()*2.*fPI;
+      r->x = sphereR * std::sqrt(1 - u * u) * std::cos(theta); 
+      r->y = sphereR * u; 
+      r->z = sphereR * std::sqrt(1 - u * u) * std::sin(theta); 
+      }
+    while(r->y > sphereR * std::cos(theta_exclusion));
+    // exits when y position falls below spherical cap
+
+    // Uniform random numbers on [0, 1)
+    r->xDir = G4UniformRand();
+    r->yDir = G4UniformRand();
+    r->zDir = G4UniformRand();
+
+    
+    // Enforces inward directionality to particles
+    if(r->x > 0) {r->xDir = -r->xDir;}
+    if(r->y > 0) {r->yDir = -r->yDir;}
+    if(r->z > 0) {r->zDir = -r->zDir;}
+
+
+    // Selects random energy according to exponential distribution
+    G4double randomNumber = G4UniformRand();
+    r->energy = ((std::log(1 - randomNumber)*-E_folding + E_shift))*keV;
+}
+
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
@@ -263,111 +316,66 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // Selects electron for particle type
   fParticleGun->SetParticleDefinition(electronParticle);
 
-  //this function is called at the begining of each event
+  G4int nBackgroundElectrons;
 
   // N particles generated per simulation run
-  // Read in number of particle from file in build directory
   std::fstream particleNumberFile;
   particleNumberFile.open("./numberOfParticles.txt", std::ios_base::in);
-  G4int nParticles;
-  particleNumberFile >> nParticles;
+  particleNumberFile >> nBackgroundElectrons;
   particleNumberFile.close();
 
-  // loss cone particles (backscattered), fractional flux derived from Marshall, Bortnik work
-  G4int nLCparticles = std::floor(0.316*nParticles);	
+  // loss cone particles (backscattered), fractional flux derived 
+  // from Marshall, Bortnik work
+  G4int nLossConeElectrons = std::floor(0.316*nBackgroundElectrons);	
 
-  // Determined through flux -> nParticles calculation (see docs)
-  G4int nSignalParticles = 10000;
-
-
-  // Allocate variables for random position, direction
-  G4double xPos,yPos,zPos,xDir,yDir,zDir;
+  // Determined through flux -> nBackgroundElectrons calculation (see docs)
+  G4int nSignalPhotons = 10000;
 
   // Constant sphere offsets
   G4double xShift = 0.;
   G4double yShift = 0.;
   G4double zShift = 0.;
+
   
-
-  // Loss cone angle (same as polar angle, phi) at 500 km, in radians
-  G4double theta_exclusion = 64.*fPI/180.;
-
-  // E-folding (E0 energy) in keV (Wei from DEMETER data) [now defined in as class member!]
-  
-  for(G4int i = 0; i<nParticles; i++){
-
-    // Reset position and direction of particle
-    xPos = 0; xDir = 0;
-    yPos = 0; yDir = 0;
-    zPos = 0; zDir = 0;
-
-
-    // Calculate random particle position on sphere, excluding spherical cap
-    do{
-      // Rand on [-1, 1)
-      G4double u = G4UniformRand()*2.-1.;
-
-      // Rand on [0, 2*pi)
-      G4double theta = G4UniformRand()*2.*fPI;
-      xPos = sphereR * std::sqrt(1 - u * u) * std::cos(theta); 
-      yPos = sphereR * u; // Y direction is "up"
-      zPos = sphereR * std::sqrt(1 - u * u) * std::sin(theta); 
-      }
-    while(yPos > sphereR * std::cos(theta_exclusion));
-    // exits when y position falls below spherical cap
-
-    // Uniform random numbers on [0, 1)
-    xDir = G4UniformRand();
-    yDir = G4UniformRand();
-    zDir = G4UniformRand();
-
-    
-    // Enforces inward directionality to particles
-    if(xPos > 0) {xDir = -xDir;}
-    if(yPos > 0) {yDir = -yDir;}
-    if(zPos > 0) {zDir = -zDir;}
-
-
-    // Selects random energy according to exponential distribution
-    G4double randomNumber = G4UniformRand();
-    G4double randEnergy = ((std::log(1 - randomNumber)*-E_folding + E_shift))*keV;
-
-
-    fParticleGun->SetParticlePosition(G4ThreeVector(xPos+xShift, yPos+yShift, zPos+zShift));
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(xDir, yDir, zDir));
-    fParticleGun->SetParticleEnergy(randEnergy);
-    
-    fParticleGun->GeneratePrimaryVertex(anEvent);
-
-  }
-
   // Struct that holds position, momentum direction, and energy
-  LossConeSample* r = new LossConeSample();
+  ParticleSample* r = new ParticleSample();
   
-  for(G4int i = 0; i<nLCparticles; i++){
+  for(G4int i = 0; i<nBackgroundElectrons; i++){
 
-    GenerateLossConeSample(r);
+    GenerateTrappedElectrons(r);
     
-    fParticleGun->SetParticlePosition(G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(r->xDir, r->yDir, r->zDir));
+    fParticleGun->SetParticlePosition(
+		    G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
+    fParticleGun->SetParticleMomentumDirection(
+		    G4ThreeVector(r->xDir, r->yDir, r->zDir));
     fParticleGun->SetParticleEnergy(r->energy);
-
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }
+  
+  for(G4int i = 0; i<nLossConeElectrons; i++){
 
+    GenerateLossConeElectrons(r);
+    
+    fParticleGun->SetParticlePosition(
+		    G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
+    fParticleGun->SetParticleMomentumDirection(
+		    G4ThreeVector(r->xDir, r->yDir, r->zDir));
+    fParticleGun->SetParticleEnergy(r->energy);
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+}
 
   // Selects photon for particle type
   fParticleGun->SetParticleDefinition(photonParticle);
   
-  
-  for(G4int i = 0; i<nSignalParticles; i++){
+  for(G4int i = 0; i<nSignalPhotons; i++){
 
     GenerateSignalSource(r);
     
-    fParticleGun->SetParticlePosition(G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(r->xDir, r->yDir, r->zDir));
+    fParticleGun->SetParticlePosition(
+		    G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
+    fParticleGun->SetParticleMomentumDirection(
+		    G4ThreeVector(r->xDir, r->yDir, r->zDir));
     fParticleGun->SetParticleEnergy(r->energy);
-
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

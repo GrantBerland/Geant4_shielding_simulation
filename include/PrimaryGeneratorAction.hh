@@ -46,7 +46,7 @@ class G4Box;
 /// The default kinematic is a 6 MeV gamma, randomly distribued 
 /// in front of the phantom across 80% of the (X,Y) phantom size.
 
-struct LossConeSample{
+struct ParticleSample{
 G4double x, y, z;
 G4double xDir, yDir, zDir;
 G4double energy;
@@ -61,8 +61,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     // method from the base class
     virtual void GeneratePrimaries(G4Event* anEvent);         
 
-    void GenerateLossConeSample(LossConeSample* r);
-    void GenerateSignalSource(LossConeSample* r);
+    void GenerateLossConeElectrons(ParticleSample* r);
+    void GenerateTrappedElectrons(ParticleSample* r);
+    void GenerateSignalSource(ParticleSample* r);
   
     // // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }

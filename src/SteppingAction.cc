@@ -88,11 +88,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // Get particle name string, either "e-" or "gamma" 
   G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
 
-  // Creator process corresponds to particle generation via ParticleGun or 
+  // Creator process corresponds to particle generation via ParticleGun or
   // a physics process, in this case electron bremsstrahlung (eBrem) 
   // or electron ionization (eIoni)
-  // **N.B.: need to check CreatorProcess is not null since primary tracks have 
-  // no process name and will segfault if dereferenced**
+  // **N.B.: need to check CreatorProcess is not null since primary tracks
+  // have no process name and will segfault if dereferenced**
   if(particleName == "gamma")
   {
     
@@ -101,8 +101,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     if(track->GetCreatorProcess() != NULL){
       const G4String& processName = track->GetCreatorProcess()->GetProcessName();
   
-      // If the particle is not a primary track, then checked if it's created
-      // via electron bremsstrahlung (eBrem); if so, reset to isBackgroung == true
+      // If the particle is not a primary track, then checked if it's 
+      // created via electron bremsstrahlung (eBrem); if so, resets to 
+      // isBackgroung = true
       isBackground = (processName == "eBrem");
   
       } 
@@ -113,10 +114,13 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   if(isInDetector || isEnteringDetector)
   {
+    // post step point (i.e. current volume) for attribute getters
     const G4StepPoint* postPoint = aStep->GetPostStepPoint();
+    
     G4double ene = postPoint->GetKineticEnergy();
     G4ThreeVector pos = postPoint->GetPosition();
   
+    // Redlen lower energy detection threshold
     if(ene > 50.*keV)
     {
       // write to background hits file	    
@@ -132,6 +136,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
 void SteppingAction::LogParticle(G4ThreeVector pos, G4double ene, G4String detectorFileName, G4int flag, G4String PID)
 {
+    // locks program so that multiple threads cannot write to file
+    // at once, unlocks when current scope (i.e. this method) is left
     G4AutoLock lock(&myParticleLog);
 
     std::ofstream hitFile_detector;
