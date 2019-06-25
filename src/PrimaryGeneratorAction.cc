@@ -206,7 +206,7 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 
   // N.B.: Mathematics spherical coordinates definition used below
   
-  // Uniform angle about the field line theta on [0 , 2pi)
+  // Uniform sampling of angle about the field line theta on [0 , 2pi)
   G4double theta = G4UniformRand()*2.*fPI; 
   
   // Zenith angle (pitch angle), converted to radians
@@ -318,18 +318,18 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   G4int nBackgroundElectrons;
 
-  // N particles generated per simulation run
+  // N particles generated per simulation run, read in from file
   std::fstream particleNumberFile;
   particleNumberFile.open("./numberOfParticles.txt", std::ios_base::in);
   particleNumberFile >> nBackgroundElectrons;
   particleNumberFile.close();
 
-  // loss cone particles (backscattered), fractional flux derived 
+  // Loss cone particles (backscattered), fractional flux derived 
   // from Marshall, Bortnik work
   G4int nLossConeElectrons = std::floor(0.316*nBackgroundElectrons);	
 
-  // Determined through flux -> nBackgroundElectrons calculation (see docs)
-  G4int nSignalPhotons = 10000;
+  // Determined through flux->nBackgroundElectrons calculation (see docs)
+  G4int nSignalPhotons = 1000;
 
   // Constant sphere offsets
   G4double xShift = 0.;
