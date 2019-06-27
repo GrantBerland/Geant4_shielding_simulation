@@ -50,12 +50,12 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
-  E_folding(200.),
+  E_folding(300.),
   E_shift(0.),
   fPI(3.14159265358979323846),
   sphereR(10.*cm),
   lossConeAngleDeg(64.),
-  photonPhiLimitDeg(22.),
+  photonPhiLimitDeg(40.),
   multModifier(0.),
   electronParticle(0),
   photonParticle(0),
@@ -206,22 +206,34 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::CalculateParticlesToGenerate()
 {
-  G4double sphereRcm = sphereR / cm;
+
+  // Convert sphere radius from Geant internal units to cm
+  G4double sphereRcm = sphereR / cm;  
+  
+  // Surface area of sphere in cm^2
   G4double sphereAreacm2 = 4. * fPI * sphereRcm * sphereRcm; 
+  
+  // Approximate flux at L = 3.6, 500 km altitude at high latitudes
   G4double trappedElectronFlux = 1e5;      // el/cm^2/s/str
 
+  // Converts loss cone angle from degrees to radians
   G4double lossConeAngleRad = lossConeAngleDeg * fPI / 180.;
+  
+  // Calculates pi * r^2 for photon flux calculations, using
+  // r = R * sin(phi), where R is the radius of the sphere
   G4double sphereCrossSectionalArea = 
 	  (sphereRcm  * std::sin(photonPhiLimitDeg * fPI / 180.)) *
 	  (sphereRcm  * std::sin(photonPhiLimitDeg * fPI / 180.)) * fPI;
 
+  // Calculation of solid angle based on cone half angle (loss cone angle)
   G4double trappedElectronSolidAngle =      // str  
 	  2 * fPI * (1 + std::cos(lossConeAngleRad));    
 
-  nBackgroundElectrons = 
-	  (unsigned long long int)(trappedElectronFlux * 
-			           sphereAreacm2 * 
-			           trappedElectronSolidAngle);
+  // Trapped electrons to generate from flux calculation 
+  nBackgroundElectrons =                                 //[el/s]
+	  (unsigned long long int)(trappedElectronFlux * //[el/cm^2/s/str]
+			           sphereAreacm2 *       //[cm^2]
+			           trappedElectronSolidAngle); //[str]
 
 
   // Loss cone particles (backscattered), fractional flux derived 
@@ -230,27 +242,45 @@ void PrimaryGeneratorAction::CalculateParticlesToGenerate()
 	  (unsigned long long int)(0.316*nBackgroundElectrons);	
 
 
-  // Photon count per second per each energy range (in keV)
+  // Photon flux [ph/cm^2/s] per each E_0 folding energy range (in keV)
   if      (E_folding <= 100.) nSignalPhotons = 144;
   else if (E_folding <= 200.) nSignalPhotons = 533;
   else if (E_folding <= 300.) nSignalPhotons = 1131;
   else throw std::invalid_argument("Non-realizable E_0");
 
+  // Converts [ph/cm^2/s] to [ph/s] through a circle the size of the 
+  // generation area
   nSignalPhotons *= sphereCrossSectionalArea;
+  
+  // Optional particle generation numbers read in from file
+  unsigned long long int source1, source2, source3;
 
+  // Reads in multiplicative factor to evenly reduce the number of 
+  // particles generated, as well as optional source counts
   std::fstream particleNumberMultiplierFile;
   particleNumberMultiplierFile.open("numberOfParticles.txt", std::ios_base::in);
-  particleNumberMultiplierFile >> multModifier;
+  particleNumberMultiplierFile >> multModifier >> source1
+	  >> source2 >> source3;
   particleNumberMultiplierFile.close();
 
-  // Reduce number of particles by modifier in order to be simulatable 
+  // If all source variables are 0, runs calculated number of particles
+  // else, runs the numbers stored in source[1,3]
+  if(source1 + source2 + source3 != 0)
+  {
+    nBackgroundElectrons = source1;
+    nLossConeElectrons   = source2;
+    nSignalPhotons       = source3;
+    multModifier = 1.;
+  }
+
+
+  // Reduces number of particles by modifier in order to be simulatable 
   nBackgroundElectrons *= multModifier;
   nLossConeElectrons   *= multModifier;
   nSignalPhotons       *= multModifier;
 
   G4cout << "Background Electrons: " << nBackgroundElectrons << "\nLoss Cone Electrons: " << nLossConeElectrons << 
 	  "\nSignal Photons: " << nSignalPhotons << G4endl;
-
 }
 
 
