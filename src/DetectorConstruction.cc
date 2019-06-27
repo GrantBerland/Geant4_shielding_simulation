@@ -36,7 +36,7 @@
 //#include "G4Tubs.hh"
 //#include "G4Cons.hh"
 //#include "G4Orb.hh"
-//#include "G4Sphere.hh"
+#include "G4Sphere.hh"
 //#include "G4GenericPolycone.hh"
 #include "G4Trd.hh"
 #include "G4LogicalVolume.hh"
@@ -67,7 +67,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4NistManager* nist = G4NistManager::Instance();
 
   // Envelope parameters
-  G4double env_sizeXY = 40.*cm, env_sizeZ = 40.*cm;
+  G4double env_sizeXY = 20.*cm, env_sizeZ = 20.*cm;
 
   G4bool checkOverlaps    = true;
   
@@ -76,7 +76,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
               1.0 , 1.01*g/mole, 1.0E-25*g/cm3,
               kStateGas, 2.73*kelvin, 3.0E-18*pascal );
   
-  G4Box* worldBox = new G4Box("World", 0.6*env_sizeXY, 0.6*env_sizeXY, 0.6*env_sizeZ);
+  G4Sphere* worldBox = new G4Sphere("World", 
+		  0.*cm, 0.6*env_sizeXY, 
+		  0.*deg , 360.*deg,
+		  0.*deg , 180.*deg);
+
   G4LogicalVolume* logicWorld = new G4LogicalVolume(worldBox,
 						     vacuum_material,
 						     "World");
@@ -89,9 +93,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 					     false,
 					     0);
 
-  G4Box* solidEnv =
-    new G4Box("Envelope",                    //its name
-        0.5*env_sizeXY, 0.5*env_sizeXY, 0.5*env_sizeZ); //its size
+  G4Sphere* solidEnv =
+    new G4Sphere("Envelope",                    //its name
+		  0.*cm, 0.5*env_sizeXY, 
+		  0.*deg , 360.*deg,
+		  0.*deg , 180.*deg);
 
   G4LogicalVolume* logicEnv =
     new G4LogicalVolume(solidEnv,            //its solid

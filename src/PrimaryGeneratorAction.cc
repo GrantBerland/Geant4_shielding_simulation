@@ -53,10 +53,10 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   E_folding(200.),
   E_shift(0.),
   fPI(3.14159265358979323846),
-  sphereR(15.*cm),
+  sphereR(10.*cm),
   lossConeAngleDeg(64.),
   photonPhiLimitDeg(22.),
-  multModifier(0.05),
+  multModifier(0.),
   electronParticle(0),
   photonParticle(0),
   nBackgroundElectrons(0),
@@ -218,12 +218,16 @@ void PrimaryGeneratorAction::CalculateParticlesToGenerate()
   G4double trappedElectronSolidAngle =      // str  
 	  2 * fPI * (1 + std::cos(lossConeAngleRad));    
 
-  nBackgroundElectrons = std::floor(trappedElectronFlux * sphereAreacm2 * 
-	                 trappedElectronSolidAngle);
+  nBackgroundElectrons = 
+	  (unsigned long long int)(trappedElectronFlux * 
+			           sphereAreacm2 * 
+			           trappedElectronSolidAngle);
+
 
   // Loss cone particles (backscattered), fractional flux derived 
   // from Marshall, Bortnik work
-  nLossConeElectrons = std::floor(0.316*nBackgroundElectrons);	
+  nLossConeElectrons = 
+	  (unsigned long long int)(0.316*nBackgroundElectrons);	
 
 
   // Photon count per second per each energy range (in keV)
@@ -234,19 +238,18 @@ void PrimaryGeneratorAction::CalculateParticlesToGenerate()
 
   nSignalPhotons *= sphereCrossSectionalArea;
 
+  std::fstream particleNumberMultiplierFile;
+  particleNumberMultiplierFile.open("numberOfParticles.txt", std::ios_base::in);
+  particleNumberMultiplierFile >> multModifier;
+  particleNumberMultiplierFile.close();
+
   // Reduce number of particles by modifier in order to be simulatable 
   nBackgroundElectrons *= multModifier;
   nLossConeElectrons   *= multModifier;
   nSignalPhotons       *= multModifier;
 
-  std::cout << nBackgroundElectrons << "," << nLossConeElectrons << ","
-	  << nSignalPhotons << std::endl;
-
-
-  nBackgroundElectrons = 100;
-  nLossConeElectrons   = 31;
-  nSignalPhotons       = 10;
-  
+  G4cout << "Background Electrons: " << nBackgroundElectrons << "\nLoss Cone Electrons: " << nLossConeElectrons << 
+	  "\nSignal Photons: " << nSignalPhotons << G4endl;
 
 }
 
@@ -563,14 +566,14 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // Constant sphere offsets
   G4double xShift = 0.;
-  G4double yShift = 0.;
+  G4double yShift = 2.*cm;
   G4double zShift = 0.;
 
   
   // Struct that holds position, momentum direction, and energy
   ParticleSample* r = new ParticleSample();
   
-  for(G4int i = 0; i<nBackgroundElectrons; i++){
+  for(unsigned long long int i = 0; i<nBackgroundElectrons; i++){
 
     GenerateTrappedElectrons(r);
     
@@ -582,7 +585,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }
   
-  for(G4int i = 0; i<nLossConeElectrons; i++){
+  for(unsigned long long int i = 0; i<nLossConeElectrons; i++){
 
     GenerateLossConeElectrons(r);
     
@@ -597,7 +600,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // Selects photon for particle type
   fParticleGun->SetParticleDefinition(photonParticle);
   
-  for(G4int i = 0; i<nSignalPhotons; i++){
+  for(unsigned long long int i = 0; i<nSignalPhotons; i++){
 
     GenerateSignalSource(r);
     
