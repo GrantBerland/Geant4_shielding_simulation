@@ -55,7 +55,7 @@ G4double energy;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction();    
+    PrimaryGeneratorAction();
     virtual ~PrimaryGeneratorAction();
 
     // method from the base class
@@ -64,18 +64,33 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GenerateLossConeElectrons(ParticleSample* r);
     void GenerateTrappedElectrons(ParticleSample* r);
     void GenerateSignalSource(ParticleSample* r);
-  
+    void CalculateParticlesToGenerate();
+
     // // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
-  
+
   private:
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
+    
     G4double E_folding;
     G4double E_shift;
     G4double fPI;
     G4double sphereR;
+    G4double lossConeAngleDeg;
+    G4double photonPhiLimitDeg;
+    G4double multModifier;
+
     G4ParticleDefinition* electronParticle; 
     G4ParticleDefinition* photonParticle; 
+    
+    G4int nBackgroundElectrons;
+    G4int nLossConeElectrons;
+    G4int nSignalPhotons;
+        
+    const G4double photonEnergyProb100keV[40];
+    const G4double photonEnergyProb200keV[40];
+    const G4double photonEnergyProb300keV[40];
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

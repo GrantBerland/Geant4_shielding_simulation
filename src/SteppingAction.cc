@@ -66,9 +66,10 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   // Allocate variable for particle logging checks
-  G4bool isEnteringDetector, isInDetector;
+  G4bool isEnteringDetector, isInDetector, check1, check2;
   G4String volName, nextVolName;
-  G4int flag;
+  G4int flag = 1;
+  G4double ene = 0;
   
   G4Track* track = aStep->GetTrack();
 
@@ -80,10 +81,19 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   if (track->GetNextVolume()) {nextVolName = track->GetNextVolume()->GetName();}
 
 
-  // Logical check between pre- and post- steps to determine if 
-  // the particle is either in or entering the detector volume 
+  // Below is the logical operation that determines if a particle is 
+  // either in or entering the detector
+  check1 = (volName == "Detector");
+  check2 = (nextVolName == "Detector");
+  
+  /*
+  // "Documentation version"
   isInDetector = (volName == "Detector" && nextVolName == "Detector");
   isEnteringDetector = (volName != "Detector" && nextVolName == "Detector");
+*/
+  // Efficient version
+  isInDetector = (check1 && check2);
+  isEnteringDetector = (!check1 && check2);
 
   // Get particle name string, either "e-" or "gamma" 
   G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
@@ -109,16 +119,22 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       } 
   }
 
-  if(isInDetector){flag = 0;}
-  else if(isEnteringDetector){flag = 1;}
+  if(isInDetector){flag = 0;
+    
+    // Particle's energy deposited per step 
+    ene = (aStep->GetPostStepPoint()->GetKineticEnergy())                         - (aStep->GetPreStepPoint()->GetKineticEnergy());
+  }
+  else if(isEnteringDetector){flag = 1;
+    
+    // Particle's total kinetic energy
+    ene = aStep->GetPostStepPoint()->GetKineticEnergy();
+  }
+  
 
   if(isInDetector || isEnteringDetector)
   {
     // post step point (i.e. current volume) for attribute getters
-    const G4StepPoint* postPoint = aStep->GetPostStepPoint();
-    
-    G4double ene = postPoint->GetKineticEnergy();
-    G4ThreeVector pos = postPoint->GetPosition();
+    G4ThreeVector pos = aStep->GetPostStepPoint()->GetPosition();
   
     // Redlen lower energy detection threshold
     if(ene > 50.*keV)

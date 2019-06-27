@@ -43,17 +43,148 @@
 #include "Randomize.hh"
 
 #include <fstream>
+#include <stdexcept>
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
-  E_folding(100.),
+  E_folding(200.),
   E_shift(0.),
   fPI(3.14159265358979323846),
   sphereR(15.*cm),
+  lossConeAngleDeg(64.),
+  photonPhiLimitDeg(22.),
+  multModifier(0.05),
   electronParticle(0),
-  photonParticle(0)
+  photonParticle(0),
+  nBackgroundElectrons(0),
+  nLossConeElectrons(0),
+  nSignalPhotons(0),
+  photonEnergyProb100keV{
+0.013595,
+0.078627,
+0.142940,
+0.205908,
+0.267163,
+0.326238,
+0.383443,
+0.439486,
+0.494482,
+0.549689,
+0.604291,
+0.657289,
+0.708533,
+0.756884,
+0.800907,
+0.839917,
+0.874357,
+0.903817,
+0.928230,
+0.947976,
+0.963441,
+0.975056,
+0.983367,
+0.989117,
+0.993118,
+0.995750,
+0.997481,
+0.998554,
+0.999187,
+0.999576,
+0.999782,
+0.999883,
+0.999942,
+0.999977,
+0.999991,
+0.999999,
+1.000000,
+1.000000,
+1.000000,
+1.000000},
+  photonEnergyProb200keV{
+0.010842,
+0.064216,
+0.118059,
+0.171936,
+0.225338,
+0.277519,
+0.328882,
+0.380243,
+0.431648,
+0.483747,
+0.536423,
+0.588938,
+0.640764,
+0.690791,
+0.738237,
+0.782133,
+0.821869,
+0.857122,
+0.887851,
+0.913818,
+0.935239,
+0.952474,
+0.965871,
+0.975966,
+0.983511,
+0.988959,
+0.992773,
+0.995375,
+0.997134,
+0.998312,
+0.999046,
+0.999486,
+0.999737,
+0.999877,
+0.999955,
+0.999987,
+0.999996,
+1.000000,
+1.000000,
+1.000000},
+  photonEnergyProb300keV{
+0.009469,
+0.056745,
+0.105280,
+0.154485,
+0.203856,
+0.252676,
+0.301132,
+0.350064,
+0.399605,
+0.450212,
+0.501742,
+0.553824,
+0.605832,
+0.656705,
+0.705463,
+0.751225,
+0.793478,
+0.831540,
+0.865236,
+0.894308,
+0.918803,
+0.938959,
+0.955067,
+0.967632,
+0.977257,
+0.984372,
+0.989457,
+0.993051,
+0.995583,
+0.997293,
+0.998387,
+0.999077,
+0.999494,
+0.999750,
+0.999898,
+0.999964,
+0.999990,
+0.999999,
+1.000000,
+1.000000}
 {
 
   fParticleGun  = new G4ParticleGun();
@@ -61,6 +192,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   electronParticle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   
   photonParticle = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
+
   
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,6 +204,54 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void PrimaryGeneratorAction::CalculateParticlesToGenerate()
+{
+  G4double sphereRcm = sphereR / cm;
+  G4double sphereAreacm2 = 4. * fPI * sphereRcm * sphereRcm; 
+  G4double trappedElectronFlux = 1e5;      // el/cm^2/s/str
+
+  G4double lossConeAngleRad = lossConeAngleDeg * fPI / 180.;
+  G4double sphereCrossSectionalArea = 
+	  (sphereRcm  * std::sin(photonPhiLimitDeg * fPI / 180.)) *
+	  (sphereRcm  * std::sin(photonPhiLimitDeg * fPI / 180.)) * fPI;
+
+  G4double trappedElectronSolidAngle =      // str  
+	  2 * fPI * (1 + std::cos(lossConeAngleRad));    
+
+  nBackgroundElectrons = std::floor(trappedElectronFlux * sphereAreacm2 * 
+	                 trappedElectronSolidAngle);
+
+  // Loss cone particles (backscattered), fractional flux derived 
+  // from Marshall, Bortnik work
+  nLossConeElectrons = std::floor(0.316*nBackgroundElectrons);	
+
+
+  // Photon count per second per each energy range (in keV)
+  if      (E_folding <= 100.) nSignalPhotons = 144;
+  else if (E_folding <= 200.) nSignalPhotons = 533;
+  else if (E_folding <= 300.) nSignalPhotons = 1131;
+  else throw std::invalid_argument("Non-realizable E_0");
+
+  nSignalPhotons *= sphereCrossSectionalArea;
+
+  // Reduce number of particles by modifier in order to be simulatable 
+  nBackgroundElectrons *= multModifier;
+  nLossConeElectrons   *= multModifier;
+  nSignalPhotons       *= multModifier;
+
+  std::cout << nBackgroundElectrons << "," << nLossConeElectrons << ","
+	  << nSignalPhotons << std::endl;
+
+
+  nBackgroundElectrons = 100;
+  nLossConeElectrons   = 31;
+  nSignalPhotons       = 10;
+  
+
+}
+
+
+
 void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 {
   // This method generates electrons that were in the loss cone, but have
@@ -82,8 +262,8 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   // Discrete CDF of particles within the loss cone and backscattered
   // from the atmosphere with 0.6527 degree resolution from [0, 63] 
   // degrees (i.e. the loss cone at approximately 500 km altitude)
-  G4int dataSize = 96;
-  G4double lossConeData[96][2] = {
+  const G4int dataSize = 96;
+  static const G4double lossConeData[96][2] = {
 { 1.0000 , 0.0000 },
 { 1.6526 , 0.0006 },
 { 2.3053 , 0.0012 },
@@ -179,8 +359,7 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 { 61.0421 , 0.9203 },
 { 61.6947 , 0.9469 },
 { 62.3474 , 0.9734 },
-{ 63.0000 , 1.0000 },
-};
+{ 63.0000 , 1.0000 }};
   
   G4double randomNumber = G4UniformRand();
   G4int angleIndex = -1;
@@ -240,20 +419,85 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 {
   // This method generates a photon signal from a energetic particle
   // precipitation event that occurs at approximately 50 - 100 km 
-  // altitude. Variables are exponential folding energy E0 and the 
+  // altitude. Variables are photon energy and the 
   // pitch, or zenith angle distribution of the photons.
 
-  G4double theta, phi, E0_signal;
+  G4double theta, phi, randomNumber;
+  static const G4double photonEnergyArray[40] = {
+10.000000,
+11.220185,
+12.589254,
+14.125375,
+15.848932,
+17.782794,
+19.952623,
+22.387211,
+25.118864,
+28.183829,
+31.622777,
+35.481339,
+39.810717,
+44.668359,
+50.118723,
+56.234133,
+63.095734,
+70.794578,
+79.432823,
+89.125094,
+100.000000,
+112.201850,
+125.892540,
+141.253750,
+158.489320,
+177.827940,
+199.526230,
+223.872110,
+251.188640,
+281.838290,
+316.227770,
+354.813390,
+398.107170,
+446.683590,
+501.187230,
+562.341330,
+630.957340,
+707.945780,
+794.328230,
+891.250940};
+
+  const G4int dataSize = 40;
+  const G4double* photonEnergyTablePointer;
+  randomNumber = G4UniformRand();
  
+  // If statements to determine which photon energy probability table to 
+  // use, based on the E_0 folding energy of the background electrons
+  if(E_folding <= 100.){
+    photonEnergyTablePointer = photonEnergyProb100keV;}
+  else if(E_folding <= 200.){
+    photonEnergyTablePointer = photonEnergyProb200keV;}
+  else if(E_folding <= 300.){
+    photonEnergyTablePointer = photonEnergyProb300keV;}
+  else {throw std::invalid_argument("Source folding energy not in {100,200,300} keV");}
+
+    // Discrete inverse CDF lookup of probabilites, which are then
+    // linked to an energy
+    for(G4int energyIndex=0; energyIndex<dataSize; energyIndex++)
+    {
+      if(randomNumber < photonEnergyTablePointer[energyIndex])
+      {
+        r->energy = photonEnergyArray[energyIndex]*keV;
+        break;
+      }
+    }
+
+  
   // Uniformly distributed around field line 
   theta = G4UniformRand()*2.*fPI;  
   
   // Phi (half angle) takes values in a cone determined by 
   // spacecraft altitude, precipitation event altitude and size
-  G4double phiLimit   = 25. * fPI / 180.;       
-  phi = G4UniformRand()*phiLimit;
-
-  E0_signal = 200.;   // in units of keV
+  G4double photonPhiLimitRad   = photonPhiLimitDeg * fPI / 180.;       
+  phi = G4UniformRand()*photonPhiLimitRad;
 
   // We want our Y direction to be "up"
   r->x = sphereR * std::cos(theta) * std::sin(phi);
@@ -266,8 +510,6 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   r->yDir = -1;
   r->zDir = 0;
 
-  G4double randomNumber = G4UniformRand();
-  r->energy = (std::log(1 - randomNumber)*-E0_signal)*keV;
 }
 
 
@@ -312,24 +554,12 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+  // Method called to populate member varaibles with number of 
+  // particles to generate
+  CalculateParticlesToGenerate();
 
   // Selects electron for particle type
   fParticleGun->SetParticleDefinition(electronParticle);
-
-  G4int nBackgroundElectrons;
-
-  // N particles generated per simulation run, read in from file
-  std::fstream particleNumberFile;
-  particleNumberFile.open("./numberOfParticles.txt", std::ios_base::in);
-  particleNumberFile >> nBackgroundElectrons;
-  particleNumberFile.close();
-
-  // Loss cone particles (backscattered), fractional flux derived 
-  // from Marshall, Bortnik work
-  G4int nLossConeElectrons = std::floor(0.316*nBackgroundElectrons);	
-
-  // Determined through flux->nBackgroundElectrons calculation (see docs)
-  G4int nSignalPhotons = 1000;
 
   // Constant sphere offsets
   G4double xShift = 0.;

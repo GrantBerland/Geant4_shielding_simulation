@@ -68,7 +68,7 @@ QBBC_modified::QBBC_modified( G4int ver, const G4String&)
   G4cout << "<<< Reference Physics List QBBC "
 	 <<G4endl;	
 
-  defaultCutValue = 0.25*mm;  
+  defaultCutValue = 0.7*mm;  
   SetVerboseLevel(ver);
 
   // EM Physics
