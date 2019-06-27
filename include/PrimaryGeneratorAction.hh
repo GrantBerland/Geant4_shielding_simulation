@@ -87,9 +87,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     unsigned long long int nLossConeElectrons;
     unsigned long long int nSignalPhotons;
         
-    const G4double photonEnergyProb100keV[40];
-    const G4double photonEnergyProb200keV[40];
-    const G4double photonEnergyProb300keV[40];
+    const G4double photonEnergyProb100keV[32];
+    const G4double photonEnergyProb200keV[32];
+    const G4double photonEnergyProb300keV[32];
 
 };
 
