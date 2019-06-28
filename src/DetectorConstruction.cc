@@ -241,7 +241,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   G4VSolid* busFrontPlate = new G4Box("Front-plate",
 		        10.*cm,
 			8.5*mm/2.,
-			10.*cm);
+			10.65*cm+0.25*cm/2);
 
   G4VSolid* busSidePlate = new G4Box("Side-plate",
 		        11.*cm,
@@ -249,7 +249,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 			10.*cm);
   
   G4VSolid* busThickPlate = new G4Box("Thick-plate",
-		        10.*cm,
+		        11.*cm,
 			59.*mm/2.,
 			10.*cm);
 
@@ -502,7 +502,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 
   
   new G4PVPlacement(wallRotm,
-		  G4ThreeVector(-10.*cm-8.5*mm/2, busHeight, 0.),
+		  G4ThreeVector(-10.*cm-8.5*mm/2, busHeight+0.65*cm, 0.25*cm/2),
 		  logicalBusFrontPlate,
 		  "Front-plate",
 		  logicEnv,
@@ -512,7 +512,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 
   
   new G4PVPlacement(wallRotm,
-		  G4ThreeVector(10.*cm+8.5*mm/2, busHeight, 0.),
+		  G4ThreeVector(10.*cm+8.5*mm/2, busHeight+0.65*cm, 0.25*cm/2),
 		  logicalBusFrontPlate,
 		  "Front-plate",
 		  logicEnv,
@@ -524,7 +524,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   sideWallRotm->rotateX(90.*deg);
 
   new G4PVPlacement(sideWallRotm,
-		  G4ThreeVector(0., busHeight, -11.*cm),
+		  G4ThreeVector(0., busHeight+0.5*cm, -11.*cm),
 		  logicalBusSidePlate,
 		  "Side-plate",
 		  logicEnv,
@@ -532,7 +532,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 		  checkOverlaps);
 
   new G4PVPlacement(sideWallRotm,
-		  G4ThreeVector(0., busHeight, 11.*cm+59.*mm/2),
+		  G4ThreeVector(0., busHeight+5.*mm, 11.*cm+59.*mm/2),
 		  logicalBusThickPlate,
 		  "Thick-plate",
 		  logicEnv,
