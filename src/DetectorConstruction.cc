@@ -67,7 +67,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4NistManager* nist = G4NistManager::Instance();
 
   // Envelope parameters
-  G4double env_sizeXY = 20.*cm, env_sizeZ = 20.*cm;
+  G4double env_sizeXY = 70.*cm, env_sizeZ = 20.*cm;
 
   G4bool checkOverlaps    = true;
   
@@ -233,7 +233,26 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 			boxInnerSizeZ,
 			boxInnerSizeXY);
   
+  G4VSolid* busBackPlate = new G4Box("Back-plate",
+		        11.*cm,
+			8.5*mm/2.,
+			11.*cm);
+
+  G4VSolid* busFrontPlate = new G4Box("Front-plate",
+		        10.*cm,
+			8.5*mm/2.,
+			10.*cm);
+
+  G4VSolid* busSidePlate = new G4Box("Side-plate",
+		        11.*cm,
+			6.35*mm/2.,
+			10.*cm);
   
+  G4VSolid* busThickPlate = new G4Box("Thick-plate",
+		        10.*cm,
+			59.*mm/2.,
+			10.*cm);
+
   //////////////////////////////////////////
   ///////////// Subtractions ///////////////
   //////////////////////////////////////////
@@ -351,7 +370,22 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   G4LogicalVolume* logicalBaffles = new G4LogicalVolume(baffles,
 		  nist->FindOrBuildMaterial("G4_W"),
 		  "Baffles");
+  
+  G4LogicalVolume* logicalBusBackPlate = new G4LogicalVolume(busBackPlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Back-plate");
 
+  G4LogicalVolume* logicalBusFrontPlate = new G4LogicalVolume(busFrontPlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Front-plate");
+
+  G4LogicalVolume* logicalBusSidePlate = new G4LogicalVolume(busSidePlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Side-plate");
+
+  G4LogicalVolume* logicalBusThickPlate = new G4LogicalVolume(busThickPlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Thick-plate");
 
   ////////////////////////////////////////////////
   ///////////////// Placements ///////////////////
@@ -450,7 +484,65 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 		  logicEnv,
 		  false,
 		  checkOverlaps);
+
+  // Bus structure placements
   
+  G4double busHeight = -5.*cm;
+
+  G4RotationMatrix* wallRotm = new G4RotationMatrix();
+  wallRotm->rotateZ(90.*deg);
+
+  new G4PVPlacement(0,
+		  G4ThreeVector(0., -10.*cm+busHeight, 0.),
+		  logicalBusBackPlate,
+		  "Back-plate",
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+
+  
+  new G4PVPlacement(wallRotm,
+		  G4ThreeVector(-10.*cm-8.5*mm/2, busHeight, 0.),
+		  logicalBusFrontPlate,
+		  "Front-plate",
+		  logicEnv,
+		  false,
+		  0,
+		  checkOverlaps);
+
+  
+  new G4PVPlacement(wallRotm,
+		  G4ThreeVector(10.*cm+8.5*mm/2, busHeight, 0.),
+		  logicalBusFrontPlate,
+		  "Front-plate",
+		  logicEnv,
+		  false,
+		  1,
+		  checkOverlaps);
+
+  G4RotationMatrix* sideWallRotm = new G4RotationMatrix();
+  sideWallRotm->rotateX(90.*deg);
+
+  new G4PVPlacement(sideWallRotm,
+		  G4ThreeVector(0., busHeight, -11.*cm),
+		  logicalBusSidePlate,
+		  "Side-plate",
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+
+  new G4PVPlacement(sideWallRotm,
+		  G4ThreeVector(0., busHeight, 11.*cm+59.*mm/2),
+		  logicalBusThickPlate,
+		  "Thick-plate",
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+
+
+
+
+
   // Baffle parameterisation
   G4int numberBaffles = 28;
 
