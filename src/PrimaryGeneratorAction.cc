@@ -142,8 +142,10 @@ void PrimaryGeneratorAction::CalculateParticlesToGenerate()
 
   // Loss cone particles (backscattered), fractional flux derived 
   // from Marshall, Bortnik work
+  G4double lossConeParticleFraction = 0.316;
+  
   nLossConeElectrons = 
-	  (unsigned long long int)(0.316*nBackgroundElectrons);	
+	  (unsigned long long int)(lossConeParticleFraction*nBackgroundElectrons/(1-lossConeParticleFraction));	
 
 
   // Photon flux [ph/cm^2/s] per each E_0 folding energy range (in keV)
@@ -189,10 +191,8 @@ void PrimaryGeneratorAction::CalculateParticlesToGenerate()
 	  "\nSignal Photons: " << nSignalPhotons << G4endl;
 
   if(debugFlag == 1){
-  
-  // For debugging
-  throw std::invalid_argument("Stop here!");
-  
+    // For debugging
+    throw std::invalid_argument("Stop here!");
   }
 
 }
