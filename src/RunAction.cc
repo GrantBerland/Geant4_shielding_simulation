@@ -69,15 +69,16 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {
 
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-
+/*
   long seeds[2];
   time_t systime = time(NULL);
   
   seeds[0] = (long) systime;
   seeds[1] = (long) (systime*G4UniformRand());
   G4Random::setTheSeeds(seeds);
-
-}
+  std::cout << "Seeds set now: " << seeds[0] << ", " << seeds[1] << std::endl;
+*/
+  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

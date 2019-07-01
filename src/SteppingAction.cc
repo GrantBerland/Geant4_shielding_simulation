@@ -51,10 +51,29 @@ namespace { G4Mutex myParticleLog = G4MUTEX_INITIALIZER; }
 SteppingAction::SteppingAction(EventAction* eventAction)
 : G4UserSteppingAction(),
   fEventAction(eventAction),
-  fScoringVolume(0),
-  backgroundFileName("../data/hits.csv"),
-  signalFileName("../data/signal.csv")
-{}
+  fScoringVolume(0)
+{
+  // Appends a random integer, [0, 1000] onto the hits and 
+  // signal filenames
+  
+  G4String randomFilename;
+  int randomNumber = rand() % 10000;
+  
+  G4String filenameHeader = "../data/";
+
+  randomFilename = "hits_" + std::to_string(randomNumber);
+  backgroundFileName = filenameHeader + randomFilename;
+
+  randomFilename = "signal_" + std::to_string(randomNumber);
+  signalFileName     = filenameHeader + randomFilename;
+
+  backgroundFileName += ".csv";
+  signalFileName     += ".csv";
+
+  LogParticle(G4ThreeVector(0.,0.,0.), 15., backgroundFileName, 1, "");   
+  LogParticle(G4ThreeVector(0.,0.,0.), 15., signalFileName, 1, "");   
+
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

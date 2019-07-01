@@ -53,6 +53,7 @@ set(EXAMPLEB1_SCRIPTS
   runBeamOn.mac  
   autoRun.sh
   numberOfParticles.txt
+  parallel_runfile
   )
 
 foreach(_script ${EXAMPLEB1_SCRIPTS})

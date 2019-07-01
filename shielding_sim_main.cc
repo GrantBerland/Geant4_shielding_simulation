@@ -57,7 +57,7 @@
 
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-
+#include <time.h>
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,11 +73,23 @@ int main(int argc,char** argv)
 
   // Choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  // set the seeds
+  long seeds[2];
+  time_t systime = time(NULL);
+  
+  // Built in c-rand
+  srand (systime);
+
+  // Geant rand
+  seeds[0] = (long) systime;
+  seeds[1] = (long) (systime*G4UniformRand());
+  G4Random::setTheSeeds(seeds);
+  std::cout << "Seeds set now: " << seeds[0] << ", " << seeds[1] << std::endl;
+
 
   // Construct the default run manager
 #ifdef G4MULTITHREADED
-  
-  // Enforce single threadin
+  // Enforce single threading
   G4RunManager* runManager = new G4RunManager;
   //G4MTRunManager* runManager = new G4MTRunManager;
   //runManager->SetNumberOfThreads(2);  // (Grant's computer)
