@@ -10,7 +10,8 @@ echo "Running $numberSims simulations in $loops loops..."
 
 for sims in $(seq 1 $loops); 
 
-	do parallel ./parallel_runfile ::: {1..$cores} >> output.log; 
+	do parallel --jobs $cores "sleep 1{}, ./parallel_runfile" ::: {1..2} >> output.log; 
+
 	echo "Simulation $((sims*cores))/$numberSims complete"; 
 
 done;

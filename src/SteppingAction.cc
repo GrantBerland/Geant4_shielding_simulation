@@ -61,17 +61,16 @@ SteppingAction::SteppingAction(EventAction* eventAction)
   
   G4String filenameHeader = "../data/";
 
-  randomFilename = "hits_" + std::to_string(randomNumber);
+  //randomFilename = "hits" + std::to_string(randomNumber);
+  randomFilename = "hits"; 
   backgroundFileName = filenameHeader + randomFilename;
 
-  randomFilename = "signal_" + std::to_string(randomNumber);
+  //randomFilename = "signal" + std::to_string(randomNumber);
+  randomFilename = "signal";
   signalFileName     = filenameHeader + randomFilename;
 
   backgroundFileName += ".csv";
   signalFileName     += ".csv";
-
-  LogParticle(G4ThreeVector(0.,0.,0.), 15., backgroundFileName, 1, "");   
-  LogParticle(G4ThreeVector(0.,0.,0.), 15., signalFileName, 1, "");   
 
 }
 

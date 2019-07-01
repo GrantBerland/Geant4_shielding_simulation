@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Sleeps for [5, 14] seconds
-sleep $((($RANDOM % 10) + 5))
-
-./main runBeamOn.mac
+./main runBeamOn.mac; sleep 1
+./main runBeamOn.mac; sleep 1
 
