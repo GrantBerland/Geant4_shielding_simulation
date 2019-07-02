@@ -57,7 +57,7 @@ SteppingAction::SteppingAction(EventAction* eventAction)
   // signal filenames
   
   G4String randomFilename;
-  int randomNumber = rand() % 10000;
+  int randomNumber = rand() % 1000;
   
   G4String filenameHeader = "../data/";
 
@@ -84,9 +84,8 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   // Allocate variable for particle logging checks
-  G4bool isEnteringDetector, isInDetector, check1, check2;
+  G4bool check1, check2;
   G4String volName, nextVolName;
-  G4int flag = 1;
   G4double ene = 0;
   
   G4Track* track = aStep->GetTrack();
@@ -107,11 +106,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   /*
   // "Documentation version"
   isInDetector = (volName == "Detector" && nextVolName == "Detector");
-  isEnteringDetector = (volName != "Detector" && nextVolName == "Detector");
-*/
+  
   // Efficient version
   isInDetector = (check1 && check2);
-  isEnteringDetector = (!check1 && check2);
+  */
 
   // Get particle name string, either "e-" or "gamma" 
   G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
@@ -123,11 +121,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // have no process name and will segfault if dereferenced**
   if(particleName == "gamma")
   {
-    
     isBackground = false;
     
     if(track->GetCreatorProcess() != NULL){
-      const G4String& processName = track->GetCreatorProcess()->GetProcessName();
+      const G4String& processName = 
+	      track->GetCreatorProcess()->GetProcessName();
   
       // If the particle is not a primary track, then checked if it's 
       // created via electron bremsstrahlung (eBrem); if so, resets to 
@@ -137,38 +135,28 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       } 
   }
 
-  if(isInDetector){flag = 0;
-    
-    // Particle's energy deposited per step 
-    ene = (aStep->GetPostStepPoint()->GetKineticEnergy())                         - (aStep->GetPreStepPoint()->GetKineticEnergy());
-  }
-  else if(isEnteringDetector){flag = 1;
-    
-    // Particle's total kinetic energy
-    ene = aStep->GetPostStepPoint()->GetKineticEnergy();
-  }
-  
-
-  if(isInDetector || isEnteringDetector)
+  if(check1 && check2) // particle is in detector
   {
     // post step point (i.e. current volume) for attribute getters
     G4ThreeVector pos = aStep->GetPostStepPoint()->GetPosition();
+    G4double ene = (aStep->GetPreStepPoint()->GetKineticEnergy()) 
+	- (aStep->GetPostStepPoint()->GetKineticEnergy());
   
     // Redlen lower energy detection threshold
     if(ene > 50.*keV)
     {
       // write to background hits file	    
-      if(isBackground) LogParticle(pos, ene, backgroundFileName, flag, particleName);
+      if(isBackground) LogParticle(pos, ene, backgroundFileName, particleName);
       
       // write to signal hits file (no part. name since all are gammas)
-      else LogParticle(pos, ene, signalFileName, flag, "");
+      else LogParticle(pos, ene, signalFileName, "");
     }
   }    
-    
+  
+
 }
 
-
-void SteppingAction::LogParticle(G4ThreeVector pos, G4double ene, G4String detectorFileName, G4int flag, G4String PID)
+void SteppingAction::LogParticle(G4ThreeVector pos, G4double ene, G4String detectorFileName, G4String PID)
 {
     // locks program so that multiple threads cannot write to file
     // at once, unlocks when current scope (i.e. this method) is left
@@ -177,7 +165,7 @@ void SteppingAction::LogParticle(G4ThreeVector pos, G4double ene, G4String detec
     std::ofstream hitFile_detector;
     hitFile_detector.open(detectorFileName, std::ios_base::app);
 
-    hitFile_detector << flag << "," << pos.x()/cm << "," << pos.y()/cm 
+    hitFile_detector << pos.x()/cm << "," << pos.y()/cm 
 	    << "," << pos.z()/cm << "," << ene/keV << "," << PID << "\n";
 
     hitFile_detector.close();
