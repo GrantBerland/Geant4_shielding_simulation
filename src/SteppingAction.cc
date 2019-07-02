@@ -57,7 +57,7 @@ SteppingAction::SteppingAction(EventAction* eventAction)
   // signal filenames
   
   G4String randomFilename;
-  int randomNumber = rand() % 1000;
+  //int randomNumber = rand() % 1000;
   
   G4String filenameHeader = "../data/";
 
@@ -86,7 +86,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // Allocate variable for particle logging checks
   G4bool check1, check2;
   G4String volName, nextVolName;
-  G4double ene = 0;
   
   G4Track* track = aStep->GetTrack();
 
