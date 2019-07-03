@@ -50,7 +50,7 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
-  E_folding(100.),
+  E_folding(300.),
   E_shift(0.),
   fPI(3.14159265358979323846),
   sphereR(30.*cm),
@@ -142,8 +142,11 @@ void PrimaryGeneratorAction::CalculateParticlesToGenerate()
 
   // Loss cone particles (backscattered), fractional flux derived 
   // from Marshall, Bortnik work
+  // N_{loss cone particles}/N_{total particles}
   G4double lossConeParticleFraction = 0.316;
-  
+ 
+  // gamma = ^ above fraction
+  // N_{loss cone parts} = gamma * N_{trapped parts}/(1 - gamma)
   nLossConeElectrons = 
 	  (unsigned long long int)(lossConeParticleFraction*nBackgroundElectrons/(1-lossConeParticleFraction));	
 

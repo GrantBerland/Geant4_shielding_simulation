@@ -8,7 +8,15 @@
 #
 # Initialize kernel
 
-/cuts/setMaxCutEnergy 50 eV
+
+# Set low energy EM processes, including fluorescence
+/process/em/fluo true
+/process/em/auger true
+/process/em/augerCascade true
+/process/em/pixe true
+
+
+#/cuts/setMaxCutEnergy 50 eV
 /run/initialize
 
 

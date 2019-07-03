@@ -77,15 +77,13 @@ int main(int argc,char** argv)
   long seeds[2];
   time_t systime = time(NULL);
   
-  // Built in c-rand
+  // Seed built in c-rand engine
   srand (systime);
 
-  // Geant rand
+  // Geant rand engine
   seeds[0] = (long) systime;
   seeds[1] = (long) (systime*G4UniformRand());
   G4Random::setTheSeeds(seeds);
-  std::cout << "Seeds set now: " << seeds[0] << ", " << seeds[1] << std::endl;
-
 
   // Construct the default run manager
 #ifdef G4MULTITHREADED
