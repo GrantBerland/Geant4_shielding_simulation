@@ -50,6 +50,7 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4StoppingPhysics.hh"
 
@@ -72,7 +73,7 @@ QBBC_modified::QBBC_modified( G4int ver, const G4String&)
   SetVerboseLevel(ver);
 
   // EM Physics
-  RegisterPhysics( new G4EmStandardPhysics(ver) );
+  RegisterPhysics( new G4EmStandardPhysics_option4(ver) );
 
   // Synchroton Radiation & GN Physics
   RegisterPhysics( new G4EmExtraPhysics(ver) );

@@ -136,26 +136,34 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   if(check1 && check2) // particle is in detector
   {
-    // post step point (i.e. current volume) for attribute getters
-    G4ThreeVector pos = aStep->GetPostStepPoint()->GetPosition();
-    G4double ene = (aStep->GetPreStepPoint()->GetKineticEnergy()) 
+    // Position of hit
+    const G4ThreeVector pos = aStep->GetPostStepPoint()->GetPosition();
+    
+    // Difference in energy between the last and current step point
+    const G4double ene = (aStep->GetPreStepPoint()->GetKineticEnergy()) 
 	- (aStep->GetPostStepPoint()->GetKineticEnergy());
   
+
+    // Get generated particle position, energy, and momentum direction
+    const G4ThreeVector vtx = track->GetVertexPosition();
+
+
+
     // Redlen lower energy detection threshold
     if(ene > 50.*keV)
     {
       // write to background hits file	    
-      if(isBackground) LogParticle(pos, ene, backgroundFileName, particleName);
+      if(isBackground) LogParticle(pos, vtx, ene, backgroundFileName, particleName);
       
       // write to signal hits file (no part. name since all are gammas)
-      else LogParticle(pos, ene, signalFileName, "");
+      else LogParticle(pos, vtx, ene, signalFileName, "");
     }
   }    
   
 
 }
 
-void SteppingAction::LogParticle(G4ThreeVector pos, G4double ene, G4String detectorFileName, G4String PID)
+void SteppingAction::LogParticle(G4ThreeVector pos, G4ThreeVector init_pos, G4double ene, G4String detectorFileName, G4String PID)
 {
     // locks program so that multiple threads cannot write to file
     // at once, unlocks when current scope (i.e. this method) is left
@@ -164,8 +172,12 @@ void SteppingAction::LogParticle(G4ThreeVector pos, G4double ene, G4String detec
     std::ofstream hitFile_detector;
     hitFile_detector.open(detectorFileName, std::ios_base::app);
 
-    hitFile_detector << pos.x()/cm << "," << pos.y()/cm 
-	    << "," << pos.z()/cm << "," << ene/keV << "," << PID << "\n";
+    hitFile_detector << pos.x()/cm << "," << pos.y()/cm << "," 
+<< pos.z()/cm << "," 
+
+<< init_pos.x()/cm << "," << init_pos.y()/cm << "," << init_pos.z()/cm 
+
+<< "," << ene/keV << "," << PID << "\n";
 
     hitFile_detector.close();
 }

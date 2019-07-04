@@ -88,9 +88,9 @@ int main(int argc,char** argv)
   // Construct the default run manager
 #ifdef G4MULTITHREADED
   // Enforce single threading
-  G4RunManager* runManager = new G4RunManager;
-  //G4MTRunManager* runManager = new G4MTRunManager;
-  //runManager->SetNumberOfThreads(2);  // (Grant's computer)
+  //G4RunManager* runManager = new G4RunManager;
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(2);  
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
