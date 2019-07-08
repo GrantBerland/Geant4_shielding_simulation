@@ -308,7 +308,7 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   // altitude. Variables are photon energy and the 
   // pitch, or zenith angle distribution of the photons.
 
-  G4double theta, phi, randomNumber;
+  G4double theta, phi, u, randomNumber;
   static const G4double photonEnergyArray[32] = 
   {50.11872,63.09573,79.43282,100.00000,
 63.09573,79.43282,100.00000,125.89254,
@@ -351,13 +351,19 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   // Phi (half angle) takes values in a cone determined by 
   // spacecraft altitude, precipitation event altitude and size
   G4double photonPhiLimitRad   = photonPhiLimitDeg * fPI / 180.;       
-  phi = G4UniformRand()*photonPhiLimitRad;
+  u = G4UniformRand()*(1.-std::cos(photonPhiLimitRad))/2.;
+  phi = std::acos(1 - 2 * u);
 
   // We want our Y direction to be "up"
-  r->x = sphereR * std::cos(theta) * std::sin(phi);
+  r->x = sphereR * std::sin(phi) * std::cos(theta);
   r->y = sphereR * std::cos(phi);
-  r->z = sphereR * std::sin(theta) * std::sin(phi);
-  
+  r->z = sphereR * std::sin(phi) * std::sin(theta);
+
+
+  std::ofstream testFile;
+  testFile.open("testFile.txt", std::ios_base::app);
+  testFile << r->x << "," << r->y << "," << r->z << "\n";
+  testFile.close();
 
   // Uniform distributed downwards, towards detector
   r->xDir = 0;
