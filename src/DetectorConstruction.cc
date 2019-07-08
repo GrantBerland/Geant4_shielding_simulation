@@ -47,7 +47,8 @@
 #include "G4SolidStore.hh"
 #include "G4SDManager.hh"
 #include "G4SubtractionSolid.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4AssemblyVolume.hh"
+
 
 DetectorConstruction::DetectorConstruction()
 : G4VUserDetectorConstruction(),
@@ -370,7 +371,11 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   G4LogicalVolume* logicalBaffles = new G4LogicalVolume(baffles,
 		  nist->FindOrBuildMaterial("G4_W"),
 		  "Baffles");
-  
+
+
+  // Bus structures
+  //
+
   G4LogicalVolume* logicalBusBackPlate = new G4LogicalVolume(busBackPlate,
 		  nist->FindOrBuildMaterial("G4_Al"),
 		  "Back-plate");
@@ -391,14 +396,24 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   ///////////////// Placements ///////////////////
   ////////////////////////////////////////////////
   
-  new G4PVPlacement(0,
-		    G4ThreeVector(0.,boxInnerSizeZ+16.15*mm+855*um,0.),
-		    logicCollimeter,
-		    "Collimeter",
-		    logicEnv,
-		    false,
-		    checkOverlaps);
+  G4AssemblyVolume* detectorAssembly = new G4AssemblyVolume();
+
+  G4RotationMatrix Rm;
+  G4ThreeVector    Tm;
+  G4Transform3D    Tr;
+
+
+  // Collimeter
+  Tm.setX(0.); Tm.setY(boxInnerSizeZ+16.15*mm+855*um); Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+  detectorAssembly->AddPlacedVolume(logicCollimeter, Tr);
  
+  // Front end electronics board
+  Tm.setX(0.); Tm.setY(-2.*cm); Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+  detectorAssembly->AddPlacedVolume(logicFrontEndBoard, Tr);
+
+
   G4double detectorPosX = -22.5*mm;
   G4double detectorPosZ = -21.*mm;
   G4double detectorPosY = frontEndBoardThickness + 0.5*cm;
@@ -410,80 +425,81 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 
   for(G4int nDet=0; nDet<4;nDet++)
   {
-
-    new G4PVPlacement(0,
-		    G4ThreeVector(pm1[nDet]*detectorPosX,
-			    -1.25*cm+0.1*mm+detectorPosY,
-			    pm2[nDet]*detectorPosZ),
-		    logicDetector,
-		    "Detector",
-		    logicEnv,
-		    false,
-		    nDet,
-		    checkOverlaps);
-
-    new G4PVPlacement(0,
-		    G4ThreeVector(pm1[nDet]*detectorPosX,
-			    -2.*cm+detectorPosY,
-			    pm2[nDet]*detectorPosZ),
-		    logicDetectorElectronics,
-		    "DetectorFR4",
-		    logicEnv,
-		    false,
-		    nDet,
-		    checkOverlaps);
-  } 
-
-  new G4PVPlacement(0,
-		    G4ThreeVector(0.,-2.0*cm,0.),
-		    logicFrontEndBoard,
-		    "Electronics",
-		    logicEnv,
-		    false,
-		    checkOverlaps);
+ 
+    // CZT Detector
+    Tm.setX(pm1[nDet]*detectorPosX); 
+    Tm.setY(-1.25*cm+0.1*mm+detectorPosY); 
+    Tm.setZ(pm2[nDet]*detectorPosZ);
+    
+    Tr = G4Transform3D(Rm, Tm); 
   
-  new G4PVPlacement(0,
-		  G4ThreeVector(),
-		  logicalOuterShielding,
-		  "W_Shielding",
-		  logicEnv,
-		  true,
-		  checkOverlaps);
+    detectorAssembly->AddPlacedVolume(logicDetector, Tr);
+    
+
+    // FR4 Detector
+    Tm.setX(pm1[nDet]*detectorPosX); 
+    Tm.setY(-2.*cm+detectorPosY); 
+    Tm.setZ(pm2[nDet]*detectorPosZ);
+    
+    Tr = G4Transform3D(Rm, Tm); 
+
+    detectorAssembly->AddPlacedVolume(logicDetectorElectronics, Tr);
+    
+   } 
+
+  // Tungsten shielding
+  Tm.setX(0.); Tm.setY(0.); Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+
+  detectorAssembly->AddPlacedVolume(logicalOuterShielding, Tr);
+
+
+  // Aluminum shielding
+  Tm.setX(0.); Tm.setY(0.); Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+
+  detectorAssembly->AddPlacedVolume(logicalInnerShielding, Tr);
+
+  // Lower beryllium window
+  Tm.setX(windowSlitShiftX); Tm.setY(windowPlacement); Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+
+  detectorAssembly->AddPlacedVolume(logicalWindow, Tr);
   
-  new G4PVPlacement(0,
-		  G4ThreeVector(),
-		  logicalInnerShielding,
-		  "Al_Shielding",
-		  logicEnv,
-		  true,
-		  checkOverlaps);
+  Tm.setX(-windowSlitShiftX); Tm.setY(windowPlacement); Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+
+  detectorAssembly->AddPlacedVolume(logicalWindow, Tr);
+
+
+  // Top beryllium window
+  Tm.setX(0.); Tm.setY(windowPlacement+20.*mm+2.*mm); Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+
+  detectorAssembly->AddPlacedVolume(logicalTopWindow, Tr);
+
+  // Baffle parameterisation
+  G4int numberBaffles = 28;
+
+  G4double bafflePlacement = windowPlacement+0.5*baffleHeight+outerShieldingThickness+0.3*mm;
   
-  new G4PVPlacement(0,
-		  G4ThreeVector(windowSlitShiftX, windowPlacement,0.),
-		  logicalWindow,
-		  "Be_Window",
-		  logicEnv,
-		  false,
-		  0,
-		  checkOverlaps);
+  G4double axialDistance;
+  rotm->rotateY(90.*deg); 
+  Rm.rotateY(90.*deg);
 
-  new G4PVPlacement(0,
-		  G4ThreeVector(-windowSlitShiftX, windowPlacement,0.),
-		  logicalWindow,
-		  "Be_Window",
-		  logicEnv,
-		  false,
-		  1,
-		  checkOverlaps);
+  for(G4int i = 0; i<numberBaffles; i++)
+  {
+    // baffles are spaced 2.53 mm apart
+    axialDistance = (i-14) * (2.53 + 0.5) * mm;
+
+    Tm.setX(0.); Tm.setY(bafflePlacement); Tm.setZ(axialDistance);
+    Tr = G4Transform3D(Rm, Tm);
+
+    detectorAssembly->AddPlacedVolume(logicalBaffles, Tr);
 
 
-  new G4PVPlacement(0,
-		  G4ThreeVector(0., windowPlacement+20.*mm+2.*mm,0.),
-		  logicalTopWindow,
-		  "top_Be_Window",
-		  logicEnv,
-		  false,
-		  checkOverlaps);
+  }
+
 
   // Bus structure placements
   
@@ -543,27 +559,18 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 
 
 
-  // Baffle parameterisation
-  G4int numberBaffles = 28;
 
-  G4double bafflePlacement = windowPlacement+0.5*baffleHeight+outerShieldingThickness+0.3*mm;
-  
-  G4double axialDistance;
-  rotm->rotateY(90.*deg); 
+  unsigned int numDetectors = 3;
+  for(unsigned int i = 0; i<numDetectors; i++){
+	 
+    G4double dimX = -5.*cm;
+    G4double dimZ = -5.*cm;
+    Tm.setX(pm1[i]*dimX); Tm.setY(0.); Tm.setZ(pm2[i]*dimZ);
+    Rm.rotateY(0.*deg);
+    Tr = G4Transform3D(Rm, Tm);
 
-  for(G4int i = 0; i<numberBaffles; i++)
-  {
-    // baffles are spaced 2.53 mm apart
-    axialDistance = (i-14) * (2.53 + 0.5) * mm;
+    detectorAssembly->MakeImprint(logicEnv, Tr);
 
-    new G4PVPlacement(rotm,
-		     G4ThreeVector(0., bafflePlacement, axialDistance),
-		     logicalBaffles,
-		     "Baffles",
-		     logicEnv,
-		     false,
-		     i,
-		     false);
   }
 
 
