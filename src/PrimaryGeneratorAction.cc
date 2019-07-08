@@ -53,7 +53,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   E_folding(100.),
   E_shift(0.),
   fPI(3.14159265358979323846),
-  sphereR(30.*cm),
+  sphereR(24.*cm),
   lossConeAngleDeg(64.),
   photonPhiLimitDeg(40.),
   multModifier(0.),
@@ -152,9 +152,9 @@ void PrimaryGeneratorAction::CalculateParticlesToGenerate()
 
 
   // Photon flux [ph/cm^2/s] per each E_0 folding energy range (in keV)
-  if      (E_folding <= 100.) nSignalPhotons = 144;
-  else if (E_folding <= 200.) nSignalPhotons = 533;
-  else if (E_folding <= 300.) nSignalPhotons = 1131;
+  if      (E_folding <= 100.) nSignalPhotons = 67;
+  else if (E_folding <= 200.) nSignalPhotons = 302;
+  else if (E_folding <= 300.) nSignalPhotons = 690;
   else throw std::invalid_argument("Non-realizable E_0");
 
   // Converts [ph/cm^2/s] to [ph/s] through a circle the size of the 
@@ -190,8 +190,9 @@ void PrimaryGeneratorAction::CalculateParticlesToGenerate()
   nLossConeElectrons   *= multModifier;
   nSignalPhotons       *= multModifier;
 
-  G4cout << "Background Electrons: " << nBackgroundElectrons << "\nLoss Cone Electrons: " << nLossConeElectrons << 
-	  "\nSignal Photons: " << nSignalPhotons << G4endl;
+  G4cout << "Background Electrons: " << nBackgroundElectrons 
+	  << "\nLoss Cone Electrons: " << nLossConeElectrons 
+	  << "\nSignal Photons: " << nSignalPhotons << G4endl;
 
   if(debugFlag == 1){
     // For debugging
