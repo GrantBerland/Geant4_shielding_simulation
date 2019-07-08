@@ -240,19 +240,19 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 			11.*cm);
 
   G4VSolid* busFrontPlate = new G4Box("Front-plate",
-		        10.*cm,
+		        5.*cm,
 			8.5*mm/2.,
 			10.65*cm+0.25*cm/2);
 
   G4VSolid* busSidePlate = new G4Box("Side-plate",
 		        11.*cm,
 			6.35*mm/2.,
-			10.*cm);
+			5.*cm);
   
   G4VSolid* busThickPlate = new G4Box("Thick-plate",
 		        11.*cm,
 			59.*mm/2.,
-			10.*cm);
+			5.*cm);
 
   //////////////////////////////////////////
   ///////////// Subtractions ///////////////
@@ -503,13 +503,13 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 
   // Bus structure placements
   
-  G4double busHeight = -5.*cm;
+  G4double busHeight = 1.*cm;
 
   G4RotationMatrix* wallRotm = new G4RotationMatrix();
   wallRotm->rotateZ(90.*deg);
 
   new G4PVPlacement(0,
-		  G4ThreeVector(0., -10.*cm+busHeight, 0.),
+		  G4ThreeVector(0., -5.*cm+busHeight, 0.),
 		  logicalBusBackPlate,
 		  "Back-plate",
 		  logicEnv,
@@ -556,15 +556,12 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 		  checkOverlaps);
 
 
-
-
-
-
+  // Place the 3 copies of the detector assemblies using the position 
+  // multiplier arrays from above
   unsigned int numDetectorAssemblies = 3;
   G4double dimX = -5.*cm;
   G4double dimZ = -5.*cm;
   Rm.rotateY(0.*deg);
-  
   
   for(unsigned int i=0; i<numDetectorAssemblies; i++){	 
     Tm.setX(pm1[i]*dimX); Tm.setY(0.); Tm.setZ(pm2[i]*dimZ);
