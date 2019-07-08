@@ -177,7 +177,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				    0.5*detectorZ,
 				    0.5*detectorXY);
 
-  G4VSolid* detectorElectronics = new G4Box("DetectorFR4",
+  G4VSolid* detectorElectronics = new G4Box("BottomFR4",
 		  		    0.5*detectorXY,
 				    0.5*detectorElectronicsZ,
 				    0.5*detectorXY);
@@ -346,7 +346,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
   
   G4LogicalVolume* logicDetectorElectronics = new G4LogicalVolume(detectorElectronics,
 							FR4,
-							"DetectorFR4");
+							"BottomFR4");
   
   G4LogicalVolume* logicFrontEndBoard = new G4LogicalVolume(frontEndBoard,
 							FR4,
@@ -560,13 +560,14 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness);
 
 
 
-  unsigned int numDetectors = 3;
-  for(unsigned int i = 0; i<numDetectors; i++){
-	 
-    G4double dimX = -5.*cm;
-    G4double dimZ = -5.*cm;
+  unsigned int numDetectorAssemblies = 3;
+  G4double dimX = -5.*cm;
+  G4double dimZ = -5.*cm;
+  Rm.rotateY(0.*deg);
+  
+  
+  for(unsigned int i=0; i<numDetectorAssemblies; i++){	 
     Tm.setX(pm1[i]*dimX); Tm.setY(0.); Tm.setZ(pm2[i]*dimZ);
-    Rm.rotateY(0.*deg);
     Tr = G4Transform3D(Rm, Tm);
 
     detectorAssembly->MakeImprint(logicEnv, Tr);

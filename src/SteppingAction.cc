@@ -85,6 +85,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   // Allocate variable for particle logging checks
   G4bool check1, check2;
+  check1 = check2 = false;
   G4String volName, nextVolName;
   
   G4Track* track = aStep->GetTrack();
@@ -99,17 +100,16 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
   // Below is the logical operation that determines if a particle is 
   // either in or entering the detector
-  check1 = (volName == "Detector");
-  check2 = (nextVolName == "Detector");
   
-  /*
-  // "Documentation version"
-  isInDetector = (volName == "Detector" && nextVolName == "Detector");
-  
-  // Efficient version
-  isInDetector = (check1 && check2);
-  */
 
+  // Searching for match to "av_1_impr_X_Detector_pv_Y", starting from
+  // character 12, where X is the impression copy 
+  // (detector assembly) [1,2,3] and Y is the detector number 
+  // within each assembly [2,4,6,8]
+  check1 = (std::string::npos != volName.find("Detector", 12));
+  check2 = (std::string::npos != nextVolName.find("Detector", 12));
+  
+  
   // Get particle name string, either "e-" or "gamma" 
   G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
 
