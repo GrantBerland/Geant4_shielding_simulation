@@ -275,7 +275,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   // empty rotation matrix for SubtractionSolid constructor
   G4RotationMatrix* rotm = new G4RotationMatrix();   
   
-  G4double windowPlacement = boxInnerSizeZ + innerShieldingThickness + outerShieldingThickness + windowThickness*1.5;
+  G4double windowPlacement = boxInnerSizeZ + innerShieldingThickness + outerShieldingThickness + windowThickness*1.5 + 1.1*cm;
 
   G4double windowSlitShiftX = 2.2*cm;
 
@@ -468,7 +468,11 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 
 
   // Collimeter
-  Tm.setX(0.); Tm.setY(boxInnerSizeZ+16.15*mm+855*um); Tm.setZ(0.);
+  Tm.setX(0.); 
+  Tm.setY(boxInnerSizeZ+ outerShieldingThickness + shieldingThickness2
+		  + shieldingThickness3 + innerShieldingThickness
+		  + 23.0*mm); 
+  Tm.setZ(0.);
   Tr = G4Transform3D(Rm, Tm); 
   detectorAssembly->AddPlacedVolume(logicCollimeter, Tr);
  
@@ -558,7 +562,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   // Baffle parameterisation
   G4int numberBaffles = 28;
 
-  G4double bafflePlacement = windowPlacement+0.5*baffleHeight+outerShieldingThickness+0.3*mm;
+  G4double bafflePlacement = windowPlacement+0.5*baffleHeight+windowThickness;
   
   G4double axialDistance;
   rotm->rotateY(90.*deg); 
