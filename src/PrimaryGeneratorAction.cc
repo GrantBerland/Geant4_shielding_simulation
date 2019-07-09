@@ -55,7 +55,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fPI(3.14159265358979323846),
   sphereR(24.*cm),
   lossConeAngleDeg(64.),
-  photonPhiLimitDeg(40.),
+  photonPhiLimitDeg(45.),
   multModifier(0.),
   electronParticle(0),
   photonParticle(0),
@@ -179,9 +179,9 @@ void PrimaryGeneratorAction::CalculateParticlesToGenerate()
 
 
   // Photon flux [ph/cm^2/s] per each E_0 folding energy range (in keV)
-  if      (E_folding <= 100.) nSignalPhotons = 67;
-  else if (E_folding <= 200.) nSignalPhotons = 302;
-  else if (E_folding <= 300.) nSignalPhotons = 690;
+  if      (E_folding <= 100.) nSignalPhotons = 10;
+  else if (E_folding <= 200.) nSignalPhotons = 36;
+  else if (E_folding <= 300.) nSignalPhotons = 59;
   else throw std::invalid_argument("Non-realizable E_0");
 
   // Converts [ph/cm^2/s] to [ph/s] through a circle the size of the 

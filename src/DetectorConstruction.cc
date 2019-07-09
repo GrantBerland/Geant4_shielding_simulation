@@ -248,24 +248,24 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
  
   // Bus structure boxes
   G4VSolid* busBackPlate = new G4Box("Back-plate",
-		        11.*cm,
+		        14.*cm,
 			8.5*mm/2.,
-			11.*cm);
+			14.*cm);
 
   G4VSolid* busFrontPlate = new G4Box("Front-plate",
-		        5.*cm,
+		        7.*cm,
 			8.5*mm/2.,
-			10.65*cm+0.25*cm/2);
+			10.65*cm+0.25*cm/2+4.*cm);
 
   G4VSolid* busSidePlate = new G4Box("Side-plate",
-		        11.*cm,
+		        14.*cm,
 			6.35*mm/2.,
-			5.*cm);
+			7.*cm);
   
   G4VSolid* busThickPlate = new G4Box("Thick-plate",
-		        11.*cm,
+		        14.*cm,
 			59.*mm/2.,
-			5.*cm);
+			7.*cm);
 
   //////////////////////////////////////////
   ///////////// Subtractions ///////////////
@@ -583,14 +583,14 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 
 
   // Bus structure placements
- /* 
+  
   G4double busHeight = 1.*cm;
 
   G4RotationMatrix* wallRotm = new G4RotationMatrix();
   wallRotm->rotateZ(90.*deg);
 
   new G4PVPlacement(0,
-		  G4ThreeVector(0., -5.*cm+busHeight, 0.),
+		  G4ThreeVector(0., -6.5*cm+busHeight, 0.),
 		  logicalBusBackPlate,
 		  "Back-plate",
 		  logicEnv,
@@ -599,7 +599,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 
   
   new G4PVPlacement(wallRotm,
-		  G4ThreeVector(-10.*cm-8.5*mm/2, busHeight+0.65*cm, 0.25*cm/2),
+		  G4ThreeVector(-14.*cm-8.5*mm/2, busHeight+0.65*cm, 0.25*cm/2),
 		  logicalBusFrontPlate,
 		  "Front-plate",
 		  logicEnv,
@@ -609,7 +609,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 
   
   new G4PVPlacement(wallRotm,
-		  G4ThreeVector(10.*cm+8.5*mm/2, busHeight+0.65*cm, 0.25*cm/2),
+		  G4ThreeVector(14.*cm+8.5*mm/2, busHeight+0.65*cm, 0.25*cm/2),
 		  logicalBusFrontPlate,
 		  "Front-plate",
 		  logicEnv,
@@ -621,7 +621,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   sideWallRotm->rotateX(90.*deg);
 
   new G4PVPlacement(sideWallRotm,
-		  G4ThreeVector(0., busHeight+0.5*cm, -11.*cm),
+		  G4ThreeVector(0., busHeight+0.5*cm, -14.5*cm),
 		  logicalBusSidePlate,
 		  "Side-plate",
 		  logicEnv,
@@ -629,14 +629,14 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 		  checkOverlaps);
 
   new G4PVPlacement(sideWallRotm,
-		  G4ThreeVector(0., busHeight+5.*mm, 11.*cm+59.*mm/2),
+		  G4ThreeVector(0., busHeight+5.*mm, 14.5*cm+59.*mm/2),
 		  logicalBusThickPlate,
 		  "Thick-plate",
 		  logicEnv,
 		  false,
 		  checkOverlaps);
 
-*/
+
   // Place the 3 copies of the detector assemblies using the position 
   // multiplier arrays from above
   unsigned int numDetectorAssemblies = 3;
