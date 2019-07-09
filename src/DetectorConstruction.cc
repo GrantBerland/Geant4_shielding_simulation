@@ -248,9 +248,9 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
  
   // Bus structure boxes
   G4VSolid* busBackPlate = new G4Box("Back-plate",
-		        14.*cm,
+		        14.5*cm,
 			8.5*mm/2.,
-			14.*cm);
+			14.5*cm);
 
   G4VSolid* busFrontPlate = new G4Box("Front-plate",
 		        7.*cm,
@@ -590,7 +590,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   wallRotm->rotateZ(90.*deg);
 
   new G4PVPlacement(0,
-		  G4ThreeVector(0., -6.5*cm+busHeight, 0.),
+		  G4ThreeVector(0., -7.0*cm+busHeight, 0.),
 		  logicalBusBackPlate,
 		  "Back-plate",
 		  logicEnv,
