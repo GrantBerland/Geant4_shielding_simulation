@@ -50,7 +50,7 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
-  E_folding(300.),
+  E_folding(100.),
   E_shift(0.),
   fPI(3.14159265358979323846),
   sphereR(24.*cm),
@@ -306,10 +306,12 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   
   // We want our Y direction to be "up," otherwise standard
   // spherical to cartesian coordinate transform
+  
   r->x = sphereR * std::cos(theta) * std::sin(phi);
   r->y = sphereR * std::cos(phi);
   r->z = sphereR * std::sin(theta) * std::sin(phi);
   
+
 
   // Uniform random numbers on [0, 1) for particle direction
   r->xDir = G4UniformRand();
@@ -390,9 +392,16 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   phi = std::acos(1 - 2 * u);
 
   // We want our Y direction to be "up"
+  /*
   r->x = sphereR * std::sin(phi) * std::cos(theta);
   r->y = sphereR * std::cos(phi);
   r->z = sphereR * std::sin(phi) * std::sin(theta);
+  */
+  G4double radius = sphereR * std::sin(photonPhiLimitRad) 
+	             * std::sqrt(G4UniformRand());
+  r->x = radius * std::sin(theta);
+  r->y = sphereR;
+  r->z = radius * std::cos(theta);
 
 
   // Uniform distributed downwards, towards detector
