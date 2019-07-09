@@ -156,9 +156,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   // 0.5 factor due to full height definition
   G4double outerShieldingThickness = 15.*mm * 0.5; // PE 
-  G4double innerShieldingThickness = 1.0*mm * 0.5; // W
-  G4double shieldingThickness2     = 3.0*mm * 0.5; // Sn
-  G4double shieldingThickness3     = 2.0*mm * 0.5; // Cu
+  G4double shieldingThickness2     = 3.0*mm * 0.5; // W
+  G4double shieldingThickness3     = 2.0*mm * 0.5; // Sn
+  G4double innerShieldingThickness = 1.0*mm * 0.5; // Cu
   G4double detectorXY      = 40.*mm;
   G4double detectorZ       = 5.*mm;
   G4double detectorElectronicsZ = 10.185*mm;
@@ -212,24 +212,24 @@ boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness+2*shieldingTh
 
 
   // Shielding boxes
-  G4VSolid* outerShieldingBox = new G4Box("Outer-shielding",
+  G4VSolid* outerShieldingBox = new G4Box("PE_Shielding",
 boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
 boxInnerSizeZ+2*innerShieldingThickness+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
 boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3);
 
 
-  G4VSolid* shieldingBox2 = new G4Box("Outer-shielding2",
+  G4VSolid* shieldingBox2 = new G4Box("W_Shielding",
 boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
 boxInnerSizeZ+2*innerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
 boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3);
 
-  G4VSolid* shieldingBox3 = new G4Box("Outer-shielding3",
+  G4VSolid* shieldingBox3 = new G4Box("Sn_Shielding",
 boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3,
 boxInnerSizeZ+2*innerShieldingThickness+2*shieldingThickness3,
 boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 
 
-  G4VSolid* innerShieldingBox = new G4Box("Inner-shielding",
+  G4VSolid* innerShieldingBox = new G4Box("Cu_Shielding",
 	  boxInnerSizeXY+2*innerShieldingThickness,
 	  boxInnerSizeZ+2*innerShieldingThickness,
 	  boxInnerSizeXY+2*innerShieldingThickness);
@@ -635,9 +635,9 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 */
   // Place the 3 copies of the detector assemblies using the position 
   // multiplier arrays from above
-  unsigned int numDetectorAssemblies = 1;
-  G4double dimX = -6.5*cm;
-  G4double dimZ = -6.5*cm;
+  unsigned int numDetectorAssemblies = 3;
+  G4double dimX = -7.0*cm;
+  G4double dimZ = -7.0*cm;
   Rm.rotateY(0.*deg);
   
   for(unsigned int i=0; i<numDetectorAssemblies; i++){	 
