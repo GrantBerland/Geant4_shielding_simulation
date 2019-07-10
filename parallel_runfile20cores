@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Sleeps to increment the system time by 1 second, leading to sequential
+# random seeds
+sleep 1; ./main runBeamOn.mac 
+sleep 2; ./main runBeamOn.mac 
+sleep 3; ./main runBeamOn.mac 
+sleep 4; ./main runBeamOn.mac 
+sleep 5; ./main runBeamOn.mac 
+sleep 6; ./main runBeamOn.mac 
+sleep 7; ./main runBeamOn.mac 
+sleep 8; ./main runBeamOn.mac 
+sleep 9; ./main runBeamOn.mac 
+sleep 10; ./main runBeamOn.mac 
+sleep 11; ./main runBeamOn.mac 
+sleep 12; ./main runBeamOn.mac 
+sleep 13; ./main runBeamOn.mac 
+sleep 14; ./main runBeamOn.mac 
+sleep 15; ./main runBeamOn.mac 
+sleep 16; ./main runBeamOn.mac 
+sleep 17; ./main runBeamOn.mac 
+sleep 18; ./main runBeamOn.mac 
+sleep 19; ./main runBeamOn.mac 
+sleep 20; ./main runBeamOn.mac 
+
