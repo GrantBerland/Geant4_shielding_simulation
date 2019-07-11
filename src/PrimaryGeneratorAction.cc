@@ -137,9 +137,14 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-/*
+
 void PrimaryGeneratorAction::CalculateParticlesToGenerate()
 {
+
+  unsigned long long nBackgroundElectrons;
+  unsigned long long nLossConeElectrons;
+  unsigned long long nSignalPhotons;
+
 
   // Convert sphere radius from Geant internal units to cm
   G4double sphereRcm = sphereR / cm;  
@@ -190,47 +195,14 @@ void PrimaryGeneratorAction::CalculateParticlesToGenerate()
   // Converts [ph/cm^2/s] to [ph/s] through a circle the size of the 
   // generation area
   nSignalPhotons *= sphereCrossSectionalArea;
-  
-  // Optional particle generation numbers read in from file
-  unsigned long long int source1, source2, source3;
-  int debugFlag;
-  // Reads in multiplicative factor to evenly reduce the number of 
-  // particles generated, as well as optional source counts
-  std::fstream particleNumberMultiplierFile;
-  particleNumberMultiplierFile.open("numberOfParticles.txt", std::ios_base::in);
-  particleNumberMultiplierFile >> multModifier >> source1
-	  >> source2 >> source3 >> debugFlag;
-  particleNumberMultiplierFile.close();
 
-  // Runs imposed number of particles if nonzero integer in file 
-  // else, runs the calculated number of particles
-  if(source1 != 0){
-    nBackgroundElectrons = source1;
-  }
-  if(source2 != 0){
-    nLossConeElectrons   = source2;
-  }  
-  if(source3 != 0){
-    nSignalPhotons       = source3;
-  }
-
-
-  // Reduces number of particles by modifier in order to be simulatable 
-  nBackgroundElectrons *= multModifier;
-  nLossConeElectrons   *= multModifier;
-  nSignalPhotons       *= multModifier;
 
   G4cout << "Background Electrons: " << nBackgroundElectrons 
 	  << "\nLoss Cone Electrons: " << nLossConeElectrons 
 	  << "\nSignal Photons: " << nSignalPhotons << G4endl;
 
-  if(debugFlag == 1){
-    // For debugging
-    throw std::invalid_argument("Stop here!");
-  }
-
 }
-*/
+
 
 void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 {
@@ -458,7 +430,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   // Method called to populate member varaibles with number of 
   // particles to generate
-  // CalculateParticlesToGenerate();
+  //CalculateParticlesToGenerate();
 
   // Selects electron for particle type
   fParticleGun->SetParticleDefinition(electronParticle);

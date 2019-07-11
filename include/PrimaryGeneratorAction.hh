@@ -65,11 +65,13 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GenerateLossConeElectrons(ParticleSample* r);
     void GenerateTrappedElectrons(ParticleSample* r);
     void GenerateSignalSource(ParticleSample* r);
-    //void CalculateParticlesToGenerate();
+    void CalculateParticlesToGenerate();
 
     void SetWhichParticle(G4int partSelection) {fWhichParticle = partSelection;};
 
-    // // method to access particle gun
+    void SetFoldingEnergy(G4double E0) { E_folding = E0; };
+    
+    // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
 
   private:
