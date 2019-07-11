@@ -27,5 +27,16 @@
 /tracking/verbose 0
 
 
+# 0 = background trapped electrons
+/particleSource/setBackgroundType 0
+/run/beamOn 1000
 
-/run/beamOn
+# 1 = background loss cone electrons
+/particleSource/setBackgroundType 1
+/run/beamOn 1000
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 2
+/run/beamOn 1000
+
+

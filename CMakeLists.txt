@@ -52,8 +52,6 @@ set(EXAMPLEB1_SCRIPTS
   vis.mac
   runBeamOn.mac  
   autoRun.sh
-  numberOfParticles.txt
-  parallel_runfile
   whichPart.txt 
   )
 
