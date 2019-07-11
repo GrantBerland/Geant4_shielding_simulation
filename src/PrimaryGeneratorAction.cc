@@ -56,12 +56,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   sphereR(25.*cm),
   lossConeAngleDeg(64.),
   photonPhiLimitDeg(45.),
-  multModifier(0.),
   electronParticle(0),
   photonParticle(0),
-  nBackgroundElectrons(0),
-  nLossConeElectrons(0),
-  nSignalPhotons(0),
   photonEnergyProb100keV{
 0.03656131,0.25322138,0.41933641,0.54648931,
 0.64401902,0.71941947,0.77817282,0.82384164,
@@ -134,7 +130,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+/*
 void PrimaryGeneratorAction::CalculateParticlesToGenerate()
 {
 
@@ -227,7 +223,7 @@ void PrimaryGeneratorAction::CalculateParticlesToGenerate()
   }
 
 }
-
+*/
 
 void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 {
@@ -455,7 +451,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   // Method called to populate member varaibles with number of 
   // particles to generate
-  CalculateParticlesToGenerate();
+  // CalculateParticlesToGenerate();
 
   // Selects electron for particle type
   fParticleGun->SetParticleDefinition(electronParticle);
@@ -465,12 +461,20 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double yShift = 1.*cm;
   G4double zShift = 2.5*cm;
 
+
+  G4int whichPart;
+
+  std::fstream whichPartFile;
+  whichPartFile.open("whichPart.txt", std::ios_base::in);
+  whichPartFile >> whichPart;
+  whichPartFile.close();
+
   
   // Struct that holds position, momentum direction, and energy
   ParticleSample* r = new ParticleSample();
-  
-  for(unsigned long long int i = 0; i<nBackgroundElectrons; i++){
-
+ 
+  switch(whichPart){
+    case(0):
     GenerateTrappedElectrons(r);
     
     fParticleGun->SetParticlePosition(
@@ -479,10 +483,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		    G4ThreeVector(r->xDir, r->yDir, r->zDir));
     fParticleGun->SetParticleEnergy(r->energy);
     fParticleGun->GeneratePrimaryVertex(anEvent);
-}
-  
-  for(unsigned long long int i = 0; i<nLossConeElectrons; i++){
+    break;
 
+    case(1):
     GenerateLossConeElectrons(r);
     
     fParticleGun->SetParticlePosition(
@@ -491,13 +494,12 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		    G4ThreeVector(r->xDir, r->yDir, r->zDir));
     fParticleGun->SetParticleEnergy(r->energy);
     fParticleGun->GeneratePrimaryVertex(anEvent);
-}
+    break;
 
-  // Selects photon for particle type
-  fParticleGun->SetParticleDefinition(photonParticle);
+    case(2):
+    // Selects photon for particle type
+    fParticleGun->SetParticleDefinition(photonParticle);
   
-  for(unsigned long long int i = 0; i<nSignalPhotons; i++){
-
     GenerateSignalSource(r);
     
     fParticleGun->SetParticlePosition(
@@ -506,7 +508,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		    G4ThreeVector(r->xDir, r->yDir, r->zDir));
     fParticleGun->SetParticleEnergy(r->energy);
     fParticleGun->GeneratePrimaryVertex(anEvent);
-}
+    break;
+  }
 
 
   delete r;

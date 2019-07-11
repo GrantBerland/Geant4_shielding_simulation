@@ -57,14 +57,16 @@ SteppingAction::SteppingAction(EventAction* eventAction)
   // signal filenames
   
   G4String randomFilename;
-  int randomNumber = rand() % 1000;
+  //int randomNumber = rand() % 1000;
   
   G4String filenameHeader = "../data/";
 
-  randomFilename = "hits" + std::to_string(randomNumber);
+  //randomFilename = "hits" + std::to_string(randomNumber);
+  randomFilename = "hits";
   backgroundFileName = filenameHeader + randomFilename;
 
-  randomFilename = "signal" + std::to_string(randomNumber);
+  //randomFilename = "signal" + std::to_string(randomNumber);
+  randomFilename = "signal";
   signalFileName     = filenameHeader + randomFilename;
 
   backgroundFileName += ".csv";

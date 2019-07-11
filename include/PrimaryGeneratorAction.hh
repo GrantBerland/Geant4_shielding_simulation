@@ -64,7 +64,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GenerateLossConeElectrons(ParticleSample* r);
     void GenerateTrappedElectrons(ParticleSample* r);
     void GenerateSignalSource(ParticleSample* r);
-    void CalculateParticlesToGenerate();
+    //void CalculateParticlesToGenerate();
 
     // // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
@@ -78,14 +78,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double sphereR;
     G4double lossConeAngleDeg;
     G4double photonPhiLimitDeg;
-    G4double multModifier;
 
     G4ParticleDefinition* electronParticle; 
     G4ParticleDefinition* photonParticle; 
-    
-    unsigned long long int nBackgroundElectrons;
-    unsigned long long int nLossConeElectrons;
-    unsigned long long int nSignalPhotons;
         
     const G4double photonEnergyProb100keV[64];
     const G4double photonEnergyProb200keV[64];

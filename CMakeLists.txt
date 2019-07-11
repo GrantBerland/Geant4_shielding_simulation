@@ -54,6 +54,7 @@ set(EXAMPLEB1_SCRIPTS
   autoRun.sh
   numberOfParticles.txt
   parallel_runfile
+  whichPart.txt 
   )
 
 foreach(_script ${EXAMPLEB1_SCRIPTS})
