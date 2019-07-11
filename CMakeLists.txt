@@ -51,8 +51,6 @@ set(EXAMPLEB1_SCRIPTS
   init_vis.mac
   vis.mac
   runBeamOn.mac  
-  autoRun.sh
-  whichPart.txt 
   )
 
 foreach(_script ${EXAMPLEB1_SCRIPTS})
