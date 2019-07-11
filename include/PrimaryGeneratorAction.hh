@@ -38,6 +38,7 @@
 
 class G4ParticleGun;
 //class G4GeneralParticleSource;
+class PrimaryGeneratorMessenger;
 class G4Event;
 class G4Box;
 
@@ -66,7 +67,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GenerateSignalSource(ParticleSample* r);
     void CalculateParticlesToGenerate();
 
-    // // method to access particle gun
+    void SetWhichParticle(G4int partSelection) {fWhichParticle = partSelection;};
+
+    void SetFoldingEnergy(G4double E0) { E_folding = E0; };
+    
+    // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
 
   private:
@@ -78,15 +83,12 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double sphereR;
     G4double lossConeAngleDeg;
     G4double photonPhiLimitDeg;
-    G4double multModifier;
 
+    G4int    fWhichParticle;
     G4ParticleDefinition* electronParticle; 
     G4ParticleDefinition* photonParticle; 
-    
-    unsigned long long int nBackgroundElectrons;
-    unsigned long long int nLossConeElectrons;
-    unsigned long long int nSignalPhotons;
-        
+    PrimaryGeneratorMessenger* fPrimaryGeneratorMessenger;
+
     const G4double photonEnergyProb100keV[64];
     const G4double photonEnergyProb200keV[64];
     const G4double photonEnergyProb300keV[64];
