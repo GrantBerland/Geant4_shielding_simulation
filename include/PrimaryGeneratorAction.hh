@@ -38,6 +38,7 @@
 
 class G4ParticleGun;
 //class G4GeneralParticleSource;
+class PrimaryGeneratorMessenger;
 class G4Event;
 class G4Box;
 
@@ -66,6 +67,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GenerateSignalSource(ParticleSample* r);
     //void CalculateParticlesToGenerate();
 
+    void SetWhichParticle(G4int partSelection) {fWhichParticle = partSelection;};
+
     // // method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
 
@@ -79,9 +82,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double lossConeAngleDeg;
     G4double photonPhiLimitDeg;
 
+    G4int    fWhichParticle;
     G4ParticleDefinition* electronParticle; 
     G4ParticleDefinition* photonParticle; 
-        
+    PrimaryGeneratorMessenger* fPrimaryGeneratorMessenger;
+
     const G4double photonEnergyProb100keV[64];
     const G4double photonEnergyProb200keV[64];
     const G4double photonEnergyProb300keV[64];

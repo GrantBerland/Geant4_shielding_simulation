@@ -89,7 +89,7 @@ int main(int argc,char** argv)
   // Enforce single threading
   //G4RunManager* runManager = new G4RunManager;
   G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(3);  
+  runManager->SetNumberOfThreads(2);  
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif

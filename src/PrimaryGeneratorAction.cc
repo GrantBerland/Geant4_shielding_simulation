@@ -30,6 +30,8 @@
 
 #include "PrimaryGeneratorAction.hh"
 
+#include "PrimaryGeneratorMessenger.hh"
+
 #include "G4LogicalVolumeStore.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Box.hh"
@@ -56,8 +58,10 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   sphereR(25.*cm),
   lossConeAngleDeg(64.),
   photonPhiLimitDeg(45.),
+  fWhichParticle(0),
   electronParticle(0),
   photonParticle(0),
+  fPrimaryGeneratorMessenger(0),
   photonEnergyProb100keV{
 0.03656131,0.25322138,0.41933641,0.54648931,
 0.64401902,0.71941947,0.77817282,0.82384164,
@@ -115,7 +119,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
 
   fParticleGun  = new G4ParticleGun();
-  
+ 
+  fPrimaryGeneratorMessenger = new PrimaryGeneratorMessenger(this);
+
   electronParticle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   
   photonParticle = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
@@ -127,6 +133,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
   delete fParticleGun;
+  delete fPrimaryGeneratorMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -461,19 +468,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double yShift = 1.*cm;
   G4double zShift = 2.5*cm;
 
-
-  G4int whichPart;
-
-  std::fstream whichPartFile;
-  whichPartFile.open("whichPart.txt", std::ios_base::in);
-  whichPartFile >> whichPart;
-  whichPartFile.close();
-
   
   // Struct that holds position, momentum direction, and energy
   ParticleSample* r = new ParticleSample();
  
-  switch(whichPart){
+  switch(fWhichParticle){
     case(0):
     GenerateTrappedElectrons(r);
     
