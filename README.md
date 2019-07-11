@@ -2,6 +2,8 @@
 
 For determining background radiation-inducing noise counts on an spacecraft-based X-ray detector.
 
+This branch uses native Geant geometry.
+
 Mission parameters:
 * 500 km, near polar orbit
 * loss cone angle of approximately 64 degrees during radiation belt pass-thrus
