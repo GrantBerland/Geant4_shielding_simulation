@@ -1,5 +1,0 @@
-#!/bin/bash
-
-./main runBeamOn.mac; sleep 1
-./main runBeamOn.mac; sleep 1
-
