@@ -29,6 +29,9 @@
 /// \brief Implementation of the SteppingAction class
 
 #include "SteppingAction.hh"
+
+#include "SteppingMessenger.hh"
+
 #include "EventAction.hh"
 #include "DetectorConstruction.hh"
 // #include "DetectorAnalysis.hh"
@@ -51,33 +54,20 @@ namespace { G4Mutex myParticleLog = G4MUTEX_INITIALIZER; }
 SteppingAction::SteppingAction(EventAction* eventAction)
 : G4UserSteppingAction(),
   fEventAction(eventAction),
-  fScoringVolume(0)
+  fScoringVolume(0),
+  fSteppingMessenger(0)
 {
-  // Appends a random integer, [0, 1000] onto the hits and 
-  // signal filenames
-  
-  G4String randomFilename;
-  //int randomNumber = rand() % 1000;
-  
-  G4String filenameHeader = "../data/";
 
-  //randomFilename = "hits" + std::to_string(randomNumber);
-  randomFilename = "hits";
-  backgroundFileName = filenameHeader + randomFilename;
-
-  //randomFilename = "signal" + std::to_string(randomNumber);
-  randomFilename = "signal";
-  signalFileName     = filenameHeader + randomFilename;
-
-  backgroundFileName += ".csv";
-  signalFileName     += ".csv";
+  fSteppingMessenger = new SteppingMessenger(this);
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::~SteppingAction()
-{}
+{
+  delete fSteppingMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -26,19 +26,23 @@
 /event/verbose 0
 /tracking/verbose 0
 
+# Set hit and signal file names
+/dataCollection/setHitFileName hitTest.csv
+/dataCollection/setSignalFileName signalTest.csv
+
 # E0 of background distribution out of {100,200,300} keV
 /particleSource/setFoldingEnergy 100. # [keV]
 
 # 0 = background trapped electrons
-/particleSource/setBackgroundType 0
-/run/beamOn 710000
+#/particleSource/setBackgroundType 0
+#/run/beamOn 710000
 
 # 1 = background loss cone electrons
-/particleSource/setBackgroundType 1
-/run/beamOn 330000
+#/particleSource/setBackgroundType 1
+#/run/beamOn 330000
 
 # 2 = bremsstrahlung signal photons
 /particleSource/setBackgroundType 2
-/run/beamOn 1
+/run/beamOn 9800
 
 
