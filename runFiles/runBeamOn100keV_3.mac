@@ -30,8 +30,8 @@
 # Summit INT_MAX=2147480000
 
 # Set hit and signal file names
-/dataCollection/setHitFileName hit100keV_1.csv
-/dataCollection/setSignalFileName signal100keV_1.csv
+/dataCollection/setHitFileName hit100keV_3.csv
+/dataCollection/setSignalFileName signal100keV_3.csv
 
 # E0 of background distribution out of {100,200,300} keV
 /particleSource/setFoldingEnergy 100. # [keV]
