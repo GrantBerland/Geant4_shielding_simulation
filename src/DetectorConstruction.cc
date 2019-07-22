@@ -205,6 +205,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				    0.5*baffleHeight,
 				    boxInnerSizeXY);
 
+  G4VSolid* baffleBox = new G4Box("BaffleBox",
+		  		    (2.53-0.5)/2.*mm,
+				    0.5*baffleHeight,
+				    boxInnerSizeXY);
+  
+  
   G4VSolid* collimeterOuterBox = new G4Box("Outer-collimeter",
 boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
 25.*mm * 0.5,
@@ -310,7 +316,6 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 	  subtractionBox);
 
 
-
   // Outer shielding window depressions 1 & 2 and slits 1 & 2
   G4SubtractionSolid* shieldingBox1_slit1 = 
 	  new G4SubtractionSolid("PE_Shielding",
@@ -411,6 +416,10 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   G4LogicalVolume* logicalOuterShielding = new G4LogicalVolume(shieldingBox1_slit_window2,
 		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 		  "PE_Shielding");
+
+  G4LogicalVolume* logicalBaffleBox = new G4LogicalVolume(baffleBox,
+		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
+		  "BaffleBox");
   
   G4LogicalVolume* logicalShielding2 = new G4LogicalVolume(shieldingBox2_slit2,
 		  nist->FindOrBuildMaterial("G4_W"),
@@ -565,23 +574,39 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   G4double bafflePlacement = windowPlacement+0.5*baffleHeight+windowThickness;
   
   G4double axialDistance;
+
+
+  // Baffle box placement 
+  Tm.setX(0.); Tm.setY(bafflePlacement); Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+  
   rotm->rotateY(90.*deg); 
   Rm.rotateY(90.*deg);
-
+  
   for(G4int i = 0; i<numberBaffles; i++)
   {
     // baffles are spaced 2.53 mm apart
     axialDistance = (i-14) * (2.53 + 0.5) * mm;
 
+    // W Baffle placement
     Tm.setX(0.); Tm.setY(bafflePlacement); Tm.setZ(axialDistance);
     Tr = G4Transform3D(Rm, Tm);
 
     detectorAssembly->AddPlacedVolume(logicalBaffles, Tr);
+    
+    
+    rotm->rotateY(0.*deg); 
+    Rm.rotateY(0.*deg);
 
+    // PE Baffle inserts
+    Tm.setX(0.); Tm.setY(bafflePlacement); Tm.setZ(axialDistance+2.53*mm/2.);
+    Tr = G4Transform3D(Rm, Tm);
+
+    detectorAssembly->AddPlacedVolume(logicalBaffleBox, Tr);
 
   }
 
-
+/*
   // Bus structure placements
   
   G4double busHeight = 1.*cm;
@@ -635,11 +660,11 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-
+*/
 
   // Place the 3 copies of the detector assemblies using the position 
   // multiplier arrays from above
-  unsigned int numDetectorAssemblies = 3;
+  unsigned int numDetectorAssemblies = 1;
   G4double dimX = -7.0*cm;
   G4double dimZ = -7.0*cm;
   Rm.rotateY(0.*deg);
