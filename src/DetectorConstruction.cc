@@ -606,7 +606,6 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 
   }
 
-/*
   // Bus structure placements
   
   G4double busHeight = 1.*cm;
@@ -660,11 +659,10 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-*/
 
   // Place the 3 copies of the detector assemblies using the position 
   // multiplier arrays from above
-  unsigned int numDetectorAssemblies = 1;
+  unsigned int numDetectorAssemblies = 3;
   G4double dimX = -7.0*cm;
   G4double dimZ = -7.0*cm;
   Rm.rotateY(0.*deg);
