@@ -57,7 +57,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fPI(3.14159265358979323846),
   sphereR(25.*cm),
   lossConeAngleDeg(64.),
-  photonPhiLimitDeg(45.),
+  photonPhiLimitDeg(26.57), // based on 500 km diameter event
   fWhichParticle(0),
   electronParticle(0),
   photonParticle(0),
@@ -363,26 +363,25 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   // Phi (half angle) takes values in a cone determined by 
   // spacecraft altitude, precipitation event altitude and size
   G4double photonPhiLimitRad   = photonPhiLimitDeg * fPI / 180.;       
-  //G4double u = G4UniformRand()*(1.-std::cos(photonPhiLimitRad))/2.;
-  //G4double phi = std::acos(1 - 2 * u);
+  G4double u = G4UniformRand()*(1.-std::cos(photonPhiLimitRad))/2.;
+  G4double phi = std::acos(1 - 2 * u);
 
   // We want our Y direction to be "up"
-  /*
-  r->x = sphereR * std::sin(phi) * std::cos(theta);
+  r->x = sphereR * std::sin(phi) * std::sin(theta);
   r->y = sphereR * std::cos(phi);
-  r->z = sphereR * std::sin(phi) * std::sin(theta);
-  */
-  G4double radius = sphereR * std::sin(photonPhiLimitRad) 
-	             * std::sqrt(G4UniformRand());
-  r->x = radius * std::sin(theta);
-  r->y = sphereR;
-  r->z = radius * std::cos(theta);
+  r->z = sphereR * std::sin(phi) * std::cos(theta);
 
 
-  // Uniform distributed downwards, towards detector
-  r->xDir = 0;
+  // Uniform random numbers on [0, 1)
+  r->xDir = G4UniformRand();
   r->yDir = -1;
-  r->zDir = 0;
+  r->zDir = G4UniformRand();
+
+     
+  // Enforces inward directionality to particles
+  if(r->x > 0) {r->xDir = -r->xDir;}
+  //if(r->y > 0) {r->yDir = -r->yDir;}
+  if(r->z > 0) {r->zDir = -r->zDir;}
 
 }
 
