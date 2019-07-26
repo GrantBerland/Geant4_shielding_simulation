@@ -205,11 +205,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				    0.5*baffleHeight,
 				    boxInnerSizeXY);
 
-  G4VSolid* baffleBox = new G4Box("BaffleBox",
-		  		    (2.53-0.5)/2.*mm,
-				    0.5*baffleHeight,
-				    boxInnerSizeXY);
-  
   
   G4VSolid* collimeterOuterBox = new G4Box("Outer-collimeter",
 boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
@@ -417,10 +412,6 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 		  "PE_Shielding");
 
-  G4LogicalVolume* logicalBaffleBox = new G4LogicalVolume(baffleBox,
-		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
-		  "BaffleBox");
-  
   G4LogicalVolume* logicalShielding2 = new G4LogicalVolume(shieldingBox2_slit2,
 		  nist->FindOrBuildMaterial("G4_W"),
 		  "W_Shielding");
@@ -594,16 +585,6 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 
     detectorAssembly->AddPlacedVolume(logicalBaffles, Tr);
     
-    
-    rotm->rotateY(0.*deg); 
-    Rm.rotateY(0.*deg);
-
-    // PE Baffle inserts
-    Tm.setX(0.); Tm.setY(bafflePlacement); Tm.setZ(axialDistance+2.53*mm/2.);
-    Tr = G4Transform3D(Rm, Tm);
-
-    detectorAssembly->AddPlacedVolume(logicalBaffleBox, Tr);
-
   }
 
   // Bus structure placements
