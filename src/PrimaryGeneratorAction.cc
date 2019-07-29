@@ -367,15 +367,15 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   G4double phi = std::acos(1 - 2 * u);
 
   // We want our Y direction to be "up"
-  r->x = sphereR * std::sin(phi) * std::sin(theta);
-  r->y = sphereR * std::cos(phi);
-  r->z = sphereR * std::sin(phi) * std::cos(theta);
+  r->x = (sphereR + 15.*cm) * std::sin(phi) * std::sin(theta);
+  r->y = (sphereR + 15.*cm) * std::cos(phi);
+  r->z = (sphereR + 15.*cm) * std::sin(phi) * std::cos(theta);
 
 
   // Uniform random numbers on [0, 1)
-  r->xDir = G4UniformRand();
+  r->xDir = G4UniformRand()*2.-1.;
   r->yDir = -1;
-  r->zDir = G4UniformRand();
+  r->zDir = G4UniformRand()*2.-1.;
 
      
   // Enforces inward directionality to particles

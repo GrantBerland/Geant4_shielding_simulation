@@ -68,7 +68,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4NistManager* nist = G4NistManager::Instance();
 
   // Envelope parameters
-  G4double env_sizeXY = 70.*cm; 
+  G4double env_sizeXY = 85.*cm; 
 
   G4bool checkOverlaps    = true;
   
