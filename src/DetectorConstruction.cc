@@ -157,7 +157,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // 0.5 factor due to full height definition
   G4double outerShieldingThickness = 15.*mm * 0.5; // PE 
   G4double shieldingThickness2     = 3.0*mm * 0.5; // W
-  G4double shieldingThickness3     = 2.0*mm * 0.5; // Sn
+  G4double shieldingThickness3     = 3.0*mm * 0.5; // Sn
   G4double innerShieldingThickness = 1.0*mm * 0.5; // Cu
   G4double detectorXY      = 40.*mm;
   G4double detectorZ       = 5.*mm;
@@ -471,7 +471,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   Tm.setX(0.); 
   Tm.setY(boxInnerSizeZ+ outerShieldingThickness + shieldingThickness2
 		  + shieldingThickness3 + innerShieldingThickness
-		  + 23.0*mm); 
+		  + 23.5*mm); 
   Tm.setZ(0.);
   Tr = G4Transform3D(Rm, Tm); 
   detectorAssembly->AddPlacedVolume(logicCollimeter, Tr);
@@ -522,25 +522,26 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   detectorAssembly->AddPlacedVolume(logicalOuterShielding, Tr);
 
 
-  // Tin shielding
+  // Tungsten shielding
   Tm.setX(0.); Tm.setY(0.); Tm.setZ(0.);
   Tr = G4Transform3D(Rm, Tm); 
 
   detectorAssembly->AddPlacedVolume(logicalShielding2, Tr);
 
-  // Copper shielding
+  // Tin shielding
   Tm.setX(0.); Tm.setY(0.); Tm.setZ(0.);
   Tr = G4Transform3D(Rm, Tm); 
 
   detectorAssembly->AddPlacedVolume(logicalShielding3, Tr);
 
 
-  // Aluminum shielding
+  /* // removed copper shielding
+  // Copper shielding
   Tm.setX(0.); Tm.setY(0.); Tm.setZ(0.);
   Tr = G4Transform3D(Rm, Tm); 
 
   detectorAssembly->AddPlacedVolume(logicalInnerShielding, Tr);
-
+*/
   // Lower beryllium window
   Tm.setX(windowSlitShiftX); Tm.setY(windowPlacement); Tm.setZ(0.);
   Tr = G4Transform3D(Rm, Tm); 
@@ -562,7 +563,7 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   // Baffle parameterisation
   G4int numberBaffles = 28;
 
-  G4double bafflePlacement = windowPlacement+0.5*baffleHeight+windowThickness;
+  G4double bafflePlacement = windowPlacement+0.5*baffleHeight+windowThickness + 0.5*mm;
   
   G4double axialDistance;
 
