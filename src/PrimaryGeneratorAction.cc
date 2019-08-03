@@ -53,7 +53,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
   E_folding(300.),
-  E_shift(0.),
   fPI(3.14159265358979323846),
   sphereR(25.*cm),
   lossConeAngleDeg(64.),
@@ -138,76 +137,10 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::CalculateParticlesToGenerate()
-{
-
-  unsigned long long nBackgroundElectrons;
-  unsigned long long nLossConeElectrons;
-  unsigned long long nSignalPhotons;
-
-
-  // Convert sphere radius from Geant internal units to cm
-  G4double sphereRcm = sphereR / cm;  
-  
-  // Surface area of sphere in cm^2
-  G4double sphereAreacm2 = 4. * fPI * sphereRcm * sphereRcm; 
-  
-  // Approximate flux at L = 3.6, 500 km altitude at high latitudes
-  G4double trappedElectronFlux = 1e5;      // el/cm^2/s/str
-
-  // Converts loss cone angle from degrees to radians
-  G4double lossConeAngleRad = lossConeAngleDeg * fPI / 180.;
-  
-  // Calculates pi * r^2 for photon flux calculations, using
-  // r = R * sin(phi), where R is the radius of the sphere
-  G4double sphereCrossSectionalArea = 
-	  (sphereRcm  * std::sin(photonPhiLimitDeg * fPI / 180.)) *
-	  (sphereRcm  * std::sin(photonPhiLimitDeg * fPI / 180.)) * fPI;
-
-  // Calculation of solid angle based on cone half angle (loss cone angle)
-  G4double trappedElectronSolidAngle =      // str  
-	  2 * fPI * (1 + std::cos(lossConeAngleRad));    
-
-  // Trapped electrons to generate from flux calculation 
-  nBackgroundElectrons =                                 //[el/s]
-	  (unsigned long long int)(trappedElectronFlux * //[el/cm^2/s/str]
-			           sphereAreacm2 *       //[cm^2]
-			           trappedElectronSolidAngle); //[str]
-
-
-  // Loss cone particles (backscattered), fractional flux derived 
-  // from Marshall, Bortnik work
-  // N_{loss cone particles}/N_{total particles}
-  G4double lossConeParticleFraction = 0.316;
- 
-  // gamma = ^ above fraction
-  // N_{loss cone parts} = gamma * N_{trapped parts}/(1 - gamma)
-  nLossConeElectrons = 
-	  (unsigned long long int)(lossConeParticleFraction*nBackgroundElectrons/(1-lossConeParticleFraction));	
-
-
-  // Photon flux [ph/cm^2/s] per each E_0 folding energy range (in keV)
-  if      (E_folding <= 100.) nSignalPhotons = 10;
-  else if (E_folding <= 200.) nSignalPhotons = 36;
-  else if (E_folding <= 300.) nSignalPhotons = 59;
-  else throw std::invalid_argument("Non-realizable E_0");
-
-  // Converts [ph/cm^2/s] to [ph/s] through a circle the size of the 
-  // generation area
-  nSignalPhotons *= sphereCrossSectionalArea;
-
-
-  G4cout << "Background Electrons: " << nBackgroundElectrons 
-	  << "\nLoss Cone Electrons: " << nLossConeElectrons 
-	  << "\nSignal Photons: " << nSignalPhotons << G4endl;
-
-}
-
-
 void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 {
   // This method generates electrons that were in the loss cone, but have
-  // backscattered off of the atmosphere and are direction anti-Earthward
+  // backscattered off of the atmosphere and are directed anti-Earthward
   // and towards the satellite.
 
 
@@ -254,10 +187,13 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 
   // Discrete inverse CDF sampling to determine the spatial distribution
   // of backscattered particles from the atmosphere
-  for(G4int angle = 0; angle<dataSize; angle++){
-    if(randomNumber < lossConeData[angle][1]){
+  for(G4int angle = 0; angle<dataSize; angle++)
+  {    
+    if(randomNumber < lossConeData[angle][1])
+    {
       angleIndex = angle;
-      break; }
+      break; 
+    }
   }
 
 
@@ -271,7 +207,7 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   else if(lossConeData[angleIndex][0] < 64) {E0 = 230.;}
   
 
-  // N.B.: Mathematics spherical coordinates definition used below
+  // NB: Mathematics spherical coordinates definition used below
   
   // Uniform sampling of angle about the field line theta on [0 , 2pi)
   G4double theta = G4UniformRand()*2.*fPI; 
@@ -302,7 +238,8 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 
   // Continous inverse CDF sampling for exponential energy distribution
   randomNumber = G4UniformRand();
-  r->energy = ((std::log(1 - randomNumber)*-E0 + E_shift))*keV;
+  r->energy = ((std::log(1 - randomNumber)*-E0))*keV;
+
 }
 
 void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
@@ -337,13 +274,22 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
  
   // If statements to determine which photon energy probability table to 
   // use, based on the E_0 folding energy of the background electrons
-  if(E_folding <= 100.){
-    photonEnergyTablePointer = photonEnergyProb100keV;}
-  else if(E_folding <= 200.){
-    photonEnergyTablePointer = photonEnergyProb200keV;}
-  else if(E_folding <= 300.){
-    photonEnergyTablePointer = photonEnergyProb300keV;}
-  else {throw std::invalid_argument("Source folding energy not in {100,200,300} keV");}
+  if(E_folding <= 100.)
+  {
+    photonEnergyTablePointer = photonEnergyProb100keV;
+  }
+  else if(E_folding <= 200.)
+  {
+    photonEnergyTablePointer = photonEnergyProb200keV;
+  }
+  else if(E_folding <= 300.)
+  {
+    photonEnergyTablePointer = photonEnergyProb300keV;
+  }
+  else 
+  {
+    throw std::invalid_argument("Source folding energy not in {100,200,300} keV");
+  }
 
     // Discrete inverse CDF lookup of probabilites, which are then
     // linked to an energy
@@ -421,7 +367,7 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
 
     // Selects random energy according to exponential distribution
     G4double randomNumber = G4UniformRand();
-    r->energy = ((std::log(1 - randomNumber)*-E_folding + E_shift))*keV;
+    r->energy = ((std::log(1 - randomNumber)*-E_folding))*keV;
 }
 
 
