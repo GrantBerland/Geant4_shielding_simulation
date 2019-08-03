@@ -37,7 +37,6 @@
 #include "globals.hh"
 
 class G4ParticleGun;
-//class G4GeneralParticleSource;
 class PrimaryGeneratorMessenger;
 class G4Event;
 class G4Box;
@@ -62,23 +61,23 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     // method from the base class
     virtual void GeneratePrimaries(G4Event* anEvent);         
 
+    // Statistical selections of part. energy, position, and direction
     void GenerateLossConeElectrons(ParticleSample* r);
     void GenerateTrappedElectrons(ParticleSample* r);
     void GenerateSignalSource(ParticleSample* r);
-    void CalculateParticlesToGenerate();
-
+    
+    // Methods for messenger class
     void SetWhichParticle(G4int partSelection) {fWhichParticle = partSelection;};
 
     void SetFoldingEnergy(G4double E0) { E_folding = E0; };
     
-    // method to access particle gun
+    // Method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
 
   private:
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
     
     G4double E_folding;
-    G4double E_shift;
     G4double fPI;
     G4double sphereR;
     G4double lossConeAngleDeg;
