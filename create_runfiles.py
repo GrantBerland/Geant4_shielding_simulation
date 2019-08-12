@@ -33,7 +33,7 @@ header_string = """# Macro file for example B1\n
 
 numBGparts = "1775000000";
 numLCparts = "825000000";
-numSigparts = ["2514", "9051", "14834"];
+numSigparts = ["12570", "9051", "14834"];
 
 index = ["1","2","3","4"]
 energy = ["100keV", "200keV","300keV"]
