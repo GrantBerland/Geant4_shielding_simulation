@@ -51,6 +51,7 @@ set(EXAMPLEB1_SCRIPTS
   init_vis.mac
   vis.mac
   runBeamOn.mac  
+  create_runfiles.py
   )
 
 foreach(_script ${EXAMPLEB1_SCRIPTS})

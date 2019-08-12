@@ -250,6 +250,8 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   // zenith angle distribution of the photons.
 
   G4double theta, randomNumber;
+  
+  /*
   static const G4double photonEnergyArray[64] = 
   {50.00000,57.14286,64.28571,71.42857,
 78.57143,85.71429,92.85714,100.00000,
@@ -269,7 +271,9 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 478.57143,485.71429,492.85714,500.00000};
   
   const G4int dataSize = 64;
-  //const G4double* photonEnergyTablePointer;
+  const G4double* photonEnergyTablePointer;
+  
+  */
   randomNumber = G4UniformRand();
 /* 
   // If statements to determine which photon energy probability table to 
@@ -318,31 +322,35 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 
   // Sampling from normal distribution
   G4double u1, u2, n1; //, n2;
-  G4double mu    = 0.4974;
-  G4double sigma = 0.2947;
+  G4double mu    = 0.4974; // radians
+  G4double sigma = 0.2947; // radians
   
-  do {
   u1 = G4UniformRand();
   u2 = G4UniformRand();
- 
-  // Box-Muller transform from N(0,1)
-  n1 = std::sqrt(-2*std::log(u1))*std::cos(2*3.1415926*u2);
-  //n2 = std::sqrt(-2*std::log(u1))*std::sin(2*3.1415926*u2);
   
-  // Shift standard normals to N(mu, sigma)
-  // Y = aX + b
+  // Box-Muller transform to obtain n1 ~ N(0,1)
+  n1 = std::sqrt(-2*std::log(u1))*std::cos(2*fPI*u2);
+  //n2 = std::sqrt(-2*std::log(u1))*std::sin(2*fPI*u2);
+  
+  // Shift standard normals to N(mu, sigma) 
   n1 = sigma*n1 + mu;
   //n2 = sigma*n2 + mu;
-  } while(n1 < 0);
-
+  
   // We want our Y direction to be "up"
   r->x = (sphereR + 15.*cm) * std::sin(phi) * std::sin(theta);
   r->y = (sphereR + 15.*cm) * std::cos(phi);
   r->z = (sphereR + 15.*cm) * std::sin(phi) * std::cos(theta);
 
+
+  // Geant internally normalizes the momentum direction
   r->yDir = -std::cos(n1);
-  r->xDir = G4UniformRand()*2.-1.;
-  r->zDir = G4UniformRand()*2.-1.;
+  r->xDir = G4UniformRand()*2. - 1.;
+  r->zDir = G4UniformRand()*2. - 1.;
+
+  // Enforces inward directionality to particles
+  if(r->x > 0) {r->xDir = -r->xDir;}
+  if(r->y > 0) {r->yDir = -r->yDir;}
+  if(r->z > 0) {r->zDir = -r->zDir;}
 
 }
 
