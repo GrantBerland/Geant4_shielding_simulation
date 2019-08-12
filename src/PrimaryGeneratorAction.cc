@@ -52,7 +52,7 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
-  E_folding(300.),
+  E_folding(100.),
   fPI(3.14159265358979323846),
   sphereR(25.*cm),
   lossConeAngleDeg(64.),
@@ -269,9 +269,9 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 478.57143,485.71429,492.85714,500.00000};
   
   const G4int dataSize = 64;
-  const G4double* photonEnergyTablePointer;
+  //const G4double* photonEnergyTablePointer;
   randomNumber = G4UniformRand();
- 
+/* 
   // If statements to determine which photon energy probability table to 
   // use, based on the E_0 folding energy of the background electrons
   if(E_folding <= 100.)
@@ -301,8 +301,11 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
         break;
       }
     }
+*/
+  //Sample from exponential, energy dist. fitted to Wei's results
+  r->energy = -(241.4)*std::log(1 - randomNumber)*keV;
+  // (valid for E0,source = 100 keV) 
 
-  
   // Uniformly distributed around field line 
   theta = G4UniformRand()*2.*fPI;  
   
@@ -312,22 +315,34 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   G4double u = G4UniformRand()*(1.-std::cos(photonPhiLimitRad))/2.;
   G4double phi = std::acos(1 - 2 * u);
 
+
+  // Sampling from normal distribution
+  G4double u1, u2, n1; //, n2;
+  G4double mu    = 0.4974;
+  G4double sigma = 0.2947;
+  
+  do {
+  u1 = G4UniformRand();
+  u2 = G4UniformRand();
+ 
+  // Box-Muller transform from N(0,1)
+  n1 = std::sqrt(-2*std::log(u1))*std::cos(2*3.1415926*u2);
+  //n2 = std::sqrt(-2*std::log(u1))*std::sin(2*3.1415926*u2);
+  
+  // Shift standard normals to N(mu, sigma)
+  // Y = aX + b
+  n1 = sigma*n1 + mu;
+  //n2 = sigma*n2 + mu;
+  } while(n1 < 0);
+
   // We want our Y direction to be "up"
   r->x = (sphereR + 15.*cm) * std::sin(phi) * std::sin(theta);
   r->y = (sphereR + 15.*cm) * std::cos(phi);
   r->z = (sphereR + 15.*cm) * std::sin(phi) * std::cos(theta);
 
-
-  // Uniform random numbers on [0, 1)
+  r->yDir = -std::cos(n1);
   r->xDir = G4UniformRand()*2.-1.;
-  r->yDir = -1;
   r->zDir = G4UniformRand()*2.-1.;
-
-     
-  // Enforces inward directionality to particles
-  if(r->x > 0) {r->xDir = -r->xDir;}
-  //if(r->y > 0) {r->yDir = -r->yDir;}
-  if(r->z > 0) {r->zDir = -r->zDir;}
 
 }
 
