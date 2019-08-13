@@ -349,7 +349,7 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 
   // Enforces inward directionality to particles
   if(r->x > 0) {r->xDir = -r->xDir;}
-  if(r->y > 0) {r->yDir = -r->yDir;}
+  //if(r->y > 0) {r->yDir = -r->yDir;}
   if(r->z > 0) {r->zDir = -r->zDir;}
 
 }
