@@ -307,10 +307,15 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
     }
 */
   //Sample from exponential, energy dist. fitted to Wei's results
-  r->energy = -(241.4)*std::log(1 - randomNumber)*keV;
   // (valid for E0,source = 100 keV) 
+  G4double shiftThreshold = 50.;
+  do{
+  randomNumber = G4UniformRand();
+  r->energy = -(241.4-shiftThreshold)*std::log(1 - randomNumber)*keV;
+  } while(r->energy < shiftThreshold*keV);
+  
 
-  // Uniformly distributed around field line 
+  // Uniformly distributed around azimuthal direction 
   theta = G4UniformRand()*2.*fPI;  
   
   // Phi (half angle) takes values in a cone determined by 
