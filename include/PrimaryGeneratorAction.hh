@@ -88,10 +88,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleDefinition* photonParticle; 
     PrimaryGeneratorMessenger* fPrimaryGeneratorMessenger;
 
+    /*
     const G4double photonEnergyProb100keV[64];
     const G4double photonEnergyProb200keV[64];
     const G4double photonEnergyProb300keV[64];
-
+    */
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -56,65 +56,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fPI(3.14159265358979323846),
   sphereR(25.*cm),
   lossConeAngleDeg(64.),
-  photonPhiLimitDeg(26.57), // based on 500 km diameter event
+  photonPhiLimitDeg(45.), // based on 1000 km diameter event
   fWhichParticle(0),
   electronParticle(0),
   photonParticle(0),
-  fPrimaryGeneratorMessenger(0),
-  photonEnergyProb100keV{
-0.03656131,0.25322138,0.41933641,0.54648931,
-0.64401902,0.71941947,0.77817282,0.82384164,
-0.85938710,0.88718832,0.90880856,0.92570210,
-0.93902379,0.94978780,0.95852530,0.96564760,
-0.97141985,0.97609667,0.97988323,0.98306097,
-0.98572875,0.98799985,0.98983837,0.99134501,
-0.99263692,0.99369583,0.99459389,0.99533782,
-0.99598452,0.99654148,0.99702781,0.99745401,
-0.99781161,0.99810876,0.99835896,0.99858048,
-0.99876756,0.99891555,0.99904548,0.99915724,
-0.99925246,0.99933265,0.99939845,0.99945309,
-0.99950227,0.99955484,0.99960124,0.99964836,
-0.99969242,0.99972854,0.99975926,0.99978796,
-0.99981340,0.99983692,0.99986030,0.99988102,
-0.99989542,0.99990494,0.99991505,0.99992416,
-0.99993166,0.99993927,0.99994694,0.99995436,
-},
-  photonEnergyProb200keV{
-0.02876192,0.20597284,0.34738649,0.46140579,
-0.55426838,0.62954151,0.69058125,0.74075579,
-0.78198443,0.81609190,0.84420152,0.86748864,
-0.88683357,0.90299907,0.91662534,0.92824191,
-0.93804658,0.94635622,0.95339780,0.95939612,
-0.96450899,0.96891157,0.97271679,0.97596182,
-0.97878795,0.98127117,0.98344643,0.98535208,
-0.98701801,0.98851288,0.98984176,0.99099882,
-0.99200506,0.99289030,0.99367931,0.99437442,
-0.99499502,0.99554365,0.99602593,0.99646198,
-0.99685119,0.99719231,0.99749278,0.99775746,
-0.99799315,0.99820526,0.99838789,0.99855571,
-0.99870689,0.99883673,0.99895023,0.99905477,
-0.99915165,0.99923969,0.99931975,0.99939577,
-0.99946387,0.99952342,0.99957918,0.99963074,
-0.99967730,0.99971911,0.99975675,0.99979030,
-},
-  photonEnergyProb300keV{
-0.02610665,0.18903997,0.32301128,0.43245321,
-0.52250693,0.59691315,0.65837889,0.70949933,
-0.75213681,0.78778598,0.81768938,0.84296799,
-0.86437774,0.88253550,0.89805688,0.91127582,
-0.92253711,0.93221907,0.94049788,0.94756600,
-0.95366863,0.95896251,0.96360651,0.96764543,
-0.97118314,0.97434494,0.97716929,0.97965296,
-0.98183185,0.98373432,0.98543972,0.98696855,
-0.98830907,0.98947127,0.99049537,0.99141793,
-0.99225126,0.99301175,0.99368905,0.99429469,
-0.99482683,0.99530538,0.99574143,0.99613313,
-0.99649066,0.99680855,0.99708959,0.99735094,
-0.99759317,0.99781256,0.99801243,0.99819783,
-0.99836752,0.99852403,0.99867026,0.99880359,
-0.99892537,0.99903805,0.99914241,0.99923489,
-0.99931565,0.99938844,0.99945331,0.99951137,
-}
+  fPrimaryGeneratorMessenger(0)
 {
 
   fParticleGun  = new G4ParticleGun();
@@ -251,66 +197,24 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 
   G4double theta, randomNumber;
   
-  /*
-  static const G4double photonEnergyArray[64] = 
-  {50.00000,57.14286,64.28571,71.42857,
-78.57143,85.71429,92.85714,100.00000,
-107.14286,114.28571,121.42857,128.57143,
-135.71429,142.85714,150.00000,157.14286,
-164.28571,171.42857,178.57143,185.71429,
-192.85714,200.00000,207.14286,214.28571,
-221.42857,228.57143,235.71429,242.85714,
-250.00000,257.14286,264.28571,271.42857,
-278.57143,285.71429,292.85714,300.00000,
-307.14286,314.28571,321.42857,328.57143,
-335.71429,342.85714,350.00000,357.14286,
-364.28571,371.42857,378.57143,385.71429,
-392.85714,400.00000,407.14286,414.28571,
-421.42857,428.57143,435.71429,442.85714,
-450.00000,457.14286,464.28571,471.42857,
-478.57143,485.71429,492.85714,500.00000};
-  
-  const G4int dataSize = 64;
-  const G4double* photonEnergyTablePointer;
-  
-  */
-  randomNumber = G4UniformRand();
-/* 
-  // If statements to determine which photon energy probability table to 
-  // use, based on the E_0 folding energy of the background electrons
-  if(E_folding <= 100.)
-  {
-    photonEnergyTablePointer = photonEnergyProb100keV;
-  }
-  else if(E_folding <= 200.)
-  {
-    photonEnergyTablePointer = photonEnergyProb200keV;
-  }
-  else if(E_folding <= 300.)
-  {
-    photonEnergyTablePointer = photonEnergyProb300keV;
-  }
-  else 
-  {
-    throw std::invalid_argument("Source folding energy not in {100,200,300} keV");
-  }
-
-    // Discrete inverse CDF lookup of probabilites, which are then
-    // linked to an energy
-    for(G4int energyIndex=0; energyIndex<dataSize; energyIndex++)
-    {
-      if(randomNumber < photonEnergyTablePointer[energyIndex])
-      {
-        r->energy = photonEnergyArray[energyIndex]*keV;
-        break;
-      }
-    }
-*/
   //Sample from exponential, energy dist. fitted to Wei's results
-  r->energy = -(241.4)*std::log(1 - randomNumber)*keV;
   // (valid for E0,source = 100 keV) 
+  G4double shiftThreshold = 50.;
+  G4double meanEnergy     = 241.4;
 
-  // Uniformly distributed around field line 
+  // Rejection sampling 
+  do
+  {
+  
+    randomNumber = G4UniformRand();
+    
+    r->energy = -(meanEnergy - shiftThreshold) *
+	    std::log(1 - randomNumber) * keV;
+  
+  } while(r->energy < shiftThreshold*keV);
+  
+
+  // Uniformly distributed around azimuthal direction ab. fieldline 
   theta = G4UniformRand()*2.*fPI;  
   
   // Phi (half angle) takes values in a cone determined by 
@@ -321,7 +225,8 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 
 
   // Sampling from normal distribution
-  G4double u1, u2, n1; //, n2;
+  G4double u1, u2, n1;
+  
   G4double mu    = 0.4974; // radians
   G4double sigma = 0.2947; // radians
   
@@ -330,11 +235,9 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   
   // Box-Muller transform to obtain n1 ~ N(0,1)
   n1 = std::sqrt(-2*std::log(u1))*std::cos(2*fPI*u2);
-  //n2 = std::sqrt(-2*std::log(u1))*std::sin(2*fPI*u2);
   
-  // Shift standard normals to N(mu, sigma) 
-  n1 = sigma*n1 + mu;
-  //n2 = sigma*n2 + mu;
+  // Shift standard normal N(0,1) to N(mu, sigma) 
+  n1 = sigma * n1 + mu;
   
   // We want our Y direction to be "up"
   r->x = (sphereR + 15.*cm) * std::sin(phi) * std::sin(theta);
@@ -343,13 +246,12 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 
 
   // Geant internally normalizes the momentum direction
-  r->yDir = -std::cos(n1);
   r->xDir = G4UniformRand()*2. - 1.;
+  r->yDir = -std::cos(n1);
   r->zDir = G4UniformRand()*2. - 1.;
 
   // Enforces inward directionality to particles
   if(r->x > 0) {r->xDir = -r->xDir;}
-  if(r->y > 0) {r->yDir = -r->yDir;}
   if(r->z > 0) {r->zDir = -r->zDir;}
 
 }
@@ -396,7 +298,7 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  // Method called to populate member varaibles with number of 
+  // Method called to populate member variables with number of 
   // particles to generate
   //CalculateParticlesToGenerate();
 
@@ -413,7 +315,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   ParticleSample* r = new ParticleSample();
  
   switch(fWhichParticle){
-    case(0):
+    case(0): // Background electron, outside loss cone
+
     GenerateTrappedElectrons(r);
     
     fParticleGun->SetParticlePosition(
@@ -424,7 +327,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->GeneratePrimaryVertex(anEvent);
     break;
 
-    case(1):
+    case(1): // Background electron, inside loss cone
+
     GenerateLossConeElectrons(r);
     
     fParticleGun->SetParticlePosition(
@@ -435,7 +339,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->GeneratePrimaryVertex(anEvent);
     break;
 
-    case(2):
+    case(2): // Signal photon
+
     // Selects photon for particle type
     fParticleGun->SetParticleDefinition(photonParticle);
   
@@ -448,9 +353,12 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->SetParticleEnergy(r->energy);
     fParticleGun->GeneratePrimaryVertex(anEvent);
     break;
+
+    default: 
+       throw std::invalid_argument("Need to chose particle type!");
   }
 
-
+  // Free particle utility struct
   delete r;
 
 }
