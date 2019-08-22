@@ -205,7 +205,6 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   // Rejection sampling 
   do
   {
-  
     randomNumber = G4UniformRand();
     
     r->energy = -(meanEnergy - shiftThreshold) *
@@ -232,13 +231,13 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   
   u1 = G4UniformRand();
   u2 = G4UniformRand();
-  
+ /* 
   // Box-Muller transform to obtain n1 ~ N(0,1)
   n1 = std::sqrt(-2*std::log(u1))*std::cos(2*fPI*u2);
   
   // Shift standard normal N(0,1) to N(mu, sigma) 
   n1 = sigma * n1 + mu;
-  
+ */
   // We want our Y direction to be "up"
   r->x = (sphereR + 15.*cm) * std::sin(phi) * std::sin(theta);
   r->y = (sphereR + 15.*cm) * std::cos(phi);
@@ -247,7 +246,8 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 
   // Geant internally normalizes the momentum direction
   r->xDir = G4UniformRand()*2. - 1.;
-  r->yDir = -std::cos(n1);
+  //r->yDir = -std::cos(n1);
+  r->yDir = -std::cos(G4UniformRand()*(40. * 3.1415926 / 180.));
   r->zDir = G4UniformRand()*2. - 1.;
 
   // Enforces inward directionality to particles
