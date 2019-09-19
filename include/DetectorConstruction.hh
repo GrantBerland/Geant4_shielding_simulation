@@ -32,6 +32,7 @@
 #define DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4SubtractionSolid.hh"
 #include "globals.hh"
 
 class G4VPhysicalVolume;
@@ -48,7 +49,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     virtual G4VPhysicalVolume* Construct();
 
     G4LogicalVolume* GetScoringVolume() const {return fScoringVolume;}
-
+    G4SubtractionSolid* CreateCodedAperture();
 
   protected:
     G4LogicalVolume*  fScoringVolume;

@@ -43,6 +43,7 @@
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
 //#include "G4IntersectionSolid.hh"
+#include "G4UnionSolid.hh"
 #include "G4RotationMatrix.hh"
 #include "G4SolidStore.hh"
 #include "G4SDManager.hh"
@@ -158,17 +159,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double outerShieldingThickness = 15.*mm * 0.5; // PE 
   G4double shieldingThickness2     = 3.5*mm * 0.5; // W
   G4double shieldingThickness3     = 2.5*mm * 0.5; // Sn
-  G4double innerShieldingThickness = 1.0*mm * 0.5; // Cu
   G4double detectorXY      = 40.*mm;
   G4double detectorZ       = 5.*mm;
   G4double detectorElectronicsZ = 10.185*mm;
   G4double boxInnerSizeXY  = 90.*mm * 0.5;
   G4double boxInnerSizeZ   = 50.*mm * 0.5;
   G4double windowThickness = 1.*mm;
-  G4double baffleHeight    = 20.*mm;
-  G4double baffleThickness = 0.5*mm;
   G4double frontEndBoardThickness = 2.86*mm;
-
+  G4double detectorApertureSpacing = 20.*mm;
 
   /////////////////////////////////////////
   //////////////// Geometry ///////////////
@@ -189,64 +187,36 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				    0.5*frontEndBoardThickness,
 				    boxInnerSizeXY);
 
-
-  G4VSolid* berylliumWindow = new G4Box("Be_Window",
-		  		    0.5*15.*mm,
-				    0.5*windowThickness,
-				    boxInnerSizeXY);
-  
   G4VSolid* topWindow = new G4Box("top_Be_Window",
 		  		    boxInnerSizeXY,
 				    0.5*windowThickness,
 				    boxInnerSizeXY);
 
-  G4VSolid* baffles = new G4Box("Baffles",
-		  		    0.5*baffleThickness,
-				    0.5*baffleHeight,
-				    boxInnerSizeXY);
-
-  
-  G4VSolid* collimeterOuterBox = new G4Box("Outer-collimeter",
-boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
-25.*mm * 0.5,
-boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3);
-
 
   // Shielding boxes
   G4VSolid* outerShieldingBox = new G4Box("PE_Shielding",
-boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
-boxInnerSizeZ+2*innerShieldingThickness+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
-boxInnerSizeXY+2*innerShieldingThickness+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3);
+boxInnerSizeXY+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
+boxInnerSizeZ+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
+boxInnerSizeXY+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3);
 
 
   G4VSolid* shieldingBox2 = new G4Box("W_Shielding",
-boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
-boxInnerSizeZ+2*innerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
-boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3);
+boxInnerSizeXY+2*shieldingThickness2+2*shieldingThickness3,
+boxInnerSizeZ+2*shieldingThickness2+2*shieldingThickness3,
+boxInnerSizeXY+2*shieldingThickness2+2*shieldingThickness3);
 
   G4VSolid* shieldingBox3 = new G4Box("Sn_Shielding",
-boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3,
-boxInnerSizeZ+2*innerShieldingThickness+2*shieldingThickness3,
-boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
+boxInnerSizeXY+2*shieldingThickness3,
+boxInnerSizeZ+2*shieldingThickness3,
+boxInnerSizeXY+2*shieldingThickness3);
 
 
-  G4VSolid* innerShieldingBox = new G4Box("Cu_Shielding",
-	  boxInnerSizeXY+2*innerShieldingThickness,
-	  boxInnerSizeZ+2*innerShieldingThickness,
-	  boxInnerSizeXY+2*innerShieldingThickness);
-
-
-  // Slits and subtraction box
-  G4VSolid* slit = new G4Box("Slit",
-		  	1.1*mm,
-			outerShieldingThickness+1.*cm,
-			boxInnerSizeXY-0.5*mm);
 
   G4VSolid* subtractionBox = new G4Box("Subtraction-box",
     		        boxInnerSizeXY,
 			boxInnerSizeZ,
 			boxInnerSizeXY);
- 
+  
   // Bus structure boxes
   G4VSolid* busBackPlate = new G4Box("Back-plate",
 		        14.5*cm,
@@ -276,21 +246,21 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   // empty rotation matrix for SubtractionSolid constructor
   G4RotationMatrix* rotm = new G4RotationMatrix();   
   
-  G4double windowPlacement = boxInnerSizeZ + innerShieldingThickness + outerShieldingThickness + windowThickness*1.5 + 1.1*cm;
+  G4double windowPlacement = boxInnerSizeZ + outerShieldingThickness + windowThickness*1.5 + 1.1*cm;
 
-  G4double windowSlitShiftX = 2.2*cm;
-
-  // Hollows out collimeter
-  G4SubtractionSolid* collimeterOuter = 
-	  new G4SubtractionSolid("Outer-collimeter",
-	  collimeterOuterBox,
-	  subtractionBox);
 
   // Hollows out outer shielding 
   G4SubtractionSolid* shieldingBox1sub = 
-	  new G4SubtractionSolid("W_Shielding",
+	  new G4SubtractionSolid("PE_Shielding",
 	  outerShieldingBox,
 	  shieldingBox2);
+  
+  G4SubtractionSolid* shieldingBox1sub_t = 
+	  new G4SubtractionSolid("PE_Shielding",
+	  shieldingBox1sub,
+	  subtractionBox,
+	  rotm,
+	  G4ThreeVector(0.,50.*mm,0.));
 
   // Hollows out shielding 2
   G4SubtractionSolid* shieldingBox2sub = 
@@ -298,104 +268,33 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 	  shieldingBox2,
 	  shieldingBox3);
   
-  // Hollows out shielding 3
-  G4SubtractionSolid* shieldingBox3sub = 
-	  new G4SubtractionSolid("W_Shielding",
-	  shieldingBox3,
-	  innerShieldingBox);
-  
-  // Hollows out inner shielding
-  G4SubtractionSolid* shieldingBox4sub = 
-	  new G4SubtractionSolid("W_Shielding",
-	  innerShieldingBox,
-	  subtractionBox);
-
-
-  // Outer shielding window depressions 1 & 2 and slits 1 & 2
-  G4SubtractionSolid* shieldingBox1_slit1 = 
-	  new G4SubtractionSolid("PE_Shielding",
-	  shieldingBox1sub,
-	  slit,
-	  rotm,
-	  G4ThreeVector(windowSlitShiftX, boxInnerSizeZ + outerShieldingThickness, 0.));
-  
-  G4SubtractionSolid* shieldingBox1_slit2 = 
-	  new G4SubtractionSolid("PE_Shielding",
-	  shieldingBox1_slit1,
-	  slit,
-	  rotm,
-	  G4ThreeVector(-windowSlitShiftX, boxInnerSizeZ + outerShieldingThickness, 0.));
-
-
-  G4SubtractionSolid* shieldingBox1_slit_window1 = 
-	  new G4SubtractionSolid("PE_Shielding",
-	  shieldingBox1_slit2,
-	  berylliumWindow,
-	  rotm,
-	  G4ThreeVector(windowSlitShiftX, windowPlacement, 0.));
-
-  G4SubtractionSolid* shieldingBox1_slit_window2 = 
-	  new G4SubtractionSolid("PE_Shielding",
-	  shieldingBox1_slit_window1,
-	  berylliumWindow,
-	  rotm,
-	  G4ThreeVector(-windowSlitShiftX, windowPlacement, 0.));
-
-
-  G4SubtractionSolid* shieldingBox2_slit1 = 
+  G4SubtractionSolid* shieldingBox2sub_t = 
 	  new G4SubtractionSolid("W_Shielding",
 	  shieldingBox2sub,
-	  slit,
+	  subtractionBox,
 	  rotm,
-	  G4ThreeVector(windowSlitShiftX, boxInnerSizeZ + outerShieldingThickness, 0.));
-
-  G4SubtractionSolid* shieldingBox2_slit2 = 
-	  new G4SubtractionSolid("W_Shielding",
-	  shieldingBox2_slit1,
-	  slit,
-	  rotm,
-	  G4ThreeVector(-windowSlitShiftX, boxInnerSizeZ + outerShieldingThickness, 0.));
+	  G4ThreeVector(0.,50.*mm,0.));
   
-  G4SubtractionSolid* shieldingBox3_slit1 = 
+  // Hollows out shielding 3
+  G4SubtractionSolid* shieldingBox3sub = 
+	  new G4SubtractionSolid("Sn_Shielding",
+	  shieldingBox3,
+	  subtractionBox);
+  
+  G4SubtractionSolid* shieldingBox3sub_t = 
 	  new G4SubtractionSolid("Sn_Shielding",
 	  shieldingBox3sub,
-	  slit,
+	  subtractionBox,
 	  rotm,
-	  G4ThreeVector(windowSlitShiftX, boxInnerSizeZ + outerShieldingThickness, 0.));
-
-  G4SubtractionSolid* shieldingBox3_slit2 = 
-	  new G4SubtractionSolid("Sn_Shielding",
-	  shieldingBox3_slit1,
-	  slit,
-	  rotm,
-	  G4ThreeVector(-windowSlitShiftX, boxInnerSizeZ + outerShieldingThickness, 0.));
-
-
-  // Inner shielding slits 1 & 2
-  G4SubtractionSolid* shieldingBoxInner_slit1 = 
-	  new G4SubtractionSolid("Cu_Shielding",
-	  shieldingBox4sub,
-	  slit,
-	  rotm,
-	  G4ThreeVector(windowSlitShiftX, boxInnerSizeZ + innerShieldingThickness, 0.));
+	  G4ThreeVector(0.,50.*mm,0.));
   
-  G4SubtractionSolid* shieldingBoxInner_slit2 = 
-	  new G4SubtractionSolid("Cu_Shielding",
-	  shieldingBoxInner_slit1,
-	  slit,
-	  rotm,
-	  G4ThreeVector(-windowSlitShiftX, boxInnerSizeZ + innerShieldingThickness, 0.));
   
 
   ////////////////////////////////////////////
   ////////////// Logical Volumes /////////////
   ////////////////////////////////////////////
 
-  G4LogicalVolume* logicCollimeter = new G4LogicalVolume(collimeterOuter,
-				   nist->FindOrBuildMaterial("G4_Al"),
-							"Collimeter");
   
-
   G4LogicalVolume* logicDetector = new G4LogicalVolume(detectorBox,
 							CZT,
 							"Detector");
@@ -408,37 +307,24 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
 							FR4,
 							"Electronics");
   
-  G4LogicalVolume* logicalOuterShielding = new G4LogicalVolume(shieldingBox1_slit_window2,
+  G4LogicalVolume* logicalOuterShielding = new G4LogicalVolume(shieldingBox1sub_t,
 		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 		  "PE_Shielding");
 
-  G4LogicalVolume* logicalShielding2 = new G4LogicalVolume(shieldingBox2_slit2,
+  G4LogicalVolume* logicalShielding2 = new G4LogicalVolume(shieldingBox2sub_t,
 		  nist->FindOrBuildMaterial("G4_W"),
 		  "W_Shielding");
   
-  G4LogicalVolume* logicalShielding3 = new G4LogicalVolume(shieldingBox3_slit2,
+  G4LogicalVolume* logicalShielding3 = new G4LogicalVolume(shieldingBox3sub_t,
 		  nist->FindOrBuildMaterial("G4_Sn"),
 		  "Sn_Shielding");
-  
-  G4LogicalVolume* logicalInnerShielding = new G4LogicalVolume(shieldingBoxInner_slit2,
-		  nist->FindOrBuildMaterial("G4_Cu"),
-		  "Cu_Shielding");
-  
-  G4LogicalVolume* logicalWindow = new G4LogicalVolume(berylliumWindow,
-		  nist->FindOrBuildMaterial("G4_Be"),
-		  "Be_Window");
   
   G4LogicalVolume* logicalTopWindow = new G4LogicalVolume(topWindow,
 		  nist->FindOrBuildMaterial("G4_Be"),
 		  "top_Be_Window");
   
-  G4LogicalVolume* logicalBaffles = new G4LogicalVolume(baffles,
-		  nist->FindOrBuildMaterial("G4_W"),
-		  "Baffles");
-
 
   // Bus structures
-  //
 
   G4LogicalVolume* logicalBusBackPlate = new G4LogicalVolume(busBackPlate,
 		  nist->FindOrBuildMaterial("G4_Al"),
@@ -466,31 +352,28 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   G4ThreeVector    Tm;
   G4Transform3D    Tr;
 
-
-  // Collimeter
-  Tm.setX(0.); 
-  Tm.setY(boxInnerSizeZ+ outerShieldingThickness + shieldingThickness2
-		  + shieldingThickness3 + innerShieldingThickness
-		  + 23.5*mm); 
-  Tm.setZ(0.);
-  Tr = G4Transform3D(Rm, Tm); 
-  detectorAssembly->AddPlacedVolume(logicCollimeter, Tr);
- 
   // Front end electronics board
   Tm.setX(0.); Tm.setY(-2.*cm); Tm.setZ(0.);
   Tr = G4Transform3D(Rm, Tm); 
   detectorAssembly->AddPlacedVolume(logicFrontEndBoard, Tr);
-
-
-  G4double detectorPosX = -22.5*mm;
+  
+  // Call method to return coded aperture sub solid, logical volume below
+  G4SubtractionSolid* logicAp1 = CreateCodedAperture();
+  
+  G4LogicalVolume* logic_aperature_base =
+    new G4LogicalVolume(logicAp1,            //its solid
+                        nist->FindOrBuildMaterial("G4_W"), // material
+                        "Aperature-base");         //its name
+  
+  G4double detectorPosX = -21.*mm;
   G4double detectorPosZ = -21.*mm;
   G4double detectorPosY = frontEndBoardThickness + 0.5*cm;
 
-  // position multiplier
+  // position multiplier arrays
   G4int pm1[4] = {1, -1, 1, -1};
   G4int pm2[4] = {1, 1, -1, -1};
 
-  // Redlen detectors per assembly
+  // Create all Redlen detectors and apertures per assembly
   for(G4int nDet=0; nDet<4;nDet++)
   {
  
@@ -512,6 +395,17 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
     Tr = G4Transform3D(Rm, Tm); 
 
     detectorAssembly->AddPlacedVolume(logicDetectorElectronics, Tr);
+  
+    // Coded Aperture
+    Tm.setX(pm1[nDet]*detectorPosX);
+    Tm.setY(detectorPosY + detectorApertureSpacing + detectorZ/2.);
+    Tm.setZ(pm2[nDet]*detectorPosZ);
+    
+    Rm.rotateX(90.*deg);
+    Tr = G4Transform3D(Rm, Tm); 
+
+    detectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);
+    Rm.rotateX(-90.*deg);
     
    } 
 
@@ -535,52 +429,14 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   detectorAssembly->AddPlacedVolume(logicalShielding3, Tr);
 
 
-  // Lower beryllium window
-  Tm.setX(windowSlitShiftX); Tm.setY(windowPlacement); Tm.setZ(0.);
-  Tr = G4Transform3D(Rm, Tm); 
-
-  detectorAssembly->AddPlacedVolume(logicalWindow, Tr);
-  
-  Tm.setX(-windowSlitShiftX); Tm.setY(windowPlacement); Tm.setZ(0.);
-  Tr = G4Transform3D(Rm, Tm); 
-
-  detectorAssembly->AddPlacedVolume(logicalWindow, Tr);
-
-
   // Top beryllium window
-  Tm.setX(0.); Tm.setY(windowPlacement+20.*mm+2.*mm); Tm.setZ(0.);
+  Tm.setX(0.); Tm.setY(windowPlacement-5.*mm); Tm.setZ(0.);
   Tr = G4Transform3D(Rm, Tm); 
 
   detectorAssembly->AddPlacedVolume(logicalTopWindow, Tr);
-
-  // Baffle parameterisation
-  G4int numberBaffles = 28;
-
-  G4double bafflePlacement = windowPlacement+0.5*baffleHeight+windowThickness + 0.5*mm;
   
-  G4double axialDistance;
-
-
-  // Baffle box placement 
-  Tm.setX(0.); Tm.setY(bafflePlacement); Tm.setZ(0.);
-  Tr = G4Transform3D(Rm, Tm); 
   
-  rotm->rotateY(90.*deg); 
-  Rm.rotateY(90.*deg);
-  
-  for(G4int i = 0; i<numberBaffles; i++)
-  {
-    // baffles are spaced 2.53 mm apart
-    axialDistance = (i-14) * (2.53 + 0.5) * mm;
-
-    // W Baffle placement
-    Tm.setX(0.); Tm.setY(bafflePlacement); Tm.setZ(axialDistance);
-    Tr = G4Transform3D(Rm, Tm);
-
-    detectorAssembly->AddPlacedVolume(logicalBaffles, Tr);
-    
-  }
-
+ 
   // Bus structure placements
   
   G4double busHeight = 1.*cm;
@@ -655,6 +511,110 @@ boxInnerSizeXY+2*innerShieldingThickness+2*shieldingThickness3);
   return physWorld;
 }
 
+G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
+{
+  G4RotationMatrix Rm;
+  G4ThreeVector    Tm;
+  G4Transform3D    Tr;
+  
+  G4double boxXY 	   = 4.*cm;
+  G4double boxZ  	   = 1.5*mm;
+  G4double aperatureSquare = 0.2*cm;
+
+  // added dimension to "fill the gap" between detectors
+  G4Box* aperature_base = new G4Box("Aperature-base",
+		   		    (boxXY+2.*mm)/2.,
+				    (boxXY+2.*mm)/2.,
+				    boxZ/2.);
+
+  G4RotationMatrix* rotm = new G4RotationMatrix();   
+
+  G4Box* coded_box = new G4Box("Coded-box",
+		  		aperatureSquare/2.,
+				aperatureSquare/2.,
+				boxZ+5.*mm);
+  
+  
+  G4UnionSolid* swapSolid;
+  G4String placementXY_str; 
+  G4double placementX, placementY; 
+  G4String token;
+  std::ifstream placementFile("coded_aperture_array.txt", std::ios_base::in);
+  
+  // Get number of lines in file
+  int numberOfBoxes = 0;
+  while(getline(placementFile, placementXY_str, '\n'))
+    { numberOfBoxes++; }
+  
+  placementFile.close();
+
+
+  // Reopen file to start from first line
+  placementFile.open("coded_aperture_array.txt", std::ios_base::in);
+  getline(placementFile, placementXY_str, '\n');
+  
+  token = placementXY_str.substr(
+		  0, 
+  		  placementXY_str.find(',')); 
+  
+  placementX = std::stod(token);
+  
+  token = placementXY_str.substr(
+		  placementXY_str.find(',')+1, 
+		  placementXY_str.find('\n'));
+  
+  placementY = std::stod(token);
+  
+  
+  G4UnionSolid* coded_boxes = new G4UnionSolid("Combined-boxes",
+		  				coded_box,
+						coded_box,
+						rotm,
+						G4ThreeVector(
+							placementX*cm,
+							placementY*cm,
+							0.)); 
+  
+  // starts at 1 since logicAp1 uses first line of file 
+  for(int i=1; i<numberOfBoxes; i++)
+  {
+    getline(placementFile, placementXY_str, '\n');
+
+    token = placementXY_str.substr(
+		  0, 
+  		  placementXY_str.find(',')); 
+    
+    placementX = std::stod(token); 
+ 
+    token = placementXY_str.substr(
+		  placementXY_str.find(',')+1, 
+		  placementXY_str.find('\n'));
+    
+    placementY = std::stod(token); 
+
+    swapSolid = new G4UnionSolid("Aperature-base",
+	  			   coded_boxes,
+	  			   coded_box,
+	  			   rotm,
+	  			   G4ThreeVector(placementX*cm,
+					         placementY*cm,
+						 0.));
+ 
+    coded_boxes = swapSolid;
+  }
+  
+  placementFile.close();
+
+  G4SubtractionSolid* logicAp1 = 
+	    new G4SubtractionSolid("Aperature-base",
+	  			   aperature_base,
+	  			   coded_boxes,
+	  			   rotm,
+	  			   G4ThreeVector(0.,0.,0.));
+
+
+  return logicAp1; 
+}
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
