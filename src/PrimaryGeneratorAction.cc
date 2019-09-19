@@ -223,21 +223,6 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   G4double phi = std::acos(1 - 2 * u);
 
 
-  // Sampling from normal distribution
-  G4double u1, u2, n1;
-  
-  G4double mu    = 0.4974; // radians
-  G4double sigma = 0.2947; // radians
-  
-  u1 = G4UniformRand();
-  u2 = G4UniformRand();
- /* 
-  // Box-Muller transform to obtain n1 ~ N(0,1)
-  n1 = std::sqrt(-2*std::log(u1))*std::cos(2*fPI*u2);
-  
-  // Shift standard normal N(0,1) to N(mu, sigma) 
-  n1 = sigma * n1 + mu;
- */
   // We want our Y direction to be "up"
   r->x = (sphereR + 15.*cm) * std::sin(phi) * std::sin(theta);
   r->y = (sphereR + 15.*cm) * std::cos(phi);
@@ -246,7 +231,6 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 
   // Geant internally normalizes the momentum direction
   r->xDir = G4UniformRand()*2. - 1.;
-  //r->yDir = -std::cos(n1);
   r->yDir = -std::cos(G4UniformRand()*(40. * 3.1415926 / 180.));
   r->zDir = G4UniformRand()*2. - 1.;
 
