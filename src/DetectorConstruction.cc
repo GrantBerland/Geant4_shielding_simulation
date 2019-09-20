@@ -246,7 +246,7 @@ boxInnerSizeXY+2*shieldingThickness3);
   // empty rotation matrix for SubtractionSolid constructor
   G4RotationMatrix* rotm = new G4RotationMatrix();   
   
-  G4double windowPlacement = boxInnerSizeZ + outerShieldingThickness + windowThickness*1.5 + 1.1*cm;
+  G4double windowPlacement = boxInnerSizeZ + outerShieldingThickness + windowThickness*1.5;
 
 
   // Hollows out outer shielding 
@@ -497,9 +497,10 @@ boxInnerSizeXY+2*shieldingThickness3);
   G4double dimX = -7.0*cm;
   G4double dimZ = -7.0*cm;
   Rm.rotateY(0.*deg);
-  
+ 
+  G4double detectorHeight = 50.*mm;
   for(unsigned int i=0; i<numDetectorAssemblies; i++){	 
-    Tm.setX(pm1[i]*dimX); Tm.setY(0.); Tm.setZ(pm2[i]*dimZ);
+    Tm.setX(pm1[i]*dimX); Tm.setY(detectorHeight); Tm.setZ(pm2[i]*dimZ);
     Tr = G4Transform3D(Rm, Tm);
 
     detectorAssembly->MakeImprint(logicEnv, Tr);
@@ -611,8 +612,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
 	  			   coded_boxes,
 	  			   rotm,
 	  			   G4ThreeVector(0.,0.,0.));
-
-
+  
   return logicAp1; 
 }
 
