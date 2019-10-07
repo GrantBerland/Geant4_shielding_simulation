@@ -56,7 +56,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fPI(3.14159265358979323846),
   sphereR(25.*cm),
   lossConeAngleDeg(64.),
-  photonPhiLimitDeg(45.), // based on 1000 km diameter event
+  photonPhiLimitDeg(40.), 
   fWhichParticle(0),
   electronParticle(0),
   photonParticle(0),
@@ -202,7 +202,7 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   G4double shiftThreshold = 50.;
   G4double meanEnergy     = 241.4;
 
-  // Rejection sampling 
+  // Rejection sampling on particle energy 
   do
   {
     randomNumber = G4UniformRand();
@@ -231,8 +231,10 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 
   // Geant internally normalizes the momentum direction
   r->xDir = G4UniformRand()*2. - 1.;
-  r->yDir = -std::cos(G4UniformRand()*(40. * 3.1415926 / 180.));
   r->zDir = G4UniformRand()*2. - 1.;
+  //r->yDir = -std::cos(G4UniformRand()*(40. * 3.1415926 / 180.));
+
+  r->yDir = -std::sqrt(r->xDir*r->xDir + r->zDir*r->zDir)/std::tan(phi);
 
   // Enforces inward directionality to particles
   if(r->x > 0) {r->xDir = -r->xDir;}

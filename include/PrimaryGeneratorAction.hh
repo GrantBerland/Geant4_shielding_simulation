@@ -70,6 +70,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void SetWhichParticle(G4int partSelection) {fWhichParticle = partSelection;};
 
     void SetFoldingEnergy(G4double E0) { E_folding = E0; };
+    void SetEventAngle(G4double ang) { photonPhiLimitDeg = ang; };
     
     // Method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
