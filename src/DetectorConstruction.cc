@@ -156,9 +156,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //////////////////////////////////////////
 
   // 0.5 factor due to full height definition
-  G4double outerShieldingThickness = 15.*mm * 0.5; // PE 
-  G4double shieldingThickness2     = 3.5*mm * 0.5; // W
-  G4double shieldingThickness3     = 2.5*mm * 0.5; // Sn
+  G4double outerShieldingThickness = 15.*mm; // PE 
+  G4double shieldingThickness2     = 3.5*mm; // W
+  G4double shieldingThickness3     = 2.5*mm; // Sn
   G4double detectorXY      = 40.*mm;
   G4double detectorZ       = 5.*mm;
   G4double detectorElectronicsZ = 10.185*mm;
@@ -187,10 +187,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				    0.5*frontEndBoardThickness,
 				    boxInnerSizeXY-5.*mm);
 
+  G4double windowXZadjustment = 3.*mm;
   G4VSolid* topWindow = new G4Box("top_Be_Window",
-		  		    boxInnerSizeXY,
+		  		    boxInnerSizeXY-windowXZadjustment,
 				    0.5*windowThickness,
-				    boxInnerSizeXY);
+				    boxInnerSizeXY-windowXZadjustment);
 
 
   // Bus structure boxes
@@ -217,14 +218,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
  
   G4double shieldingHeight = 5.*cm;
-  G4double shieldingXZ     = -4.5*cm; 
+  G4double shieldingXZ     = -4.30*cm; 
   // Polyethylene shielding
   G4String name1 = "PE_Shielding";  
 
-  G4double box1OuterDim = 92.*mm;
+  G4double box1OuterDim = 120.*mm;
   G4double boxDepth1    = 70.*mm;
+  G4double aBit 	= 4.*mm;
+  G4double aLittleBit 	= 0.6*mm;
   
-  /*
   G4LogicalVolume* logic_shielding1 = CreateLshielding(box1OuterDim,
 		  boxDepth1,
 		  outerShieldingThickness,
@@ -239,24 +241,23 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-    
-  */
+  
   // Tungsten shielding
   G4String name2 = "W_Shielding"; 
   
-  G4double box2OuterDim = box1OuterDim - outerShieldingThickness;
+  G4double box2OuterDim = box1OuterDim - outerShieldingThickness - aBit;
   G4double boxDepth2    = boxDepth1 - outerShieldingThickness;
   
   G4LogicalVolume* logic_shielding2 = CreateLshielding(box2OuterDim,
-			boxDepth2,
+			boxDepth2+aBit,
 		  	shieldingThickness2,
-			5.*mm,
+			1.*mm,
 		  	nist->FindOrBuildMaterial("G4_W"),
 		  	name2); 
   
   
   new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ,shieldingHeight,shieldingXZ),
+		  G4ThreeVector(shieldingXZ-aLittleBit,shieldingHeight,shieldingXZ-aLittleBit),
 		  logic_shielding2,
 		  name2,
 		  logicEnv,
@@ -266,24 +267,25 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Tin shielding
   G4String name3 = "Sn_Shielding"; 
   
-  G4double box3OuterDim = box2OuterDim - shieldingThickness2;
+  G4double box3OuterDim = box2OuterDim - shieldingThickness2 - aBit*2;
   G4double boxDepth3    = boxDepth2 - shieldingThickness2; 
   G4LogicalVolume* logic_shielding3 = CreateLshielding(box3OuterDim,
 			boxDepth3,
 		  	shieldingThickness3,
-			5*mm,
+			0.*mm,
 		  	nist->FindOrBuildMaterial("G4_Sn"),
 		  	name3); 
   
   
   new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ,shieldingHeight,shieldingXZ),
+		  G4ThreeVector(shieldingXZ-aLittleBit,
+			  	shieldingHeight,
+			  	shieldingXZ-aLittleBit),
 		  logic_shielding3,
 		  name3,
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-  
   
   
   
@@ -611,7 +613,6 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 		G4Material* shieldingMaterial,
 		G4String    shieldingName)
 {
-  
   // Units assigned at function call!!
   
   G4Box* mainBlock = new G4Box("B1",
@@ -620,7 +621,7 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 			    (outerDim+shieldingThickness)/2.);
   
   G4Box* sideBlock = new G4Box("B1_s",
-		(outerDim+shieldingThickness+finiteThicknessOffset)/2.,
+		(outerDim+shieldingThickness)/2.+finiteThicknessOffset,
 			    (boxDepth+shieldingThickness)/2.,
 			    (outerDim+shieldingThickness)/2.);
 
@@ -633,8 +634,8 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 			    outerDim/2.);
 
   G4Box* sideSubtraction_block = new G4Box("B1_s",
-		   	    (outerDim + finiteThicknessOffset)/2.,
-			    (boxDepth+shieldingThickness)/2.,
+		   	    (outerDim/2. + finiteThicknessOffset),
+			    (boxDepth/2.+shieldingThickness),
 			    outerDim/2.);
   
   
@@ -652,7 +653,7 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 		  		mainBlock,
 				sideBlock,
 				rotm,
-				G4ThreeVector(outerDim+shieldingThickness,
+				G4ThreeVector(outerDim+shieldingThickness+finiteThicknessOffset,
 		  			0,
 					0));
   // Union of 3rd block
@@ -663,25 +664,24 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 				rotm,
 				G4ThreeVector(0,
 		  			      0,
-		 		       outerDim+shieldingThickness));
+		 outerDim+shieldingThickness+finiteThicknessOffset));
 
   // (unrotate)
   rotm->rotateY(-90.*deg);
-  
   
   // L shape to subtraction from main L shielding, union of 2 blocks 
   G4UnionSolid* sub_L = new G4UnionSolid("sub-L",
 		  			subtraction_block,
 					sideSubtraction_block,
 					rotm,
-				G4ThreeVector(outerDim+shieldingThickness+finiteThicknessOffset,
+	G4ThreeVector(outerDim+shieldingThickness+finiteThicknessOffset,
 		  			0,
 					0));
   
   // Union of 3rd block fo subtracting off from the L-shape
   sub_L = new G4UnionSolid("sub-L",
 	  		   sub_L,
-			   subtraction_block,
+			   sideSubtraction_block,
 			   rotm,
 			   G4ThreeVector(0,
 		  		         0,
@@ -708,7 +708,7 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 					middleWallRemover,
 					rotm,
  				        G4ThreeVector(outerDim/2.,
-						shieldingThickness*2.,
+						shieldingThickness,
 						0.)); 
   
   // Removes second inner wall
@@ -718,7 +718,7 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 					middleWallRemover,
 					rotm,
  				        G4ThreeVector(0.,
-						shieldingThickness*2.,
+						shieldingThickness,
 						outerDim/2.)); 
   
  
