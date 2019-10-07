@@ -33,6 +33,7 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4SubtractionSolid.hh"
+#include "G4Material.hh"
 #include "globals.hh"
 
 class G4VPhysicalVolume;
@@ -49,6 +50,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     virtual G4VPhysicalVolume* Construct();
 
     G4LogicalVolume* GetScoringVolume() const {return fScoringVolume;}
+    G4LogicalVolume* CreateLshielding(G4double, G4double, G4double, G4double, G4Material*, G4String);
     G4SubtractionSolid* CreateCodedAperture();
 
   protected:

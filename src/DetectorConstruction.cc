@@ -183,9 +183,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				    0.5*detectorXY);
 
   G4VSolid* frontEndBoard = new G4Box("Electronics",
-		  		    boxInnerSizeXY,
+		  		    boxInnerSizeXY-5.*mm,
 				    0.5*frontEndBoardThickness,
-				    boxInnerSizeXY);
+				    boxInnerSizeXY-5.*mm);
 
   G4VSolid* topWindow = new G4Box("top_Be_Window",
 		  		    boxInnerSizeXY,
@@ -193,30 +193,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				    boxInnerSizeXY);
 
 
-  // Shielding boxes
-  G4VSolid* outerShieldingBox = new G4Box("PE_Shielding",
-boxInnerSizeXY+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
-boxInnerSizeZ+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3,
-boxInnerSizeXY+2*outerShieldingThickness+2*shieldingThickness2+2*shieldingThickness3);
-
-
-  G4VSolid* shieldingBox2 = new G4Box("W_Shielding",
-boxInnerSizeXY+2*shieldingThickness2+2*shieldingThickness3,
-boxInnerSizeZ+2*shieldingThickness2+2*shieldingThickness3,
-boxInnerSizeXY+2*shieldingThickness2+2*shieldingThickness3);
-
-  G4VSolid* shieldingBox3 = new G4Box("Sn_Shielding",
-boxInnerSizeXY+2*shieldingThickness3,
-boxInnerSizeZ+2*shieldingThickness3,
-boxInnerSizeXY+2*shieldingThickness3);
-
-
-
-  G4VSolid* subtractionBox = new G4Box("Subtraction-box",
-    		        boxInnerSizeXY,
-			boxInnerSizeZ,
-			boxInnerSizeXY);
-  
   // Bus structure boxes
   G4VSolid* busBackPlate = new G4Box("Back-plate",
 		        14.5*cm,
@@ -238,6 +214,79 @@ boxInnerSizeXY+2*shieldingThickness3);
 			59.*mm/2.,
 			7.*cm);
 
+  
+ 
+  G4double shieldingHeight = 5.*cm;
+  G4double shieldingXZ     = -4.5*cm; 
+  // Polyethylene shielding
+  G4String name1 = "PE_Shielding";  
+
+  G4double box1OuterDim = 92.*mm;
+  G4double boxDepth1    = 70.*mm;
+  
+  /*
+  G4LogicalVolume* logic_shielding1 = CreateLshielding(box1OuterDim,
+		  boxDepth1,
+		  outerShieldingThickness,
+		  0.*mm,
+		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
+		  name1); 
+  
+  new G4PVPlacement(0,
+		G4ThreeVector(shieldingXZ, shieldingHeight, shieldingXZ),
+		  logic_shielding1,
+		  name1,
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+    
+  */
+  // Tungsten shielding
+  G4String name2 = "W_Shielding"; 
+  
+  G4double box2OuterDim = box1OuterDim - outerShieldingThickness;
+  G4double boxDepth2    = boxDepth1 - outerShieldingThickness;
+  
+  G4LogicalVolume* logic_shielding2 = CreateLshielding(box2OuterDim,
+			boxDepth2,
+		  	shieldingThickness2,
+			5.*mm,
+		  	nist->FindOrBuildMaterial("G4_W"),
+		  	name2); 
+  
+  
+  new G4PVPlacement(0,
+		  G4ThreeVector(shieldingXZ,shieldingHeight,shieldingXZ),
+		  logic_shielding2,
+		  name2,
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+ 
+  // Tin shielding
+  G4String name3 = "Sn_Shielding"; 
+  
+  G4double box3OuterDim = box2OuterDim - shieldingThickness2;
+  G4double boxDepth3    = boxDepth2 - shieldingThickness2; 
+  G4LogicalVolume* logic_shielding3 = CreateLshielding(box3OuterDim,
+			boxDepth3,
+		  	shieldingThickness3,
+			5*mm,
+		  	nist->FindOrBuildMaterial("G4_Sn"),
+		  	name3); 
+  
+  
+  new G4PVPlacement(0,
+		  G4ThreeVector(shieldingXZ,shieldingHeight,shieldingXZ),
+		  logic_shielding3,
+		  name3,
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+  
+  
+  
+  
   //////////////////////////////////////////
   ///////////// Subtractions ///////////////
   //////////////////////////////////////////
@@ -245,47 +294,6 @@ boxInnerSizeXY+2*shieldingThickness3);
 
   // empty rotation matrix for SubtractionSolid constructor
   G4RotationMatrix* rotm = new G4RotationMatrix();   
-  
-
-  // Hollows out outer shielding 
-  G4SubtractionSolid* shieldingBox1sub = 
-	  new G4SubtractionSolid("PE_Shielding",
-	  outerShieldingBox,
-	  shieldingBox2);
-  
-  G4SubtractionSolid* shieldingBox1sub_t = 
-	  new G4SubtractionSolid("PE_Shielding",
-	  shieldingBox1sub,
-	  subtractionBox,
-	  rotm,
-	  G4ThreeVector(0.,50.*mm,0.));
-
-  // Hollows out shielding 2
-  G4SubtractionSolid* shieldingBox2sub = 
-	  new G4SubtractionSolid("W_Shielding",
-	  shieldingBox2,
-	  shieldingBox3);
-  
-  G4SubtractionSolid* shieldingBox2sub_t = 
-	  new G4SubtractionSolid("W_Shielding",
-	  shieldingBox2sub,
-	  subtractionBox,
-	  rotm,
-	  G4ThreeVector(0.,50.*mm,0.));
-  
-  // Hollows out shielding 3
-  G4SubtractionSolid* shieldingBox3sub = 
-	  new G4SubtractionSolid("Sn_Shielding",
-	  shieldingBox3,
-	  subtractionBox);
-  
-  G4SubtractionSolid* shieldingBox3sub_t = 
-	  new G4SubtractionSolid("Sn_Shielding",
-	  shieldingBox3sub,
-	  subtractionBox,
-	  rotm,
-	  G4ThreeVector(0.,50.*mm,0.));
-  
   
 
   ////////////////////////////////////////////
@@ -305,17 +313,6 @@ boxInnerSizeXY+2*shieldingThickness3);
 							FR4,
 							"Electronics");
   
-  G4LogicalVolume* logicalOuterShielding = new G4LogicalVolume(shieldingBox1sub_t,
-		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
-		  "PE_Shielding");
-
-  G4LogicalVolume* logicalShielding2 = new G4LogicalVolume(shieldingBox2sub_t,
-		  nist->FindOrBuildMaterial("G4_W"),
-		  "W_Shielding");
-  
-  G4LogicalVolume* logicalShielding3 = new G4LogicalVolume(shieldingBox3sub_t,
-		  nist->FindOrBuildMaterial("G4_Sn"),
-		  "Sn_Shielding");
   
   G4LogicalVolume* logicalTopWindow = new G4LogicalVolume(topWindow,
 		  nist->FindOrBuildMaterial("G4_Be"),
@@ -407,24 +404,6 @@ boxInnerSizeXY+2*shieldingThickness3);
     
    } 
 
-  // Polyethylene shielding
-  Tm.setX(0.); Tm.setY(0.); Tm.setZ(0.);
-  Tr = G4Transform3D(Rm, Tm); 
-
-  detectorAssembly->AddPlacedVolume(logicalOuterShielding, Tr);
-
-
-  // Tungsten shielding
-  Tm.setX(0.); Tm.setY(0.); Tm.setZ(0.);
-  Tr = G4Transform3D(Rm, Tm); 
-
-  detectorAssembly->AddPlacedVolume(logicalShielding2, Tr);
-
-  // Tin shielding
-  Tm.setX(0.); Tm.setY(0.); Tm.setZ(0.);
-  Tr = G4Transform3D(Rm, Tm); 
-
-  detectorAssembly->AddPlacedVolume(logicalShielding3, Tr);
 
 
   // Top beryllium window
@@ -447,7 +426,7 @@ boxInnerSizeXY+2*shieldingThickness3);
   
  
   // Bus structure placements
-  
+/*  
   G4double busHeight = 1.*cm;
 
   G4RotationMatrix* wallRotm = new G4RotationMatrix();
@@ -499,12 +478,12 @@ boxInnerSizeXY+2*shieldingThickness3);
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-
+  */
   // Place the 3 copies of the detector assemblies using the position 
   // multiplier arrays from above
   unsigned int numDetectorAssemblies = 3;
-  G4double dimX = -7.0*cm;
-  G4double dimZ = -7.0*cm;
+  G4double dimX = -4.2*cm;
+  G4double dimZ = -4.2*cm;
   Rm.rotateY(0.*deg);
  
   G4double detectorHeight = 50.*mm;
@@ -625,5 +604,131 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   return logicAp1; 
 }
 
+G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
+		G4double    boxDepth,				
+		G4double    shieldingThickness,
+		G4double    finiteThicknessOffset, // fuck this parameter
+		G4Material* shieldingMaterial,
+		G4String    shieldingName)
+{
+  
+  // Units assigned at function call!!
+  
+  G4Box* mainBlock = new G4Box("B1",
+		   	    (outerDim+shieldingThickness)/2.,
+			    (boxDepth+shieldingThickness)/2.,
+			    (outerDim+shieldingThickness)/2.);
+  
+  G4Box* sideBlock = new G4Box("B1_s",
+		(outerDim+shieldingThickness+finiteThicknessOffset)/2.,
+			    (boxDepth+shieldingThickness)/2.,
+			    (outerDim+shieldingThickness)/2.);
+
+
+  // Subtraction box, made arbitrarily tall to remove 
+  // top wall of shielding
+  G4Box* subtraction_block = new G4Box("B1",
+		   	    outerDim/2.,
+			    boxDepth/2.+shieldingThickness,
+			    outerDim/2.);
+
+  G4Box* sideSubtraction_block = new G4Box("B1_s",
+		   	    (outerDim + finiteThicknessOffset)/2.,
+			    (boxDepth+shieldingThickness)/2.,
+			    outerDim/2.);
+  
+  
+  G4Box* middleWallRemover = new G4Box("MWR",
+		 shieldingThickness*2.5, 			
+		 boxDepth/2.+shieldingThickness,
+		 outerDim/2.);
+  
+  
+  // Empty rotation matrix for union and subtraction solids
+  G4RotationMatrix* rotm = new G4RotationMatrix();
+  
+  // Main L shape of shielding, union of two blocks
+  G4UnionSolid* solid_L = new G4UnionSolid("solid-L",
+		  		mainBlock,
+				sideBlock,
+				rotm,
+				G4ThreeVector(outerDim+shieldingThickness,
+		  			0,
+					0));
+  // Union of 3rd block
+  rotm->rotateY(90.*deg);
+  solid_L = new G4UnionSolid("solid-L",
+		  		solid_L,
+				sideBlock,
+				rotm,
+				G4ThreeVector(0,
+		  			      0,
+		 		       outerDim+shieldingThickness));
+
+  // (unrotate)
+  rotm->rotateY(-90.*deg);
+  
+  
+  // L shape to subtraction from main L shielding, union of 2 blocks 
+  G4UnionSolid* sub_L = new G4UnionSolid("sub-L",
+		  			subtraction_block,
+					sideSubtraction_block,
+					rotm,
+				G4ThreeVector(outerDim+shieldingThickness+finiteThicknessOffset,
+		  			0,
+					0));
+  
+  // Union of 3rd block fo subtracting off from the L-shape
+  sub_L = new G4UnionSolid("sub-L",
+	  		   sub_L,
+			   subtraction_block,
+			   rotm,
+			   G4ThreeVector(0,
+		  		         0,
+		 		         outerDim+shieldingThickness+finiteThicknessOffset));
+  
+
+  // Upward shift to ensure top of shielding is removed,
+  // and bottom has thickness shieldingThickness
+  G4ThreeVector subtraction_shift = G4ThreeVector(0.,
+		  				  shieldingThickness,
+		  				  0.);
+
+  // Main subtraction
+  G4SubtractionSolid* hollow_L = new G4SubtractionSolid(shieldingName,
+		  					solid_L,
+							sub_L,
+							rotm,
+						       subtraction_shift);
+
+
+  // Removes middle walls created by finite subtraction box thickness
+  hollow_L = new G4SubtractionSolid(shieldingName,
+ 					hollow_L,
+					middleWallRemover,
+					rotm,
+ 				        G4ThreeVector(outerDim/2.,
+						shieldingThickness*2.,
+						0.)); 
+  
+  // Removes second inner wall
+  rotm->rotateY(90.*deg);
+  hollow_L = new G4SubtractionSolid(shieldingName,
+ 					hollow_L,
+					middleWallRemover,
+					rotm,
+ 				        G4ThreeVector(0.,
+						shieldingThickness*2.,
+						outerDim/2.)); 
+  
+ 
+  // Final logical volume to be returned
+  G4LogicalVolume* logic_L = new G4LogicalVolume(hollow_L,
+						shieldingMaterial,
+						shieldingName);  
+
+
+  return logic_L;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
