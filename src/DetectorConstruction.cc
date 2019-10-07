@@ -164,7 +164,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double detectorElectronicsZ = 10.185*mm;
   G4double boxInnerSizeXY  = 90.*mm * 0.5;
   G4double boxInnerSizeZ   = 50.*mm * 0.5;
-  G4double windowThickness = 1.*mm;
+  G4double windowThickness = 0.5*mm;		// 2 windows, each 0.5 mm
   G4double frontEndBoardThickness = 2.86*mm;
   G4double detectorApertureSpacing = 20.*mm;
 
@@ -246,8 +246,6 @@ boxInnerSizeXY+2*shieldingThickness3);
   // empty rotation matrix for SubtractionSolid constructor
   G4RotationMatrix* rotm = new G4RotationMatrix();   
   
-  G4double windowPlacement = boxInnerSizeZ + outerShieldingThickness + windowThickness*1.5;
-
 
   // Hollows out outer shielding 
   G4SubtractionSolid* shieldingBox1sub = 
@@ -430,7 +428,18 @@ boxInnerSizeXY+2*shieldingThickness3);
 
 
   // Top beryllium window
-  Tm.setX(0.); Tm.setY(windowPlacement-5.*mm); Tm.setZ(0.);
+  G4double windowPlacement = detectorPosY + detectorApertureSpacing 
+	  				  + detectorZ/2.;
+
+  Tm.setX(0.); Tm.setY(windowPlacement+windowThickness/2.+1.5*mm/2.); 
+  Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+
+  detectorAssembly->AddPlacedVolume(logicalTopWindow, Tr);
+  
+  // Bottom beryllium window
+  Tm.setX(0.); Tm.setY(windowPlacement-windowThickness/2.-1.5*mm/2.); 
+  Tm.setZ(0.);
   Tr = G4Transform3D(Rm, Tm); 
 
   detectorAssembly->AddPlacedVolume(logicalTopWindow, Tr);
