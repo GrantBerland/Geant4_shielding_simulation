@@ -32,10 +32,13 @@
 #define SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
+#include "G4ThreeVector.hh"
 #include "globals.hh"
 
-class EventAction;
 
+
+class EventAction;
+class SteppingMessenger;
 class G4LogicalVolume;
 
 /// Stepping action class
@@ -50,11 +53,17 @@ class SteppingAction : public G4UserSteppingAction
 
     // method from the base class
     virtual void UserSteppingAction(const G4Step*);
+    void LogParticle(G4ThreeVector, G4ThreeVector, G4double, G4String, G4String);
 
-
+    void SetHitFileName(G4String fileName){backgroundFileName = fileName;};
+    void SetSignalFileName(G4String fileName){signalFileName = fileName;};
+  
   private:
     EventAction*  fEventAction;
     G4LogicalVolume* fScoringVolume;
+    G4String backgroundFileName;
+    G4String signalFileName;
+    SteppingMessenger* fSteppingMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

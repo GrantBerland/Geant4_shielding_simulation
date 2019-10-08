@@ -23,47 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2TrackerSD.hh 69706 2013-05-13 09:12:40Z gcosmo $
+// $Id: QBBC.hh 66892 2013-01-17 10:57:59Z gunter $
 //
-/// \file B2TrackerSD.hh
-/// \brief Definition of the B2TrackerSD class
+//---------------------------------------------------------------------------
+//
+// ClassName:  QBBC
+//
+// Author: 11 April 2006 V. Ivanchenko
+//
+// Modified:
+// 15.04.2007 set glauber=true (V.Ivanchenko)
+//----------------------------------------------------------------------------
+//
+#ifndef QBBC_h
+#define QBBC_h 1
 
-#ifndef B2TrackerSD_h
-#define B2TrackerSD_h 1
+#include "globals.hh"
+#include "G4VModularPhysicsList.hh"
 
-#include "G4VSensitiveDetector.hh"
-
-#include "B2TrackerHit.hh"
-
-#include <vector>
-
-class G4Step;
-class G4HCofThisEvent;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-/// B2Tracker sensitive detector class
-///
-/// The hits are accounted in hits in ProcessHits() function which is called
-/// by Geant4 kernel at each step. A hit is created with each step with non zero 
-/// energy deposit.
-
-class B2TrackerSD : public G4VSensitiveDetector
+class QBBC_modified : public G4VModularPhysicsList
 {
-  public:
-    B2TrackerSD(const G4String& name, 
-                const G4String& hitsCollectionName);
-    virtual ~B2TrackerSD();
-  
-    // methods from base class
-    virtual void   Initialize(G4HCofThisEvent* hitCollection);
-    virtual G4bool ProcessHits(G4Step* step, G4TouchableHistory* history);
-    virtual void   EndOfEvent(G4HCofThisEvent* hitCollection);
+public:
 
-  private:
-    B2TrackerHitsCollection* fHitsCollection;
+  QBBC_modified(G4int ver = 1, const G4String& type = "QBBC");
+
+  virtual ~QBBC_modified();
+
+  virtual void SetCuts();
+
+private:
+
+  // copy constructor and hide assignment operator
+  QBBC_modified(QBBC_modified &);
+  QBBC_modified & operator=(const QBBC_modified &right);
+
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
+
+
+

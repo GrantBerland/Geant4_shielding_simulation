@@ -32,7 +32,6 @@
 #include "ActionInitialization.hh"
 #include "RunAction.hh"
 
-
 // Multithreading header support
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -45,7 +44,7 @@
 #include "FTFP_BERT.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4PhysListFactory.hh"
-#include "QBBC.hh"
+#include "QBBC_modified.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -57,7 +56,7 @@
 
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-
+#include <time.h>
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,11 +72,24 @@ int main(int argc,char** argv)
 
   // Choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  // set the seeds
+  long seeds[2];
+  time_t systime = time(NULL);
+  
+  // Seed built in c-rand engine
+  srand (systime);
+
+  // Geant rand engine
+  seeds[0] = (long) systime;
+  seeds[1] = (long) (systime*G4UniformRand());
+  G4Random::setTheSeeds(seeds);
 
   // Construct the default run manager
-#ifndef G4MULTITHREADED
+#ifdef G4MULTITHREADED
+  // Enforce single threading
+  //G4RunManager* runManager = new G4RunManager;
   G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4);  // (Grant's computer)
+  runManager->SetNumberOfThreads(3);  
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
@@ -85,9 +97,16 @@ int main(int argc,char** argv)
 
   // Physics list
   G4PhysListFactory factory;
+
+  // Stock QBBC list
   //G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("QBBC");
-  G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("FTFP_BERT_LIV");
-  physicsList->SetVerboseLevel(1);
+
+  // Livermore physics list
+  //G4VModularPhysicsList* physicsList = factory.GetReferencePhysList("FTFP_BERT_LIV");
+  
+  // Modified QBBC list
+  QBBC_modified* physicsList = new QBBC_modified();
+  
   runManager->SetUserInitialization(new DetectorConstruction());
   runManager->SetUserInitialization(physicsList);
   runManager->SetUserInitialization(new ActionInitialization());

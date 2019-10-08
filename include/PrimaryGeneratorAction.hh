@@ -37,7 +37,7 @@
 #include "globals.hh"
 
 class G4ParticleGun;
-//class G4GeneralParticleSource;
+class PrimaryGeneratorMessenger;
 class G4Event;
 class G4Box;
 
@@ -46,7 +46,7 @@ class G4Box;
 /// The default kinematic is a 6 MeV gamma, randomly distribued 
 /// in front of the phantom across 80% of the (X,Y) phantom size.
 
-struct LossConeSample{
+struct ParticleSample{
 G4double x, y, z;
 G4double xDir, yDir, zDir;
 G4double energy;
@@ -55,23 +55,45 @@ G4double energy;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction();    
+    PrimaryGeneratorAction();
     virtual ~PrimaryGeneratorAction();
 
     // method from the base class
     virtual void GeneratePrimaries(G4Event* anEvent);         
 
-    void GenerateLossConeSample(LossConeSample* r);
-  
-    // // method to access particle gun
+    // Statistical selections of part. energy, position, and direction
+    void GenerateLossConeElectrons(ParticleSample* r);
+    void GenerateTrappedElectrons(ParticleSample* r);
+    void GenerateSignalSource(ParticleSample* r);
+    
+    // Methods for messenger class
+    void SetWhichParticle(G4int partSelection) {fWhichParticle = partSelection;};
+
+    void SetFoldingEnergy(G4double E0) { E_folding = E0; };
+    void SetEventAngle(G4double ang) { photonPhiLimitDeg = ang; };
+    
+    // Method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
-  
+
   private:
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
-    // G4GeneralParticleSource* fParticleGun;
-    // G4Box* fEnvelopeBox;
+    
     G4double E_folding;
-    G4double E_shift;
+    G4double fPI;
+    G4double sphereR;
+    G4double lossConeAngleDeg;
+    G4double photonPhiLimitDeg;
+
+    G4int    fWhichParticle;
+    G4ParticleDefinition* electronParticle; 
+    G4ParticleDefinition* photonParticle; 
+    PrimaryGeneratorMessenger* fPrimaryGeneratorMessenger;
+
+    /*
+    const G4double photonEnergyProb100keV[64];
+    const G4double photonEnergyProb200keV[64];
+    const G4double photonEnergyProb300keV[64];
+    */
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

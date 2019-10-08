@@ -36,20 +36,20 @@
 //#include "G4Tubs.hh"
 //#include "G4Cons.hh"
 //#include "G4Orb.hh"
-//#include "G4Sphere.hh"
+#include "G4Sphere.hh"
 //#include "G4GenericPolycone.hh"
 #include "G4Trd.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
 //#include "G4IntersectionSolid.hh"
+#include "G4UnionSolid.hh"
 #include "G4RotationMatrix.hh"
 #include "G4SolidStore.hh"
 #include "G4SDManager.hh"
-#include "B2TrackerSD.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4AssemblyVolume.hh"
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
 : G4VUserDetectorConstruction(),
@@ -69,32 +69,37 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4NistManager* nist = G4NistManager::Instance();
 
   // Envelope parameters
-  //
-  G4double env_sizeXY = 50.*cm, env_sizeZ = 50.*cm;
+  G4double env_sizeXY = 85.*cm; 
 
   G4bool checkOverlaps    = true;
-  G4bool validateSchema   = false;
-
-  fParser.Read("./top_v2.gdml", validateSchema);
-  G4SolidStore* solids = G4SolidStore::GetInstance();
-
-
-    // Material: Vacuum
-    //TODO: check pressures, environment for Van Allen belt altitudes
+  
+  // Material: Vacuum
   G4Material* vacuum_material = new G4Material("Vacuum",
               1.0 , 1.01*g/mole, 1.0E-25*g/cm3,
               kStateGas, 2.73*kelvin, 3.0E-18*pascal );
   
+  G4Sphere* worldBox = new G4Sphere("World", 
+		  0.*cm, 0.6*env_sizeXY, 
+		  0.*deg , 360.*deg,
+		  0.*deg , 180.*deg);
 
-  G4LogicalVolume* logicWorld = new G4LogicalVolume((*solids)[0],
-							     vacuum_material,
-							     "World");
+  G4LogicalVolume* logicWorld = new G4LogicalVolume(worldBox,
+						     vacuum_material,
+						     "World");
 
+  G4VPhysicalVolume* physWorld = new G4PVPlacement(0,
+		  			     G4ThreeVector(),
+					     logicWorld,
+					     "World",
+					     0,
+					     false,
+					     0);
 
-
-  G4Box* solidEnv =
-    new G4Box("Envelope",                    //its name
-        0.5*env_sizeXY, 0.5*env_sizeXY, 0.5*env_sizeZ); //its size
+  G4Sphere* solidEnv =
+    new G4Sphere("Envelope",                    //its name
+		  0.*cm, 0.5*env_sizeXY, 
+		  0.*deg , 360.*deg,
+		  0.*deg , 180.*deg);
 
   G4LogicalVolume* logicEnv =
     new G4LogicalVolume(solidEnv,            //its solid
@@ -146,122 +151,584 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   FR4->AddMaterial(SiO2, 0.528);
   FR4->AddMaterial(Epoxy, 0.472);
 
+  //////////////////////////////////////////
+  /////////// Detector Construction ////////
+  //////////////////////////////////////////
+
+  // 0.5 factor due to full height definition
+  G4double outerShieldingThickness = 15.*mm; // PE 
+  G4double shieldingThickness2     = 3.5*mm; // W
+  G4double shieldingThickness3     = 2.5*mm; // Sn
+  G4double detectorXY      = 40.*mm;
+  G4double detectorZ       = 5.*mm;
+  G4double detectorElectronicsZ = 10.185*mm;
+  G4double boxInnerSizeXY  = 90.*mm * 0.5;
+  G4double boxInnerSizeZ   = 50.*mm * 0.5;
+  G4double windowThickness = 0.5*mm;		// 2 windows, each 0.5 mm
+  G4double frontEndBoardThickness = 2.86*mm;
+  G4double detectorApertureSpacing = 20.*mm;
+
+  /////////////////////////////////////////
+  //////////////// Geometry ///////////////
+  /////////////////////////////////////////
+
+  G4VSolid* detectorBox = new G4Box("Detector",
+		  		    0.5*detectorXY,
+				    0.5*detectorZ,
+				    0.5*detectorXY);
+
+  G4VSolid* detectorElectronics = new G4Box("BottomFR4",
+		  		    0.5*detectorXY,
+				    0.5*detectorElectronicsZ,
+				    0.5*detectorXY);
+
+  G4VSolid* frontEndBoard = new G4Box("Electronics",
+		  		    boxInnerSizeXY-5.*mm,
+				    0.5*frontEndBoardThickness,
+				    boxInnerSizeXY-5.*mm);
+
+  G4double windowXZadjustment = 3.*mm;
+  G4VSolid* topWindow = new G4Box("top_Be_Window",
+		  		    boxInnerSizeXY-windowXZadjustment,
+				    0.5*windowThickness,
+				    boxInnerSizeXY-windowXZadjustment);
 
 
+  // Bus structure boxes
+  G4VSolid* busBackPlate = new G4Box("Back-plate",
+		        14.5*cm,
+			8.5*mm/2.,
+			14.5*cm);
 
-  for(unsigned int i = 0; i < solids->size(); i++){
-    G4VSolid* psol = (*solids)[i];
-    G4cout << "Solid ID: " << i << " Name: " << psol->GetName() << G4endl;
-    };
+  G4VSolid* busFrontPlate = new G4Box("Front-plate",
+		        7.*cm,
+			8.5*mm/2.,
+			10.65*cm+0.25*cm/2+4.*cm);
 
-
-  G4VPhysicalVolume* physWorld =
-    new G4PVPlacement(0,                     //no rotation
-                      G4ThreeVector(),       //at (0,0,0)
-                      logicWorld,            //its logical volume
-                      "World",               //its name
-                      0,                     //its mother  volume
-                      false,                 //no boolean operation
-                      0,                     //copy number
-                      checkOverlaps);        //overlaps checking
- 
- G4LogicalVolume* logicShielding = new G4LogicalVolume((*solids)[1],
-					nist->FindOrBuildMaterial("G4_Al"),
-							     "Shielding");
-
-
-  new G4PVPlacement(0,                     //no rotation
-                  G4ThreeVector(0.,0.,-10.*cm),                 //at position
-                  logicShielding,          //its logical volume
-		  "Shielding",           //its name
-		  logicEnv,                //its mother  volume
-		  false,                   //no boolean operation:u
-	 	  0,                       //copy number
-		  checkOverlaps);          //overlaps checking
-
-
-  G4LogicalVolume* logicWindows = new G4LogicalVolume((*solids)[2],
-					nist->FindOrBuildMaterial("G4_Be"),
-							     "Windows");
-  new G4PVPlacement(0,                       //no rotation
-	            G4ThreeVector(0.,0.,0.), //its logical volume
-	            logicWindows,            //at position
-	   	    "Windows",               //its name
-	 	    logicShielding,                //its mother  volume
-		    false,                   //no boolean operation:u
-		    0,                       //copy number
-		    checkOverlaps);          //overlaps checking
-
+  G4VSolid* busSidePlate = new G4Box("Side-plate",
+		        14.*cm,
+			6.35*mm/2.,
+			7.*cm);
+  
+  G4VSolid* busThickPlate = new G4Box("Thick-plate",
+		        14.*cm,
+			59.*mm/2.,
+			7.*cm);
 
   
-  G4LogicalVolume* logicPlates = new G4LogicalVolume((*solids)[6],
-						nist->FindOrBuildMaterial("G4_W"),
-								      "Plates");
-
-
-  new G4PVPlacement(0,                     //no rotation
-		  G4ThreeVector(0.,0.,0.),                 //at position
-		  logicPlates,          //its logical volume
-		  "Plates",           //its name
-		  logicShielding,                //its mother  volume
-		  false,                   //no boolean operation:u
-		  0,                       //copy number
-		  checkOverlaps);          //overlaps checking
-
-
-
-  G4LogicalVolume* logicDetectorTop = new G4LogicalVolume((*solids)[3],
-								CZT,
-							      "DetectorCZT");
-  new G4PVPlacement(0,                     //no rotation
-	 	   G4ThreeVector(0.,0.,0.),   //at position
-	 	   logicDetectorTop,          //its logical volume
-		   "DetectorCZT",              //its name
-		   logicPlates,         //its mother  volume
-		   false,                  //no boolean operation:u
-		    0,                     //copy number
-	  	   checkOverlaps);         //overlaps checking
-	 
-  G4LogicalVolume* logicDetectorBottom = new G4LogicalVolume((*solids)[4],
-								FR4,
-							      "DetectorFR4");
-  new G4PVPlacement(0,                     //no rotation
-	 	   G4ThreeVector(0.,0.,0.),   //at position
-	 	   logicDetectorBottom,          //its logical volume
-		   "DetectorFR4",              //its name
-		   logicPlates,         //its mother  volume
-		   false,                  //no boolean operation:u
-		    0,                     //copy number
-	  	   checkOverlaps);         //overlaps checking
  
-  G4LogicalVolume* logicBaffles = new G4LogicalVolume((*solids)[5],
-						nist->FindOrBuildMaterial("G4_W"),
-								      "Baffles");
+  G4double shieldingHeight = 5.*cm;
+  G4double shieldingXZ     = -4.30*cm; 
+  // Polyethylene shielding
+  G4String name1 = "PE_Shielding";  
+
+  G4double box1OuterDim = 120.*mm;
+  G4double boxDepth1    = 70.*mm;
+  G4double aBit 	= 4.*mm;
+  G4double aLittleBit 	= 0.6*mm;
+  
+  G4LogicalVolume* logic_shielding1 = CreateLshielding(box1OuterDim,
+		  boxDepth1,
+		  outerShieldingThickness,
+		  0.*mm,
+		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
+		  name1); 
+  
+  new G4PVPlacement(0,
+		G4ThreeVector(shieldingXZ, shieldingHeight, shieldingXZ),
+		  logic_shielding1,
+		  name1,
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+  
+  // Tungsten shielding
+  G4String name2 = "W_Shielding"; 
+  
+  G4double box2OuterDim = box1OuterDim - outerShieldingThickness - aBit;
+  G4double boxDepth2    = boxDepth1 - outerShieldingThickness;
+  
+  G4LogicalVolume* logic_shielding2 = CreateLshielding(box2OuterDim,
+			boxDepth2+aBit,
+		  	shieldingThickness2,
+			1.*mm,
+		  	nist->FindOrBuildMaterial("G4_W"),
+		  	name2); 
+  
+  
+  new G4PVPlacement(0,
+		  G4ThreeVector(shieldingXZ-aLittleBit,shieldingHeight,shieldingXZ-aLittleBit),
+		  logic_shielding2,
+		  name2,
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+ 
+  // Tin shielding
+  G4String name3 = "Sn_Shielding"; 
+  
+  G4double box3OuterDim = box2OuterDim - shieldingThickness2 - aBit*2;
+  G4double boxDepth3    = boxDepth2 - shieldingThickness2; 
+  G4LogicalVolume* logic_shielding3 = CreateLshielding(box3OuterDim,
+			boxDepth3,
+		  	shieldingThickness3,
+			0.*mm,
+		  	nist->FindOrBuildMaterial("G4_Sn"),
+		  	name3); 
+  
+  
+  new G4PVPlacement(0,
+		  G4ThreeVector(shieldingXZ-aLittleBit,
+			  	shieldingHeight,
+			  	shieldingXZ-aLittleBit),
+		  logic_shielding3,
+		  name3,
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+  
+  
+  
+  //////////////////////////////////////////
+  ///////////// Subtractions ///////////////
+  //////////////////////////////////////////
 
 
-  new G4PVPlacement(0,                     //no rotation
-		  G4ThreeVector(0.,0.,0.),                 //at position
-		  logicBaffles,          //its logical volume
-		  "Baffles",           //its name
-		  logicShielding,                //its mother  volume
-		  false,                   //no boolean operation:u
-		  0,                       //copy number
-		  checkOverlaps);          //overlaps checking
+  // empty rotation matrix for SubtractionSolid constructor
+  G4RotationMatrix* rotm = new G4RotationMatrix();   
+  
+
+  ////////////////////////////////////////////
+  ////////////// Logical Volumes /////////////
+  ////////////////////////////////////////////
+
+  
+  G4LogicalVolume* logicDetector = new G4LogicalVolume(detectorBox,
+							CZT,
+							"Detector");
+  
+  G4LogicalVolume* logicDetectorElectronics = new G4LogicalVolume(detectorElectronics,
+							FR4,
+							"BottomFR4");
+  
+  G4LogicalVolume* logicFrontEndBoard = new G4LogicalVolume(frontEndBoard,
+							FR4,
+							"Electronics");
+  
+  
+  G4LogicalVolume* logicalTopWindow = new G4LogicalVolume(topWindow,
+		  nist->FindOrBuildMaterial("G4_Be"),
+		  "top_Be_Window");
+  
+
+  // Bus structures
+
+  G4LogicalVolume* logicalBusBackPlate = new G4LogicalVolume(busBackPlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Back-plate");
+
+  G4LogicalVolume* logicalBusFrontPlate = new G4LogicalVolume(busFrontPlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Front-plate");
+
+  G4LogicalVolume* logicalBusSidePlate = new G4LogicalVolume(busSidePlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Side-plate");
+
+  G4LogicalVolume* logicalBusThickPlate = new G4LogicalVolume(busThickPlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Thick-plate");
+
+  ////////////////////////////////////////////////
+  ///////////////// Placements ///////////////////
+  ////////////////////////////////////////////////
+  
+  G4AssemblyVolume* detectorAssembly = new G4AssemblyVolume();
+
+  G4RotationMatrix Rm;
+  G4ThreeVector    Tm;
+  G4Transform3D    Tr;
+
+  // Front end electronics board
+  Tm.setX(0.); Tm.setY(-2.*cm); Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+  detectorAssembly->AddPlacedVolume(logicFrontEndBoard, Tr);
+  
+  // Call method to return coded aperture sub solid, logical volume below
+  G4SubtractionSolid* logicAp1 = CreateCodedAperture();
+  
+  G4LogicalVolume* logic_aperature_base =
+    new G4LogicalVolume(logicAp1,            //its solid
+                        nist->FindOrBuildMaterial("G4_W"), // material
+                        "Aperature-base");         //its name
+  
+  G4double detectorPosX = -21.*mm;
+  G4double detectorPosZ = -21.*mm;
+  G4double detectorPosY = frontEndBoardThickness + 0.5*cm;
+
+  // position multiplier arrays
+  G4int pm1[4] = {1, -1, 1, -1};
+  G4int pm2[4] = {1, 1, -1, -1};
+
+  // Create all Redlen detectors and apertures per assembly
+  for(G4int nDet=0; nDet<4;nDet++)
+  {
+ 
+    // CZT Detector
+    Tm.setX(pm1[nDet]*detectorPosX); 
+    Tm.setY(-1.25*cm+0.1*mm+detectorPosY); 
+    Tm.setZ(pm2[nDet]*detectorPosZ);
+    
+    Tr = G4Transform3D(Rm, Tm); 
+  
+    detectorAssembly->AddPlacedVolume(logicDetector, Tr);
+    
+
+    // FR4 Detector
+    Tm.setX(pm1[nDet]*detectorPosX); 
+    Tm.setY(-2.*cm+detectorPosY); 
+    Tm.setZ(pm2[nDet]*detectorPosZ);
+    
+    Tr = G4Transform3D(Rm, Tm); 
+
+    detectorAssembly->AddPlacedVolume(logicDetectorElectronics, Tr);
+  
+    // Coded Aperture
+    Tm.setX(pm1[nDet]*detectorPosX);
+    Tm.setY(detectorPosY + detectorApertureSpacing + detectorZ/2.);
+    Tm.setZ(pm2[nDet]*detectorPosZ);
+    
+    Rm.rotateX(90.*deg);
+    Tr = G4Transform3D(Rm, Tm); 
+
+    detectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);
+    Rm.rotateX(-90.*deg);
+    
+   } 
 
 
 
-  fScoringVolume = logicDetectorTop;
+  // Top beryllium window
+  G4double windowPlacement = detectorPosY + detectorApertureSpacing 
+	  				  + detectorZ/2.;
 
-  // Register the detector as a sensitive detector
-  B2TrackerSD* aTrackerSD = new B2TrackerSD("DetectorCZT","TrackerHitsCollection");
-  G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
-  SetSensitiveDetector("DetectorCZT", aTrackerSD, true);
+  Tm.setX(0.); Tm.setY(windowPlacement+windowThickness/2.+1.5*mm/2.); 
+  Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+
+  detectorAssembly->AddPlacedVolume(logicalTopWindow, Tr);
+  
+  // Bottom beryllium window
+  Tm.setX(0.); Tm.setY(windowPlacement-windowThickness/2.-1.5*mm/2.); 
+  Tm.setZ(0.);
+  Tr = G4Transform3D(Rm, Tm); 
+
+  detectorAssembly->AddPlacedVolume(logicalTopWindow, Tr);
+  
+  
+ 
+  // Bus structure placements
+/*  
+  G4double busHeight = 1.*cm;
+
+  G4RotationMatrix* wallRotm = new G4RotationMatrix();
+  wallRotm->rotateZ(90.*deg);
+
+  new G4PVPlacement(0,
+		  G4ThreeVector(0., -7.0*cm+busHeight, 0.),
+		  logicalBusBackPlate,
+		  "Back-plate",
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+
+  
+  new G4PVPlacement(wallRotm,
+		  G4ThreeVector(-14.*cm-8.5*mm/2, busHeight+0.65*cm, 0.25*cm/2),
+		  logicalBusFrontPlate,
+		  "Front-plate",
+		  logicEnv,
+		  false,
+		  0,
+		  checkOverlaps);
+
+  
+  new G4PVPlacement(wallRotm,
+		  G4ThreeVector(14.*cm+8.5*mm/2, busHeight+0.65*cm, 0.25*cm/2),
+		  logicalBusFrontPlate,
+		  "Front-plate",
+		  logicEnv,
+		  false,
+		  1,
+		  checkOverlaps);
+
+  G4RotationMatrix* sideWallRotm = new G4RotationMatrix();
+  sideWallRotm->rotateX(90.*deg);
+
+  new G4PVPlacement(sideWallRotm,
+		  G4ThreeVector(0., busHeight+0.5*cm, -14.5*cm),
+		  logicalBusSidePlate,
+		  "Side-plate",
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+
+  new G4PVPlacement(sideWallRotm,
+		  G4ThreeVector(0., busHeight+5.*mm, 14.5*cm+59.*mm/2),
+		  logicalBusThickPlate,
+		  "Thick-plate",
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+  */
+  // Place the 3 copies of the detector assemblies using the position 
+  // multiplier arrays from above
+  unsigned int numDetectorAssemblies = 3;
+  G4double dimX = -4.2*cm;
+  G4double dimZ = -4.2*cm;
+  Rm.rotateY(0.*deg);
+ 
+  G4double detectorHeight = 50.*mm;
+  for(unsigned int i=0; i<numDetectorAssemblies; i++){	 
+    Tm.setX(pm1[i]*dimX); Tm.setY(detectorHeight); Tm.setZ(pm2[i]*dimZ);
+    Tr = G4Transform3D(Rm, Tm);
+
+    detectorAssembly->MakeImprint(logicEnv, Tr);
+
+  }
 
 
   // always return the physical World
   return physWorld;
 }
 
+G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
+{
+  G4RotationMatrix Rm;
+  G4ThreeVector    Tm;
+  G4Transform3D    Tr;
+  
+  G4double boxXY 	   = 4.*cm;
+  G4double boxZ  	   = 1.5*mm;
+  G4double aperatureSquare = 0.2*cm;
 
+  // added dimension to "fill the gap" between detectors
+  G4Box* aperature_base = new G4Box("Aperature-base",
+		   		    (boxXY+2.*mm)/2.,
+				    (boxXY+2.*mm)/2.,
+				    boxZ/2.);
+
+  G4RotationMatrix* rotm = new G4RotationMatrix();   
+
+  G4Box* coded_box = new G4Box("Coded-box",
+		  		aperatureSquare/2.,
+				aperatureSquare/2.,
+				boxZ+5.*mm);
+  
+  
+  G4UnionSolid* swapSolid;
+  G4String placementXY_str; 
+  G4double placementX, placementY; 
+  G4String token;
+  std::ifstream placementFile("coded_aperture_array.txt", std::ios_base::in);
+  
+  // Get number of lines in file
+  int numberOfBoxes = 0;
+  while(getline(placementFile, placementXY_str, '\n'))
+    { numberOfBoxes++; }
+  
+  placementFile.close();
+
+
+  // Reopen file to start from first line
+  placementFile.open("coded_aperture_array.txt", std::ios_base::in);
+  getline(placementFile, placementXY_str, '\n');
+  
+  token = placementXY_str.substr(
+		  0, 
+  		  placementXY_str.find(',')); 
+  
+  placementX = std::stod(token);
+  
+  token = placementXY_str.substr(
+		  placementXY_str.find(',')+1, 
+		  placementXY_str.find('\n'));
+  
+  placementY = std::stod(token);
+  
+  
+  G4UnionSolid* coded_boxes = new G4UnionSolid("Combined-boxes",
+		  				coded_box,
+						coded_box,
+						rotm,
+						G4ThreeVector(
+							placementX*cm,
+							placementY*cm,
+							0.)); 
+  
+  // starts at 1 since logicAp1 uses first line of file 
+  for(int i=1; i<numberOfBoxes; i++)
+  {
+    getline(placementFile, placementXY_str, '\n');
+
+    token = placementXY_str.substr(
+		  0, 
+  		  placementXY_str.find(',')); 
+    
+    placementX = std::stod(token); 
+ 
+    token = placementXY_str.substr(
+		  placementXY_str.find(',')+1, 
+		  placementXY_str.find('\n'));
+    
+    placementY = std::stod(token); 
+
+    swapSolid = new G4UnionSolid("Aperature-base",
+	  			   coded_boxes,
+	  			   coded_box,
+	  			   rotm,
+	  			   G4ThreeVector(placementX*cm,
+					         placementY*cm,
+						 0.));
+ 
+    coded_boxes = swapSolid;
+  }
+  
+  placementFile.close();
+
+  G4SubtractionSolid* logicAp1 = 
+	    new G4SubtractionSolid("Aperature-base",
+	  			   aperature_base,
+	  			   coded_boxes,
+	  			   rotm,
+	  			   G4ThreeVector(0.,0.,0.));
+  
+  return logicAp1; 
+}
+
+G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
+		G4double    boxDepth,				
+		G4double    shieldingThickness,
+		G4double    finiteThicknessOffset, // fuck this parameter
+		G4Material* shieldingMaterial,
+		G4String    shieldingName)
+{
+  // Units assigned at function call!!
+  
+  G4Box* mainBlock = new G4Box("B1",
+		   	    (outerDim+shieldingThickness)/2.,
+			    (boxDepth+shieldingThickness)/2.,
+			    (outerDim+shieldingThickness)/2.);
+  
+  G4Box* sideBlock = new G4Box("B1_s",
+		(outerDim+shieldingThickness)/2.+finiteThicknessOffset,
+			    (boxDepth+shieldingThickness)/2.,
+			    (outerDim+shieldingThickness)/2.);
+
+
+  // Subtraction box, made arbitrarily tall to remove 
+  // top wall of shielding
+  G4Box* subtraction_block = new G4Box("B1",
+		   	    outerDim/2.,
+			    boxDepth/2.+shieldingThickness,
+			    outerDim/2.);
+
+  G4Box* sideSubtraction_block = new G4Box("B1_s",
+		   	    (outerDim/2. + finiteThicknessOffset),
+			    (boxDepth/2.+shieldingThickness),
+			    outerDim/2.);
+  
+  
+  G4Box* middleWallRemover = new G4Box("MWR",
+		 shieldingThickness*2.5, 			
+		 boxDepth/2.+shieldingThickness,
+		 outerDim/2.);
+  
+  
+  // Empty rotation matrix for union and subtraction solids
+  G4RotationMatrix* rotm = new G4RotationMatrix();
+  
+  // Main L shape of shielding, union of two blocks
+  G4UnionSolid* solid_L = new G4UnionSolid("solid-L",
+		  		mainBlock,
+				sideBlock,
+				rotm,
+				G4ThreeVector(outerDim+shieldingThickness+finiteThicknessOffset,
+		  			0,
+					0));
+  // Union of 3rd block
+  rotm->rotateY(90.*deg);
+  solid_L = new G4UnionSolid("solid-L",
+		  		solid_L,
+				sideBlock,
+				rotm,
+				G4ThreeVector(0,
+		  			      0,
+		 outerDim+shieldingThickness+finiteThicknessOffset));
+
+  // (unrotate)
+  rotm->rotateY(-90.*deg);
+  
+  // L shape to subtraction from main L shielding, union of 2 blocks 
+  G4UnionSolid* sub_L = new G4UnionSolid("sub-L",
+		  			subtraction_block,
+					sideSubtraction_block,
+					rotm,
+	G4ThreeVector(outerDim+shieldingThickness+finiteThicknessOffset,
+		  			0,
+					0));
+  
+  // Union of 3rd block fo subtracting off from the L-shape
+  sub_L = new G4UnionSolid("sub-L",
+	  		   sub_L,
+			   sideSubtraction_block,
+			   rotm,
+			   G4ThreeVector(0,
+		  		         0,
+		 		         outerDim+shieldingThickness+finiteThicknessOffset));
+  
+
+  // Upward shift to ensure top of shielding is removed,
+  // and bottom has thickness shieldingThickness
+  G4ThreeVector subtraction_shift = G4ThreeVector(0.,
+		  				  shieldingThickness,
+		  				  0.);
+
+  // Main subtraction
+  G4SubtractionSolid* hollow_L = new G4SubtractionSolid(shieldingName,
+		  					solid_L,
+							sub_L,
+							rotm,
+						       subtraction_shift);
+
+
+  // Removes middle walls created by finite subtraction box thickness
+  hollow_L = new G4SubtractionSolid(shieldingName,
+ 					hollow_L,
+					middleWallRemover,
+					rotm,
+ 				        G4ThreeVector(outerDim/2.,
+						shieldingThickness,
+						0.)); 
+  
+  // Removes second inner wall
+  rotm->rotateY(90.*deg);
+  hollow_L = new G4SubtractionSolid(shieldingName,
+ 					hollow_L,
+					middleWallRemover,
+					rotm,
+ 				        G4ThreeVector(0.,
+						shieldingThickness,
+						outerDim/2.)); 
+  
+ 
+  // Final logical volume to be returned
+  G4LogicalVolume* logic_L = new G4LogicalVolume(hollow_L,
+						shieldingMaterial,
+						shieldingName);  
+
+
+  return logic_L;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
