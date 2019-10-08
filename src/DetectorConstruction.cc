@@ -167,6 +167,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double windowThickness = 0.5*mm;		// 2 windows, each 0.5 mm
   G4double frontEndBoardThickness = 2.86*mm;
   G4double detectorApertureSpacing = 20.*mm;
+  G4double detectorHeight = 50.*mm;
 
   /////////////////////////////////////////
   //////////////// Geometry ///////////////
@@ -230,7 +231,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4LogicalVolume* logic_shielding1 = CreateLshielding(box1OuterDim,
 		  boxDepth1,
 		  outerShieldingThickness,
-		  0.*mm,
+		  -25.*mm,
 		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 		  name1); 
   
@@ -251,7 +252,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4LogicalVolume* logic_shielding2 = CreateLshielding(box2OuterDim,
 			boxDepth2+aBit,
 		  	shieldingThickness2,
-			1.*mm,
+			-7.*mm,
 		  	nist->FindOrBuildMaterial("G4_W"),
 		  	name2); 
   
@@ -315,10 +316,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 							FR4,
 							"Electronics");
   
-  
-  G4LogicalVolume* logicalTopWindow = new G4LogicalVolume(topWindow,
-		  nist->FindOrBuildMaterial("G4_Be"),
-		  "top_Be_Window");
+  G4LogicalVolume* logicalTopWindow = CreateBerylliumWindow(
+		boxInnerSizeXY*2, 
+		windowThickness,
+		nist->FindOrBuildMaterial("G4_Be"),
+		"top_Be_Window");
   
 
   // Bus structures
@@ -412,18 +414,26 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double windowPlacement = detectorPosY + detectorApertureSpacing 
 	  				  + detectorZ/2.;
 
-  Tm.setX(0.); Tm.setY(windowPlacement+windowThickness/2.+1.5*mm/2.); 
-  Tm.setZ(0.);
-  Tr = G4Transform3D(Rm, Tm); 
-
-  detectorAssembly->AddPlacedVolume(logicalTopWindow, Tr);
   
-  // Bottom beryllium window
-  Tm.setX(0.); Tm.setY(windowPlacement-windowThickness/2.-1.5*mm/2.); 
-  Tm.setZ(0.);
-  Tr = G4Transform3D(Rm, Tm); 
-
-  detectorAssembly->AddPlacedVolume(logicalTopWindow, Tr);
+  new G4PVPlacement(0,
+		  G4ThreeVector(shieldingXZ-aLittleBit,
+	detectorHeight+windowPlacement+windowThickness/2.+1.5*mm/2.,
+			  	shieldingXZ-aLittleBit),
+		  logicalTopWindow,
+		  "top_Be_Window",
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+  
+  new G4PVPlacement(0,
+		  G4ThreeVector(shieldingXZ-aLittleBit,
+	     detectorHeight+windowPlacement+windowThickness/2.-1.5*mm,
+			  	shieldingXZ-aLittleBit),
+		  logicalTopWindow,
+		  "bottom_Be_Window",
+		  logicEnv,
+		  false,
+		  checkOverlaps);
   
   
  
@@ -432,7 +442,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4RotationMatrix* wallRotm = new G4RotationMatrix();
   wallRotm->rotateZ(90.*deg);
-
+  
   new G4PVPlacement(0,
 		  G4ThreeVector(0., -7.0*cm+busHeight, 0.),
 		  logicalBusBackPlate,
@@ -479,7 +489,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-  
   // Place the 3 copies of the detector assemblies using the position 
   // multiplier arrays from above
   unsigned int numDetectorAssemblies = 3;
@@ -487,7 +496,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double dimZ = -4.2*cm;
   Rm.rotateY(0.*deg);
  
-  G4double detectorHeight = 50.*mm;
   for(unsigned int i=0; i<numDetectorAssemblies; i++){	 
     Tm.setX(pm1[i]*dimX); Tm.setY(detectorHeight); Tm.setZ(pm2[i]*dimZ);
     Tr = G4Transform3D(Rm, Tm);
@@ -509,6 +517,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
+  // FIXME
   G4double aperatureSquare = 0.22*cm;
 
   // added dimension to "fill the gap" between detectors
@@ -633,8 +642,8 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 			    outerDim/2.);
 
   G4Box* sideSubtraction_block = new G4Box("B1_s",
-		   	    (outerDim/2. + finiteThicknessOffset),
-			    (boxDepth/2.+shieldingThickness),
+		   	    outerDim/2. + finiteThicknessOffset,
+			    boxDepth/2.+shieldingThickness,
 			    outerDim/2.);
   
   
@@ -652,7 +661,8 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 		  		mainBlock,
 				sideBlock,
 				rotm,
-				G4ThreeVector(outerDim+shieldingThickness+finiteThicknessOffset,
+				G4ThreeVector(
+			outerDim+shieldingThickness+finiteThicknessOffset,
 		  			0,
 					0));
   // Union of 3rd block
@@ -678,6 +688,7 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 					0));
   
   // Union of 3rd block fo subtracting off from the L-shape
+  rotm->rotateY(90.*deg);
   sub_L = new G4UnionSolid("sub-L",
 	  		   sub_L,
 			   sideSubtraction_block,
@@ -686,6 +697,7 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 		  		         0,
 		 		         outerDim+shieldingThickness+finiteThicknessOffset));
   
+  rotm->rotateY(-90.*deg);
 
   // Upward shift to ensure top of shielding is removed,
   // and bottom has thickness shieldingThickness
@@ -728,6 +740,53 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 
 
   return logic_L;
+}
+
+G4LogicalVolume* DetectorConstruction::CreateBerylliumWindow(
+		G4double windowDimension, 
+		G4double windowThickness,
+		G4Material* windowMaterial,
+		G4String windowName)
+{
+
+  G4Box* windowBox = new G4Box("Window-box",
+		  	       windowDimension/2.,
+			       windowThickness/2.,
+			       windowDimension/2.);
+
+  G4Box* sideWindowBox = new G4Box("Window-box",
+		  	       windowDimension/2.+1.5*mm,
+			       windowThickness/2.,
+			       windowDimension/2.);
+  
+  G4RotationMatrix* rotm = new G4RotationMatrix();
+
+  
+  G4UnionSolid* L_window = new G4UnionSolid("Window-concat",
+		  	      windowBox,
+			      sideWindowBox,
+			      rotm,
+			      G4ThreeVector(windowDimension,
+				      	    0.,
+					    0.));
+  
+ 
+  rotm->rotateY(90.*deg);
+  L_window = new G4UnionSolid("Window-concat",
+		  	      L_window,
+			      sideWindowBox,
+			      rotm,
+			      G4ThreeVector(0.,
+				      	    0.,
+					    windowDimension));
+  
+
+
+  G4LogicalVolume* window = new G4LogicalVolume(L_window,
+		  				windowMaterial,
+						windowName);
+
+  return window;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

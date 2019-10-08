@@ -50,9 +50,14 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     virtual G4VPhysicalVolume* Construct();
 
     G4LogicalVolume* GetScoringVolume() const {return fScoringVolume;}
+    
     G4LogicalVolume* CreateLshielding(G4double, G4double, G4double, G4double, G4Material*, G4String);
+    
     G4SubtractionSolid* CreateCodedAperture();
-
+    
+    G4LogicalVolume* CreateBerylliumWindow(G4double, G4double, G4Material*, G4String);
+  
+  
   protected:
     G4LogicalVolume*  fScoringVolume;
 };
