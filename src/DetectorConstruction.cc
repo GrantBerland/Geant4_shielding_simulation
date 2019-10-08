@@ -428,7 +428,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
  
   // Bus structure placements
-/*  
   G4double busHeight = 1.*cm;
 
   G4RotationMatrix* wallRotm = new G4RotationMatrix();
@@ -480,7 +479,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-  */
+  
   // Place the 3 copies of the detector assemblies using the position 
   // multiplier arrays from above
   unsigned int numDetectorAssemblies = 3;
@@ -510,7 +509,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
-  G4double aperatureSquare = 0.2*cm;
+  G4double aperatureSquare = 0.22*cm;
 
   // added dimension to "fill the gap" between detectors
   G4Box* aperature_base = new G4Box("Aperature-base",

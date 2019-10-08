@@ -54,6 +54,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fParticleGun(0),
   E_folding(100.),
   fPI(3.14159265358979323846),
+  fDeg2Rad(3.14159265358979323846 / 180.),
   sphereR(25.*cm),
   lossConeAngleDeg(64.),
   photonPhiLimitDeg(40.), 
@@ -156,10 +157,10 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   // NB: Mathematics spherical coordinates definition used below
   
   // Uniform sampling of angle about the field line theta on [0 , 2pi)
-  G4double theta = G4UniformRand()*2.*fPI; 
+  G4double theta = G4UniformRand() * 2. * fPI; 
   
   // Zenith angle (pitch angle), converted to radians
-  G4double phi = lossConeData[angleIndex][0] * fPI / 180.;
+  G4double phi = lossConeData[angleIndex][0] * fDeg2Rad;
   
   // We want our Y direction to be "up," otherwise standard
   // spherical to cartesian coordinate transform
@@ -214,12 +215,17 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   
 
   // Uniformly distributed around azimuthal direction ab. fieldline 
-  theta = G4UniformRand()*2.*fPI;  
+  // theta ~ U[0, 2 pi]
+  theta = G4UniformRand() * 2. * fPI;  
   
   // Phi (half angle) takes values in a cone determined by 
   // spacecraft altitude, precipitation event altitude and size
-  G4double photonPhiLimitRad   = photonPhiLimitDeg * fPI / 180.;       
+  G4double photonPhiLimitRad = photonPhiLimitDeg * fDeg2Rad;       
+  
+  // u ~ U[0, 1-1/2*cos(phi_limit)] s.t. phi is distributed uniformly
   G4double u = G4UniformRand()*(1.-std::cos(photonPhiLimitRad))/2.;
+  
+  // phi ~ U[0, phi_limit] = cos^-1(1 - 2 u)
   G4double phi = std::acos(1 - 2 * u);
 
 
@@ -230,13 +236,17 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 
 
   // Geant internally normalizes the momentum direction
+  
+  // xh ~ U[-1, 1]
   r->xDir = G4UniformRand()*2. - 1.;
+  
+  // zh ~ U[-1, 1]
   r->zDir = G4UniformRand()*2. - 1.;
-  //r->yDir = -std::cos(G4UniformRand()*(40. * 3.1415926 / 180.));
 
+  // yh = sqrt(xh^2 + zh^2) / tan(phi) (negative due to coord. system)
   r->yDir = -std::sqrt(r->xDir*r->xDir + r->zDir*r->zDir)/std::tan(phi);
 
-  // Enforces inward directionality to particles
+  // Enforces inward directionality to particles (theta direction)
   if(r->x > 0) {r->xDir = -r->xDir;}
   if(r->z > 0) {r->zDir = -r->zDir;}
 

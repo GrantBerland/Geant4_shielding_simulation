@@ -80,6 +80,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     
     G4double E_folding;
     G4double fPI;
+    G4double fDeg2Rad;
     G4double sphereR;
     G4double lossConeAngleDeg;
     G4double photonPhiLimitDeg;
