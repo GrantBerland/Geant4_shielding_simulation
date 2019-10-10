@@ -235,21 +235,18 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   r->z = (sphereR + 15.*cm) * std::sin(phi) * std::cos(theta);
 
 
-  // Geant internally normalizes the momentum direction
-  
-  // xh ~ U[-1, 1]
-  r->xDir = G4UniformRand()*2. - 1.;
-  
-  // zh ~ U[-1, 1]
-  r->zDir = G4UniformRand()*2. - 1.;
+  // Inward unit normal
+  r->xDir = -std::sin(theta) * std::sin(phi);
+  r->zDir = -std::cos(theta) * std::sin(phi); 
+  r->yDir = -std::cos(phi);
 
-  // yh = sqrt(xh^2 + zh^2) / tan(phi) (negative due to coord. system)
-  r->yDir = -std::sqrt(r->xDir*r->xDir + r->zDir*r->zDir)/std::tan(phi);
 
-  // Enforces inward directionality to particles (theta direction)
-  if(r->x > 0) {r->xDir = -r->xDir;}
-  if(r->z > 0) {r->zDir = -r->zDir;}
+  // Uniform nudges s.t. each particle isn't aimed at the origin
+  G4double nudgeFactor = 0.3;
 
+  r->xDir += (G4UniformRand()*2. - 1.) * nudgeFactor; 
+  r->yDir += (G4UniformRand()*2. - 1.) * nudgeFactor; 
+  r->zDir += (G4UniformRand()*2. - 1.) * nudgeFactor; 
 }
 
 
