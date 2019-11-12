@@ -57,7 +57,7 @@ class SteppingAction : public G4UserSteppingAction
 
     void SetHitFileName(G4String fileName){backgroundFileName = fileName;};
     void SetSignalFileName(G4String fileName){signalFileName = fileName;};
-  
+    void LocationToPixelAddress(G4ThreeVector, G4String);  
   private:
     EventAction*  fEventAction;
     G4LogicalVolume* fScoringVolume;

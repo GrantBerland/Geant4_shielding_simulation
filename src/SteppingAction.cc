@@ -146,11 +146,24 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       if(isBackground) LogParticle(pos, vtx, ene, backgroundFileName, particleName);
       
       // write to signal hits file (no part. name since all are gammas)
-      else LogParticle(pos, vtx, ene, signalFileName, "");
+      else {LogParticle(pos, vtx, ene, signalFileName, ""); 
+      	    LocationToPixelAddress(pos, volName);}
     }
   }    
   
 
+}
+
+void SteppingAction::LocationToPixelAddress(G4ThreeVector pos, G4String volName)
+{
+
+  G4String impr = volName[10];
+  G4String pv   = volName.substr(24, 2);
+  std::cout << volName << ": " << impr << ',' << pv << std::endl;
+  std::cout << pos.x()/cm << ',' << 
+	       pos.y()/cm << ',' << 
+	       pos.z()/cm << std::endl;
+  
 }
 
 void SteppingAction::LogParticle(G4ThreeVector pos, G4ThreeVector init_pos, G4double ene, G4String detectorFileName, G4String PID)

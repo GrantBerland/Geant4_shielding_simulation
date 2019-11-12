@@ -203,7 +203,7 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   G4double shiftThreshold = 50.;
   G4double meanEnergy     = 241.4;
 
-  // Rejection sampling on particle energy 
+  // Rejection sampling on particle energy to generate exponential particles > 50 keV 
   do
   {
     randomNumber = G4UniformRand();

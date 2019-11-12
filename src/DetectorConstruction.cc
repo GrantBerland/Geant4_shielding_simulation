@@ -49,7 +49,7 @@
 #include "G4SDManager.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4AssemblyVolume.hh"
-
+#include "G4PVReplica.hh"
 
 DetectorConstruction::DetectorConstruction()
 : G4VUserDetectorConstruction(),
@@ -169,9 +169,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double detectorApertureSpacing = 20.*mm;
   G4double detectorHeight = 50.*mm;
 
+  G4double pixelSize      = 2.5*mm;
   /////////////////////////////////////////
   //////////////// Geometry ///////////////
   /////////////////////////////////////////
+  
+  G4VSolid* pixelBlock = new G4Box("Pixel",
+		  		0.5*pixelSize,
+				0.5*detectorZ,
+		  		0.5*pixelSize);
 
   G4VSolid* detectorBox = new G4Box("Detector",
 		  		    0.5*detectorXY,
@@ -277,18 +283,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  	nist->FindOrBuildMaterial("G4_Sn"),
 		  	name3); 
   
-  
   new G4PVPlacement(0,
 		  G4ThreeVector(shieldingXZ-aLittleBit,
-			  	shieldingHeight,
+			  	shieldingHeight+0.25*cm,
 			  	shieldingXZ-aLittleBit),
 		  logic_shielding3,
 		  name3,
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-  
-  
   
   //////////////////////////////////////////
   ///////////// Subtractions ///////////////
@@ -303,7 +306,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   ////////////// Logical Volumes /////////////
   ////////////////////////////////////////////
 
-  
+  G4LogicalVolume* logicPixel = new G4LogicalVolume(pixelBlock,
+		  				    CZT,
+						    "Pixel");
+ 
   G4LogicalVolume* logicDetector = new G4LogicalVolume(detectorBox,
 							CZT,
 							"Detector");
@@ -317,7 +323,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 							"Electronics");
   
   G4LogicalVolume* logicalTopWindow = CreateBerylliumWindow(
-		boxInnerSizeXY*2, 
+		(boxInnerSizeXY-1.*mm)*2, 
 		windowThickness,
 		nist->FindOrBuildMaterial("G4_Be"),
 		"top_Be_Window");
@@ -372,6 +378,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4int pm1[4] = {1, -1, 1, -1};
   G4int pm2[4] = {1, 1, -1, -1};
 
+
+  G4VPhysicalVolume* pixel_divisions = new G4PVReplica("pixels",
+		  				       logicPixel,
+						       logicDetector,
+						       kXAxis,
+						       16,
+						       pixelSize);
+
+
   // Create all Redlen detectors and apertures per assembly
   for(G4int nDet=0; nDet<4;nDet++)
   {
@@ -396,9 +411,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     detectorAssembly->AddPlacedVolume(logicDetectorElectronics, Tr);
   
     // Coded Aperture
-    Tm.setX(pm1[nDet]*detectorPosX);
+    Tm.setX(pm1[nDet]*(detectorPosX + 0.*mm));
     Tm.setY(detectorPosY + detectorApertureSpacing + detectorZ/2.);
-    Tm.setZ(pm2[nDet]*detectorPosZ);
+    Tm.setZ(pm2[nDet]*(detectorPosZ + 0.*mm));
     
     Rm.rotateX(90.*deg);
     Tr = G4Transform3D(Rm, Tm); 
@@ -518,12 +533,13 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
   // FIXME
-  G4double aperatureSquare = 0.22*cm;
+  G4double aperatureSquare = 0.2*cm;
 
   // added dimension to "fill the gap" between detectors
+  G4double fillTheGap = 2.*mm;
   G4Box* aperature_base = new G4Box("Aperature-base",
-		   		    (boxXY+2.*mm)/2.,
-				    (boxXY+2.*mm)/2.,
+		   		    (boxXY+fillTheGap)/2.,
+				    (boxXY+fillTheGap)/2.,
 				    boxZ/2.);
 
   G4RotationMatrix* rotm = new G4RotationMatrix();   
