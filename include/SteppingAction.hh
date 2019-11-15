@@ -53,11 +53,14 @@ class SteppingAction : public G4UserSteppingAction
 
     // method from the base class
     virtual void UserSteppingAction(const G4Step*);
-    void LogParticle(G4ThreeVector, G4ThreeVector, G4double, G4String, G4String);
+    
+    void LogParticle(G4double, G4String, G4String);
 
+    
     void SetHitFileName(G4String fileName){backgroundFileName = fileName;};
+  
     void SetSignalFileName(G4String fileName){signalFileName = fileName;};
-    void LocationToPixelAddress(G4ThreeVector, G4String);  
+  
   private:
     EventAction*  fEventAction;
     G4LogicalVolume* fScoringVolume;
