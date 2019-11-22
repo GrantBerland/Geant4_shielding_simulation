@@ -65,7 +65,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GenerateLossConeElectrons(ParticleSample* r);
     void GenerateTrappedElectrons(ParticleSample* r);
     void GenerateSignalSource(ParticleSample* r);
-    void GenerateOtherDistributions(ParticleSample* r);
     
     // Methods for messenger class
     void SetWhichParticle(G4int partSelection) {fWhichParticle = partSelection;};
