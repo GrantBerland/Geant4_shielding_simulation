@@ -249,6 +249,114 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   r->zDir += (G4UniformRand()*2. - 1.) * nudgeFactor; 
 }
 
+void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
+{
+  
+  G4double x, y, z;
+  G4double xDir, yDir, zDir;
+  G4double theta, phi, R;
+
+  G4double energy;
+  G4double narrowingOffset;
+  G4double detectorSize;
+
+  detectorSize  = 200*2;  // mm , units assigned in switch-case
+
+  G4double fE0 = 241.;
+  do{
+    r->energy = -(fE0-50) * std::log(1 - G4UniformRand()) * keV;
+  } while(r->energy < 50.*keV);
+	
+  G4int fDistType = 3;
+
+
+  switch(fDistType)
+  {
+        case 0: // point source, near
+                x = 10.*mm;
+                y = 5.*mm;
+                z = -20.*cm;
+
+                narrowingOffset = 0.4;
+                xDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
+                yDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
+                zDir = 1;
+                break;
+
+        case 1: // point source, infinitely far
+		r->x = G4UniformRand()*detectorSize - detectorSize/2.; 
+                r->x *= mm;
+                r->z = G4UniformRand()*detectorSize - detectorSize/2.;
+                r->z *= mm;
+                r->y = 20.*cm;
+
+                r->xDir = r->zDir = 0;
+                r->yDir = -1;
+                
+		break;
+        
+	case 2: // structured circle
+                R = std::sqrt(G4UniformRand() * 30.) * mm;
+                theta = G4UniformRand() * 2. * fPI;
+                x = 10.*mm + R * std::cos(theta);
+                y = 5.*mm - R * std::sin(theta);
+                z = -20.*cm;
+                
+                xDir = yDir = 0;
+ 		zDir = 1;
+
+                break;
+
+        case 3: // Rotated plane, infinitely far away
+                theta = 5. * fDeg2Rad; // pi/18 rad = 10 deg
+
+                r->x = G4UniformRand()*detectorSize - detectorSize/2.;
+                r->x *= mm;
+
+                r->x -= 5*cm;
+
+                r->z = G4UniformRand()*detectorSize - detectorSize/2.;
+                r->z *= mm;
+                r->y = 20.*cm;
+
+                r->xDir = std::cos(theta) + std::sin(theta);
+                r->zDir = 0;
+                r->yDir = -(-std::sin(theta) + std::cos(theta));
+                break;
+
+        case 4: // Uniformly distributed phi angle
+
+                R = 20.*cm;
+ 		
+		// Angle of particle about field line
+                theta = G4UniformRand()*2.*fPI;
+
+                // Zenith angle of particles wrt to detector
+                phi = std::acos(1 - 2 * G4UniformRand()*
+                  (1.-std::cos(photonPhiLimitDeg * fDeg2Rad))/2.);
+
+                // Position on surface of sphere
+                x = R * std::sin(phi) * std::cos(theta);
+                y = R * std::sin(phi) * std::sin(theta);
+                z = -R * std::cos(phi);
+
+                // Particle direction 
+                xDir = G4UniformRand()*2. - 1.; // |x| ~ U[-1, 1]
+                yDir = G4UniformRand()*2. - 1.; // |y| ~ U[-1, 1]
+
+                // |z| ~ U[0, phi_limit]
+                zDir = std::sqrt(xDir * xDir + yDir * yDir)/
+                std::tan(G4UniformRand()*photonPhiLimitDeg * fDeg2Rad);
+                break;
+
+        default:
+                throw std::invalid_argument("Choose distribution type!");
+
+  }
+
+
+  }
+
 
 void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
 {
@@ -303,7 +411,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double yShift = 1.*cm;
   G4double zShift = 2.5*cm;
 
-  
   // Struct that holds position, momentum direction, and energy
   ParticleSample* r = new ParticleSample();
  
@@ -347,6 +454,21 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->GeneratePrimaryVertex(anEvent);
     break;
 
+    case(3): // Signal photon, other distribution types
+
+    // Selects photon for particle type
+    fParticleGun->SetParticleDefinition(photonParticle);
+  
+    GenerateOtherDistributions(r);
+    
+    fParticleGun->SetParticlePosition(
+		    G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
+    fParticleGun->SetParticleMomentumDirection(
+		    G4ThreeVector(r->xDir, r->yDir, r->zDir));
+    fParticleGun->SetParticleEnergy(r->energy);
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+    break;
+    
     default: 
        throw std::invalid_argument("Need to chose particle type!");
   }
