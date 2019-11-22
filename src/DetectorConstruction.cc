@@ -306,10 +306,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   ////////////// Logical Volumes /////////////
   ////////////////////////////////////////////
 
-  G4LogicalVolume* logicPixel = new G4LogicalVolume(pixelBlock,
-		  				    CZT,
-						    "Pixel");
- 
+  G4LogicalVolume* logicPixel; 
   G4LogicalVolume* logicDetector = new G4LogicalVolume(detectorBox,
 							CZT,
 							"Detector");
@@ -378,28 +375,55 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4int pm1[4] = {1, -1, 1, -1};
   G4int pm2[4] = {1, 1, -1, -1};
 
+  
+  G4AssemblyVolume* pixelAssembly = new G4AssemblyVolume();
+  
+  G4RotationMatrix RmT;
+  G4ThreeVector    TmT;
+  G4Transform3D    TrT;
+  
+  G4String pixelName;
 
-  G4VPhysicalVolume* pixel_divisions = new G4PVReplica("pixels",
-		  				       logicPixel,
-						       logicDetector,
-						       kXAxis,
-						       16,
-						       pixelSize);
+  // Create pixelated detector
+  G4int nameCounter = 0;
+  G4int numPixels = 16;
+  for(G4int i=0; i<numPixels; i++){
+    for(G4int j=0; j<numPixels; j++){
+  
+	pixelName = "P";
+	pixelName += std::to_string(nameCounter);
+	pixelName += "_i";
+	pixelName += std::to_string(i);
+	pixelName += "_j";
+	pixelName += std::to_string(j);
+	nameCounter++;
 
+	logicPixel = new G4LogicalVolume(pixelBlock,
+		  		   CZT,
+				   pixelName);
 
+	TmT.setX(pixelSize*(i-numPixels));
+	TmT.setZ(pixelSize*(j-numPixels));
+	TmT.setY(-1.25*cm+0.1*mm+detectorPosY);
+	
+	TrT = G4Transform3D(RmT, TmT);	
+        
+	pixelAssembly->AddPlacedVolume(logicPixel, TrT);
+    }
+  }
+  
   // Create all Redlen detectors and apertures per assembly
   for(G4int nDet=0; nDet<4;nDet++)
   {
  
     // CZT Detector
-    Tm.setX(pm1[nDet]*detectorPosX); 
-    Tm.setY(-1.25*cm+0.1*mm+detectorPosY); 
-    Tm.setZ(pm2[nDet]*detectorPosZ);
+    Tm.setX(pm1[nDet]*detectorPosX + 2.1*cm); 
+    Tm.setY(-1.25*cm+0.1*mm+detectorPosY+detectorZ); 
+    Tm.setZ(pm2[nDet]*detectorPosZ + 2.1*cm);
     
     Tr = G4Transform3D(Rm, Tm); 
   
-    detectorAssembly->AddPlacedVolume(logicDetector, Tr);
-    
+    detectorAssembly->AddPlacedAssembly(pixelAssembly, Tr);
 
     // FR4 Detector
     Tm.setX(pm1[nDet]*detectorPosX); 
@@ -806,3 +830,4 @@ G4LogicalVolume* DetectorConstruction::CreateBerylliumWindow(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
