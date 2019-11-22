@@ -227,7 +227,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double shieldingHeight = 5.*cm;
   G4double shieldingXZ     = -4.30*cm; 
   // Polyethylene shielding
-  G4String name1 = "PE_Shielding";  
+  G4String name1 = "pe_Shielding";  
 
   G4double box1OuterDim = 120.*mm;
   G4double boxDepth1    = 70.*mm;
@@ -557,7 +557,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
   // FIXME
-  G4double aperatureSquare = 0.2*cm;
+  G4double aperatureSquare = 0.22*cm;
 
   // added dimension to "fill the gap" between detectors
   G4double fillTheGap = 2.*mm;
