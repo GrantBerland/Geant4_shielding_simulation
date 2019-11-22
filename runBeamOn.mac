@@ -33,9 +33,6 @@
 # E0 of background distribution out of {100,200,300} keV
 /particleSource/setFoldingEnergy 100. # [keV]
 
-# Angular half-angle size of event (maps to spatial size at 450 km)
-/particleSource/setEventAngularSize 30 # deg, [0, 40]
-
 # 0 = background trapped electrons
 #/particleSource/setBackgroundType 0
 #/run/beamOn 710000
