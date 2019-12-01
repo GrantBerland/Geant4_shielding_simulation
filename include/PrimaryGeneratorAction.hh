@@ -65,12 +65,14 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void GenerateLossConeElectrons(ParticleSample* r);
     void GenerateTrappedElectrons(ParticleSample* r);
     void GenerateSignalSource(ParticleSample* r);
+    void GenerateOtherDistributions(ParticleSample* r);
     
     // Methods for messenger class
     void SetWhichParticle(G4int partSelection) {fWhichParticle = partSelection;};
 
     void SetFoldingEnergy(G4double E0) { E_folding = E0; };
     void SetEventAngle(G4double ang) { photonPhiLimitDeg = ang; };
+    void SetThetaDirection(G4double ang) { fDirectionTheta = ang; }; 
     
     // Method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
@@ -84,6 +86,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double sphereR;
     G4double lossConeAngleDeg;
     G4double photonPhiLimitDeg;
+    G4double fDirectionTheta;
 
     G4int    fWhichParticle;
     G4ParticleDefinition* electronParticle; 

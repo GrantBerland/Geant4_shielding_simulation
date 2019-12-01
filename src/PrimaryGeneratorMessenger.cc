@@ -27,6 +27,11 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* pri
   fD2cmd->SetParameterName("Enter an angle within (0, 45] degrees.",true);
   fD2cmd->SetDefaultValue(100.);
   fD2cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  
+  fD3cmd= new G4UIcmdWithADouble("/particleSource/setThetaDirection",this);
+  fD3cmd->SetParameterName("Enter a direction angle for theta.",true);
+  fD3cmd->SetDefaultValue(0.);
+  fD3cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
 }
 
@@ -38,6 +43,7 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
   delete fcmd;
   delete fDcmd;
   delete fD2cmd;
+  delete fD3cmd;
 }
 
 
@@ -55,6 +61,10 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
   
   if(command == fD2cmd){
     fPrimaryGenerator->SetEventAngle(std::stod(newValue));
+  }
+  
+  if(command == fD3cmd){
+    fPrimaryGenerator->SetThetaDirection(std::stod(newValue));
   }
 
 }

@@ -1,0 +1,136 @@
+# Macro file for example B1
+# 
+# Can be run in batch, without graphic
+# or interactively: Idle> /control/execute run1.mac
+#
+# Change the default number of workers (in multi-threading mode) 
+#/run/numberOfWorkers 4
+#
+# Initialize kernel
+
+
+# Set low energy EM processes, including fluorescence
+/process/em/fluo true
+/process/em/auger false
+/process/em/augerCascade false
+/process/em/pixe true
+/process/em/deexcitationIgnoreCut false
+
+
+#/cuts/setMaxCutEnergy 50 eV
+/run/initialize
+
+
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+# Set hit and signal file names
+/dataCollection/setHitFileName archive/hitTest10.csv
+/dataCollection/setSignalFileName archive/signalTest10.csv
+
+# E0 of background distribution out of {100,200,300} keV
+/particleSource/setFoldingEnergy 100. # [keV]
+
+# Angular half-angle size of event (maps to spatial size at 450 km)
+/particleSource/setEventAngularSize 30 # deg, [0, 40]
+
+/particleSource/setThetaDirection -1
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+/particleSource/setThetaDirection 0
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+/particleSource/setThetaDirection 1
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+/particleSource/setThetaDirection 2
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+/particleSource/setThetaDirection 3
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+/particleSource/setThetaDirection 4
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+/particleSource/setThetaDirection 5
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+/particleSource/setThetaDirection 6
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+/particleSource/setThetaDirection 7
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+/particleSource/setThetaDirection 8
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+/particleSource/setThetaDirection 9 
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+
+/particleSource/setThetaDirection 10
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+
+/particleSource/setThetaDirection 11
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+
+/particleSource/setThetaDirection 12
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+
+/particleSource/setThetaDirection 13
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+
+/particleSource/setThetaDirection 14
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+
+/particleSource/setThetaDirection 15
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+
+/particleSource/setThetaDirection 16
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+
