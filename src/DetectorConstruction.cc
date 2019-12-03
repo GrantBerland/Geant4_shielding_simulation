@@ -163,8 +163,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double detectorZ       = 5.*mm;
   G4double detectorElectronicsZ = 10.185*mm;
   G4double boxInnerSizeXY  = 90.*mm * 0.5;
-  G4double boxInnerSizeZ   = 50.*mm * 0.5;
-  G4double windowThickness = 0.5*mm;		// 2 windows, each 0.5 mm
+  G4double windowThickness = 0.75*mm;		// 2 windows, each 0.5 mm
   G4double frontEndBoardThickness = 2.86*mm;
   G4double detectorApertureSpacing = 20.*mm;
   G4double detectorHeight = 50.*mm;
@@ -179,10 +178,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				0.5*detectorZ,
 		  		0.5*pixelSize);
 
-  G4VSolid* detectorBox = new G4Box("Detector",
-		  		    0.5*detectorXY,
-				    0.5*detectorZ,
-				    0.5*detectorXY);
 
   G4VSolid* detectorElectronics = new G4Box("BottomFR4",
 		  		    0.5*detectorXY,
@@ -193,12 +188,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  		    boxInnerSizeXY-5.*mm,
 				    0.5*frontEndBoardThickness,
 				    boxInnerSizeXY-5.*mm);
-
-  G4double windowXZadjustment = 3.*mm;
-  G4VSolid* topWindow = new G4Box("top_Be_Window",
-		  		    boxInnerSizeXY-windowXZadjustment,
-				    0.5*windowThickness,
-				    boxInnerSizeXY-windowXZadjustment);
 
 
   // Bus structure boxes
@@ -293,23 +282,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  false,
 		  checkOverlaps);
   
-  //////////////////////////////////////////
-  ///////////// Subtractions ///////////////
-  //////////////////////////////////////////
-
-
-  // empty rotation matrix for SubtractionSolid constructor
-  G4RotationMatrix* rotm = new G4RotationMatrix();   
-  
-
   ////////////////////////////////////////////
   ////////////// Logical Volumes /////////////
   ////////////////////////////////////////////
 
   G4LogicalVolume* logicPixel; 
-  G4LogicalVolume* logicDetector = new G4LogicalVolume(detectorBox,
-							CZT,
-							"Detector");
   
   G4LogicalVolume* logicDetectorElectronics = new G4LogicalVolume(detectorElectronics,
 							FR4,
@@ -557,7 +534,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
   // FIXME
-  G4double aperatureSquare = 0.22*cm;
+  G4double aperatureSquare = 0.2*cm;
 
   // added dimension to "fill the gap" between detectors
   G4double fillTheGap = 2.*mm;
