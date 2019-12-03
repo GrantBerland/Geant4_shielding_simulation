@@ -96,8 +96,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // character 12, where X is the impression copy 
   // (detector assembly) [1,2,3] and Y is the detector number 
   // within each assembly [2,4,6,8]
-  check1 = std::string::npos != volName.find("P", 12);
-  check2 = std::string::npos != nextVolName.find("P", 12);
+  check1 = (std::string::npos != volName.find("P", 12));
+  check2 = (std::string::npos != nextVolName.find("P", 12));
   
   
   // Get particle name string, either "e-" or "gamma" 
@@ -127,7 +127,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   if(check1 && check2) // particle is in detector
   {
     // Position of hit
-    const G4ThreeVector pos = aStep->GetPostStepPoint()->GetPosition();
+    //const G4ThreeVector pos = aStep->GetPostStepPoint()->GetPosition();
     
     // Difference in energy between the last and current step point
     const G4double ene = (aStep->GetPreStepPoint()->GetKineticEnergy()) 
@@ -137,16 +137,14 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     // Get generated particle position, energy, and momentum direction
     const G4ThreeVector vtx = track->GetVertexPosition();
 
-
-
     // Redlen lower energy detection threshold
     if(ene > 50.*keV)
     {
       // write to background hits file	    
-      if(isBackground) LogParticle(ene, backgroundFileName, volName);
+      if(isBackground) LogParticle(vtx, ene, backgroundFileName, volName);
       
       // write to signal hits file (no part. name since all are gammas)
-      else LogParticle(ene, signalFileName, volName); 
+      else LogParticle(vtx, ene, signalFileName, volName); 
       	    
     }
   }    
@@ -154,18 +152,17 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 
 }
 
-
-void SteppingAction::LogParticle(G4double ene, G4String detectorFileName, G4String volName)
+void SteppingAction::LogParticle(G4ThreeVector vtx, G4double ene, G4String detectorFileName, G4String volName)
 {
     // locks program so that multiple threads cannot write to file
     // at once, unlocks when current scope (i.e. this method) is left
     G4AutoLock lock(&myParticleLog);
     
-    G4int loc1 = volName.find('P', 10);
-    G4int loc2 = volName.find('_', loc1);
+    G4int loc1  = volName.find('P', 10);
+    G4int loc2  = volName.find('_', loc1);
     G4int loc2p = volName.find('i', loc1);
-    G4int loc3 = volName.find('j', loc2);
-    G4int loc4 = volName.find('_', loc3);
+    G4int loc3  = volName.find('j', loc2);
+    G4int loc4  = volName.find('_', loc3);
  
     // Find detector and pixel number from volume name string
     G4String detNumber   = volName.substr(10, volName.find('_', 10)-10);
@@ -178,7 +175,10 @@ void SteppingAction::LogParticle(G4double ene, G4String detectorFileName, G4Stri
     hitFile_detector << ene/keV << "," 
 		     << detNumber << "," 
 	    	     << iNum << "," 
-		     << jNum << "\n";
+		     << jNum << ","
+		     << vtx.x()/cm << ","
+		     << vtx.y()/cm << ","
+		     << vtx.z()/cm << "\n";
 
     hitFile_detector.close();
 }

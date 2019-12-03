@@ -35,9 +35,9 @@
 
 # 0 = background trapped electrons
 /particleSource/setBackgroundType 0
-/run/beamOn 7100000
+/run/beamOn 71000
 
 # 1 = background loss cone electrons
 /particleSource/setBackgroundType 1
-/run/beamOn 3300000
+/run/beamOn 33000
 
