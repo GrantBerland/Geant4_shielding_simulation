@@ -163,7 +163,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double detectorZ       = 5.*mm;
   G4double detectorElectronicsZ = 10.185*mm;
   G4double boxInnerSizeXY  = 90.*mm * 0.5;
-  G4double windowThickness = 0.75*mm;		// 2 windows, each 0.5 mm
+  G4double windowThickness = 1.*mm;		// 2 windows, each 0.5 mm
   G4double frontEndBoardThickness = 2.86*mm;
   G4double detectorApertureSpacing = 20.*mm;
   G4double detectorHeight = 50.*mm;
@@ -433,7 +433,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   new G4PVPlacement(0,
 		  G4ThreeVector(shieldingXZ-aLittleBit,
-	detectorHeight+windowPlacement+windowThickness/2.+1.5*mm/2.,
+	detectorHeight+windowPlacement+windowThickness/2.+1.75*mm/2.,
 			  	shieldingXZ-aLittleBit),
 		  logicalTopWindow,
 		  "top_Be_Window",
@@ -443,7 +443,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   new G4PVPlacement(0,
 		  G4ThreeVector(shieldingXZ-aLittleBit,
-	     detectorHeight+windowPlacement+windowThickness/2.-1.5*mm,
+	     detectorHeight+windowPlacement+windowThickness/2.-1.75*mm,
 			  	shieldingXZ-aLittleBit),
 		  logicalTopWindow,
 		  "bottom_Be_Window",
@@ -534,7 +534,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
   // FIXME
-  G4double aperatureSquare = 0.2*cm;
+  G4double aperatureSquare = 0.22*cm;
 
   // added dimension to "fill the gap" between detectors
   G4double fillTheGap = 2.*mm;
