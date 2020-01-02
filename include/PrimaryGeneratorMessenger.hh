@@ -29,6 +29,9 @@ private:
   G4UIcmdWithADouble*        fDcmd;
   G4UIcmdWithADouble*        fD2cmd;
   G4UIcmdWithADouble*        fD3cmd;
+  G4UIcmdWithADouble*        fD4cmd;
+  G4UIcmdWithADouble*        fD5cmd;
+  G4UIcmdWithADouble*        fD6cmd;
 
 };
 

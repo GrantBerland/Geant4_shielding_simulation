@@ -72,7 +72,12 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     void SetFoldingEnergy(G4double E0) { E_folding = E0; };
     void SetEventAngle(G4double ang) { photonPhiLimitDeg = ang; };
+
     void SetThetaDirection(G4double ang) { fDirectionTheta = ang; }; 
+    void SetThetaSigma(G4double stddev) { fThetaSigma = stddev; }; 
+    
+    void SetPhiDirection(G4double ang) { fDirectionPhi = ang; }; 
+    void SetPhiSigma(G4double stddev) { fPhiSigma = stddev; }; 
     
     // Method to access particle gun
     const G4ParticleGun* GetParticleGun() const { return fParticleGun; }
@@ -86,8 +91,12 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double sphereR;
     G4double lossConeAngleDeg;
     G4double photonPhiLimitDeg;
+    
     G4double fDirectionTheta;
-
+    G4double fThetaSigma;
+    G4double fDirectionPhi;
+    G4double fPhiSigma;
+    
     G4int    fWhichParticle;
     G4ParticleDefinition* electronParticle; 
     G4ParticleDefinition* photonParticle; 

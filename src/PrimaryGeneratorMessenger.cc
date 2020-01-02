@@ -29,10 +29,24 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* pri
   fD2cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   
   fD3cmd= new G4UIcmdWithADouble("/particleSource/setThetaDirection",this);
-  fD3cmd->SetParameterName("Enter a direction angle for theta.",true);
+  fD3cmd->SetParameterName("Enter a direction angle for theta [deg].",true);
   fD3cmd->SetDefaultValue(0.);
   fD3cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  
+  fD4cmd= new G4UIcmdWithADouble("/particleSource/setThetaSigma",this);
+  fD4cmd->SetParameterName("Enter an angular std dev for theta [deg].",true);
+  fD4cmd->SetDefaultValue(0.);
+  fD4cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+  fD5cmd= new G4UIcmdWithADouble("/particleSource/setPhiDirection",this);
+  fD5cmd->SetParameterName("Enter a direction angle for phi [deg].",true);
+  fD5cmd->SetDefaultValue(0.);
+  fD5cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  
+  fD6cmd= new G4UIcmdWithADouble("/particleSource/setPhiSigma",this);
+  fD6cmd->SetParameterName("Enter an angular std dev for phi [deg].",true);
+  fD6cmd->SetDefaultValue(0.);
+  fD6cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 
@@ -44,6 +58,9 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
   delete fDcmd;
   delete fD2cmd;
   delete fD3cmd;
+  delete fD4cmd;
+  delete fD5cmd;
+  delete fD6cmd;
 }
 
 
@@ -65,6 +82,18 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
   
   if(command == fD3cmd){
     fPrimaryGenerator->SetThetaDirection(std::stod(newValue));
+  }
+  
+  if(command == fD4cmd){
+    fPrimaryGenerator->SetThetaSigma(std::stod(newValue));
+  }
+  
+  if(command == fD5cmd){
+    fPrimaryGenerator->SetPhiDirection(std::stod(newValue));
+  }
+  
+  if(command == fD6cmd){
+    fPrimaryGenerator->SetPhiSigma(std::stod(newValue));
   }
 
 }

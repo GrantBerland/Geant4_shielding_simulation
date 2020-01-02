@@ -59,6 +59,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   lossConeAngleDeg(64.),
   photonPhiLimitDeg(40.), 
   fDirectionTheta(), 
+  fThetaSigma(),
+  fDirectionPhi(), 
+  fPhiSigma(),
   fWhichParticle(0),
   electronParticle(0),
   photonParticle(0),
@@ -253,13 +256,10 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 {
   
-  G4double x, y, z;
-  G4double xDir, yDir, zDir;
   G4double theta, phi, R;
-
-  G4double energy;
   G4double narrowingOffset;
   G4double detectorSize;
+  G4double N1, N2, U1, U2;
 
   detectorSize  = 250*2;  // mm , units assigned in switch-case
 
@@ -274,14 +274,14 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
   switch(fDistType)
   {
         case 0: // point source, near
-                x = 10.*mm;
-                y = 5.*mm;
-                z = -20.*cm;
+                r->x = 10.*mm;
+                r->y = 5.*mm;
+                r->z = -20.*cm;
 
                 narrowingOffset = 0.4;
-                xDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
-                yDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
-                zDir = 1;
+                r->xDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
+                r->yDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
+                r->zDir = 1;
                 break;
 
         case 1: // point source, infinitely far
@@ -299,18 +299,26 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 	case 2: // structured circle
                 R = std::sqrt(G4UniformRand() * 30.) * mm;
                 theta = G4UniformRand() * 2. * fPI;
-                x = 10.*mm + R * std::cos(theta);
-                y = 5.*mm - R * std::sin(theta);
-                z = -20.*cm;
+                r->x = 10.*mm + R * std::cos(theta);
+                r->y = 5.*mm - R * std::sin(theta);
+                r->z = -20.*cm;
                 
-                xDir = yDir = 0;
- 		zDir = 1;
+                r->xDir = r->yDir = 0;
+ 		r->zDir = 1;
 
                 break;
 
-        case 3: // Rotated plane, infinitely far away
+        case 3: // Rotated plane + Gaussian spot
+		
+		// Box-Mueller transform
+		U1 = G4UniformRand();
+		U2 = G4UniformRand();
+		N1 = std::sqrt(-2*std::log(U1)) * std::cos(2*fPI*U2);
+		N2 = std::sqrt(-2*std::log(U1)) * std::sin(2*fPI*U2);
 
-		theta = fDirectionTheta * fDeg2Rad;
+		// x ~ N(x_mean, sigma^2)
+		theta = (fDirectionTheta + N1*fThetaSigma) * fDeg2Rad;
+		phi   = (fDirectionPhi   + N2*fPhiSigma)   * fDeg2Rad;
 
                 r->x = G4UniformRand()*detectorSize - detectorSize/2.;
                 r->x *= mm;
@@ -319,11 +327,12 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 
                 r->z = G4UniformRand()*detectorSize - detectorSize/2.;
                 r->z *= mm;
-                r->y = 20.*cm;
+                
+		r->y = 20.*cm;
 
-                r->xDir = std::sin(theta);
-                r->zDir = 0;
-                r->yDir = -std::cos(theta);
+                r->xDir = std::sin(phi) * std::cos(theta);
+                r->zDir = std::sin(phi) * std::sin(theta);
+                r->yDir = -std::cos(phi);
                 break;
 
         case 4: // Uniformly distributed phi angle
@@ -338,24 +347,22 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
                   (1.-std::cos(photonPhiLimitDeg * fDeg2Rad))/2.);
 
                 // Position on surface of sphere
-                x = R * std::sin(phi) * std::cos(theta);
-                y = R * std::sin(phi) * std::sin(theta);
-                z = -R * std::cos(phi);
+                r->x = R * std::sin(phi) * std::cos(theta);
+                r->y = R * std::sin(phi) * std::sin(theta);
+                r->z = -R * std::cos(phi);
 
                 // Particle direction 
-                xDir = G4UniformRand()*2. - 1.; // |x| ~ U[-1, 1]
-                yDir = G4UniformRand()*2. - 1.; // |y| ~ U[-1, 1]
+                r->xDir = G4UniformRand()*2. - 1.; // |x| ~ U[-1, 1]
+                r->yDir = G4UniformRand()*2. - 1.; // |y| ~ U[-1, 1]
 
                 // |z| ~ U[0, phi_limit]
-                zDir = std::sqrt(xDir * xDir + yDir * yDir)/
+                r->zDir = std::sqrt(r->xDir * r->xDir + r->yDir * r->yDir)/
                 std::tan(G4UniformRand()*photonPhiLimitDeg * fDeg2Rad);
                 break;
 
         default:
                 throw std::invalid_argument("Choose distribution type!");
-
   }
-
 
   }
 
