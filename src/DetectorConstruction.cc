@@ -273,9 +273,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  	name3); 
   
   new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ-aLittleBit,
+		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
 			  	shieldingHeight+0.25*cm,
-			  	shieldingXZ-aLittleBit),
+			  	shieldingXZ-aLittleBit+2.*mm),
 		  logic_shielding3,
 		  name3,
 		  logicEnv,
@@ -361,6 +361,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   G4String pixelName;
 
+  // TMP
+  /*
   // Create pixelated detector
   G4int nameCounter = 0;
   G4int numPixels = 16;
@@ -388,7 +390,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	pixelAssembly->AddPlacedVolume(logicPixel, TrT);
     }
   }
-  
+  */
+
   // Create all Redlen detectors and apertures per assembly
   for(G4int nDet=0; nDet<4;nDet++)
   {
@@ -418,8 +421,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
     Rm.rotateX(90.*deg);
     Tr = G4Transform3D(Rm, Tm); 
-
-    detectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);
+    // TMP
+    //detectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);
     Rm.rotateX(-90.*deg);
     
    } 
@@ -451,8 +454,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  false,
 		  checkOverlaps);
   
-  
- 
+  // TMP
+ /*
   // Bus structure placements
   G4double busHeight = 1.*cm;
 
@@ -505,6 +508,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  logicEnv,
 		  false,
 		  checkOverlaps);
+  */
   // Place the 3 copies of the detector assemblies using the position 
   // multiplier arrays from above
   unsigned int numDetectorAssemblies = 3;
@@ -534,7 +538,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
   // FIXME
-  G4double aperatureSquare = 0.22*cm;
+  G4double aperatureSquare = 0.2*cm;
 
   // added dimension to "fill the gap" between detectors
   G4double fillTheGap = 2.*mm;
@@ -634,7 +638,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
 G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 		G4double    boxDepth,				
 		G4double    shieldingThickness,
-		G4double    finiteThicknessOffset, // fuck this parameter
+		G4double    finiteThicknessOffset, 
 		G4Material* shieldingMaterial,
 		G4String    shieldingName)
 {
@@ -655,18 +659,18 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
   // top wall of shielding
   G4Box* subtraction_block = new G4Box("B1",
 		   	    outerDim/2.,
-			    boxDepth/2.+shieldingThickness,
+			    boxDepth/2. + shieldingThickness,
 			    outerDim/2.);
 
   G4Box* sideSubtraction_block = new G4Box("B1_s",
 		   	    outerDim/2. + finiteThicknessOffset,
-			    boxDepth/2.+shieldingThickness,
+			    boxDepth/2. + shieldingThickness,
 			    outerDim/2.);
   
   
   G4Box* middleWallRemover = new G4Box("MWR",
 		 shieldingThickness*2.5, 			
-		 boxDepth/2.+shieldingThickness,
+		 boxDepth/2. + shieldingThickness,
 		 outerDim/2.);
   
   
@@ -683,6 +687,7 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 		  			0,
 					0));
   // Union of 3rd block
+  // union on Z-side
   rotm->rotateY(90.*deg);
   solid_L = new G4UnionSolid("solid-L",
 		  		solid_L,
@@ -695,7 +700,8 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
   // (unrotate)
   rotm->rotateY(-90.*deg);
   
-  // L shape to subtraction from main L shielding, union of 2 blocks 
+  // L shape to subtraction from main L shielding, union of 2 blocks
+  // union occurs on X-side
   G4UnionSolid* sub_L = new G4UnionSolid("sub-L",
 		  			subtraction_block,
 					sideSubtraction_block,
@@ -806,5 +812,4 @@ G4LogicalVolume* DetectorConstruction::CreateBerylliumWindow(
   return window;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

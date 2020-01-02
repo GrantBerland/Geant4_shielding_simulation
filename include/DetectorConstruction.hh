@@ -57,7 +57,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     
     G4LogicalVolume* CreateBerylliumWindow(G4double, G4double, G4Material*, G4String);
   
-  
   protected:
     G4LogicalVolume*  fScoringVolume;
 };
