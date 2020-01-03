@@ -155,15 +155,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   /////////// Detector Construction ////////
   //////////////////////////////////////////
 
-  // 0.5 factor due to full height definition
   G4double outerShieldingThickness = 15.*mm; // PE 
   G4double shieldingThickness2     = 3.5*mm; // W
   G4double shieldingThickness3     = 2.5*mm; // Sn
   G4double detectorXY      = 40.*mm;
-  G4double detectorZ       = 5.*mm;
+  G4double detectorZ       = 6.*mm;
   G4double detectorElectronicsZ = 10.185*mm;
   G4double boxInnerSizeXY  = 90.*mm * 0.5;
-  G4double windowThickness = 1.*mm;		// 2 windows, each 0.5 mm
+  G4double windowThickness = 1.*mm;		// 2 windows, each 1 mm
   G4double frontEndBoardThickness = 2.86*mm;
   G4double detectorApertureSpacing = 20.*mm;
   G4double detectorHeight = 50.*mm;
@@ -223,15 +222,18 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double aBit 	= 4.*mm;
   G4double aLittleBit 	= 0.6*mm;
   
-  G4LogicalVolume* logic_shielding1 = CreateLshielding(box1OuterDim,
-		  boxDepth1,
+  G4LogicalVolume* logic_shielding1 = CreateLshielding(box1OuterDim 
+		                                      - 5.*mm,
+		  boxDepth1-12.5*mm,
 		  outerShieldingThickness,
 		  -25.*mm,
 		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 		  name1); 
   
   new G4PVPlacement(0,
-		G4ThreeVector(shieldingXZ, shieldingHeight, shieldingXZ),
+		G4ThreeVector(shieldingXZ, 
+			      shieldingHeight-5.*mm, 
+			      shieldingXZ),
 		  logic_shielding1,
 		  name1,
 		  logicEnv,
@@ -241,7 +243,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Tungsten shielding
   G4String name2 = "W_Shielding"; 
   
-  G4double box2OuterDim = box1OuterDim - outerShieldingThickness - aBit;
+  G4double box2OuterDim = 95.*mm - 2.*mm;
   G4double boxDepth2    = boxDepth1 - outerShieldingThickness;
   
   G4LogicalVolume* logic_shielding2 = CreateLshielding(box2OuterDim,
@@ -253,7 +255,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   
   new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ-aLittleBit,shieldingHeight,shieldingXZ-aLittleBit),
+		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,shieldingHeight,shieldingXZ-aLittleBit+2.*mm),
 		  logic_shielding2,
 		  name2,
 		  logicEnv,
@@ -263,10 +265,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Tin shielding
   G4String name3 = "Sn_Shielding"; 
   
-  G4double box3OuterDim = box2OuterDim - shieldingThickness2 - aBit*2;
+  //G4double box3OuterDim = 95.*mm - 10.5*mm;
+  G4double box3OuterDim = 89.*mm - 5.*mm;
   G4double boxDepth3    = boxDepth2 - shieldingThickness2; 
   G4LogicalVolume* logic_shielding3 = CreateLshielding(box3OuterDim,
-			boxDepth3,
+			boxDepth3 - 5.*mm,
 		  	shieldingThickness3,
 			0.*mm,
 		  	nist->FindOrBuildMaterial("G4_Sn"),
@@ -274,7 +277,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   new G4PVPlacement(0,
 		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
-			  	shieldingHeight+0.25*cm,
+			  	shieldingHeight+0.25*cm-5.*mm ,
 			  	shieldingXZ-aLittleBit+2.*mm),
 		  logic_shielding3,
 		  name3,
@@ -391,14 +394,13 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     }
   }
   */
-
   // Create all Redlen detectors and apertures per assembly
   for(G4int nDet=0; nDet<4;nDet++)
   {
  
     // CZT Detector
     Tm.setX(pm1[nDet]*detectorPosX + 2.1*cm); 
-    Tm.setY(-1.25*cm+0.1*mm+detectorPosY+detectorZ); 
+    Tm.setY(-1.25*cm+detectorPosY+detectorZ); 
     Tm.setZ(pm2[nDet]*detectorPosZ + 2.1*cm);
     
     Tr = G4Transform3D(Rm, Tm); 
@@ -415,14 +417,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     detectorAssembly->AddPlacedVolume(logicDetectorElectronics, Tr);
   
     // Coded Aperture
-    Tm.setX(pm1[nDet]*(detectorPosX + 0.*mm));
-    Tm.setY(detectorPosY + detectorApertureSpacing + detectorZ/2.);
-    Tm.setZ(pm2[nDet]*(detectorPosZ + 0.*mm));
+    Tm.setX(pm1[nDet]*detectorPosX + 0.5*mm-100.*um);
+    Tm.setY(detectorPosY + detectorApertureSpacing + detectorZ-1.25*cm);
+    Tm.setZ(pm2[nDet]*detectorPosZ + 0.5*mm-100.*um);
     
     Rm.rotateX(90.*deg);
     Tr = G4Transform3D(Rm, Tm); 
     // TMP
-    //detectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);
+    detectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);
     Rm.rotateX(-90.*deg);
     
    } 
@@ -433,7 +435,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double windowPlacement = detectorPosY + detectorApertureSpacing 
 	  				  + detectorZ/2.;
 
-  
+ // TMP
+ /*
   new G4PVPlacement(0,
 		  G4ThreeVector(shieldingXZ-aLittleBit,
 	detectorHeight+windowPlacement+windowThickness/2.+1.75*mm/2.,
@@ -453,7 +456,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-  
+  */
+
   // TMP
  /*
   // Bus structure placements
