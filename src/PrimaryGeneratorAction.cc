@@ -401,8 +401,9 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
 
 
     // Selects random energy according to exponential distribution
-    G4double randomNumber = G4UniformRand();
-    r->energy = ((std::log(1 - randomNumber)*-E_folding))*keV;
+    //G4double randomNumber = G4UniformRand();
+    //r->energy = ((std::log(1 - randomNumber)*-E_folding))*keV;
+     r->energy = 1. * MeV;
 }
 
 
