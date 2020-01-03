@@ -300,7 +300,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 							"Electronics");
   
   G4LogicalVolume* logicalTopWindow = CreateBerylliumWindow(
-		(boxInnerSizeXY-1.*mm)*2, 
+		84.*mm, 
 		windowThickness,
 		nist->FindOrBuildMaterial("G4_Be"),
 		"top_Be_Window");
@@ -364,8 +364,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   G4String pixelName;
 
-  // TMP
-  /*
   // Create pixelated detector
   G4int nameCounter = 0;
   G4int numPixels = 16;
@@ -393,7 +391,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	pixelAssembly->AddPlacedVolume(logicPixel, TrT);
     }
   }
-  */
+  
   // Create all Redlen detectors and apertures per assembly
   for(G4int nDet=0; nDet<4;nDet++)
   {
@@ -423,8 +421,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
     Rm.rotateX(90.*deg);
     Tr = G4Transform3D(Rm, Tm); 
-    // TMP
-    //detectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);
+    detectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);
     Rm.rotateX(-90.*deg);
     
    } 
@@ -432,34 +429,29 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   // Top beryllium window
-  G4double windowPlacement = detectorPosY + detectorApertureSpacing 
-	  				  + detectorZ/2.;
-
- // TMP
- /*
   new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ-aLittleBit,
-	detectorHeight+windowPlacement+windowThickness/2.+1.75*mm/2.,
-			  	shieldingXZ-aLittleBit),
+		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
+    detectorHeight+detectorPosY+detectorApertureSpacing
+    +detectorZ-1.25*cm+(windowThickness+1.5*mm)/2.,
+			  	shieldingXZ-aLittleBit+2.*mm),
 		  logicalTopWindow,
 		  "top_Be_Window",
 		  logicEnv,
 		  false,
 		  checkOverlaps);
   
+  // Bottom beryllium window 
   new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ-aLittleBit,
-	     detectorHeight+windowPlacement+windowThickness/2.-1.75*mm,
-			  	shieldingXZ-aLittleBit),
+		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
+    detectorHeight+detectorPosY+detectorApertureSpacing
+    +detectorZ-1.25*cm-(windowThickness+1.5*mm)/2.,
+			  	shieldingXZ-aLittleBit+2.*mm),
 		  logicalTopWindow,
 		  "bottom_Be_Window",
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-  */
 
-  // TMP
- /*
   // Bus structure placements
   G4double busHeight = 1.*cm;
 
@@ -512,7 +504,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-  */
+  
   // Place the 3 copies of the detector assemblies using the position 
   // multiplier arrays from above
   unsigned int numDetectorAssemblies = 3;
@@ -542,7 +534,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
   // FIXME
-  G4double aperatureSquare = 0.2*cm;
+  G4double aperatureSquare = 0.22*cm;
 
   // added dimension to "fill the gap" between detectors
   G4double fillTheGap = 2.*mm;
@@ -782,7 +774,7 @@ G4LogicalVolume* DetectorConstruction::CreateBerylliumWindow(
 			       windowDimension/2.);
 
   G4Box* sideWindowBox = new G4Box("Window-box",
-		  	       windowDimension/2.+1.5*mm,
+		  	       windowDimension/2.,
 			       windowThickness/2.,
 			       windowDimension/2.);
   
