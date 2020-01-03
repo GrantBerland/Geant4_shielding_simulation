@@ -155,15 +155,14 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   /////////// Detector Construction ////////
   //////////////////////////////////////////
 
-  // 0.5 factor due to full height definition
   G4double outerShieldingThickness = 15.*mm; // PE 
   G4double shieldingThickness2     = 3.5*mm; // W
   G4double shieldingThickness3     = 2.5*mm; // Sn
   G4double detectorXY      = 40.*mm;
-  G4double detectorZ       = 5.*mm;
+  G4double detectorZ       = 6.*mm;
   G4double detectorElectronicsZ = 10.185*mm;
   G4double boxInnerSizeXY  = 90.*mm * 0.5;
-  G4double windowThickness = 1.*mm;		// 2 windows, each 0.5 mm
+  G4double windowThickness = 1.*mm;		// 2 windows, each 1 mm
   G4double frontEndBoardThickness = 2.86*mm;
   G4double detectorApertureSpacing = 20.*mm;
   G4double detectorHeight = 50.*mm;
@@ -218,20 +217,22 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Polyethylene shielding
   G4String name1 = "pe_Shielding";  
 
-  G4double box1OuterDim = 120.*mm;
+  G4double box1OuterDim = 86.5*mm+3.5*mm;
   G4double boxDepth1    = 70.*mm;
   G4double aBit 	= 4.*mm;
   G4double aLittleBit 	= 0.6*mm;
   
   G4LogicalVolume* logic_shielding1 = CreateLshielding(box1OuterDim,
-		  boxDepth1,
+		  boxDepth1-27.*mm,
 		  outerShieldingThickness,
-		  -25.*mm,
+		  -10.5*mm,
 		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 		  name1); 
   
   new G4PVPlacement(0,
-		G4ThreeVector(shieldingXZ, shieldingHeight, shieldingXZ),
+		G4ThreeVector(shieldingXZ+2.*mm-0.6*mm, 
+			      shieldingHeight-7.25*mm, 
+			      shieldingXZ+2.*mm-0.6*mm),
 		  logic_shielding1,
 		  name1,
 		  logicEnv,
@@ -241,19 +242,21 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Tungsten shielding
   G4String name2 = "W_Shielding"; 
   
-  G4double box2OuterDim = box1OuterDim - outerShieldingThickness - aBit;
+  G4double box2OuterDim = 86.5*mm;
   G4double boxDepth2    = boxDepth1 - outerShieldingThickness;
   
   G4LogicalVolume* logic_shielding2 = CreateLshielding(box2OuterDim,
-			boxDepth2+aBit,
+			boxDepth2+aBit-12.*mm,
 		  	shieldingThickness2,
-			-7.*mm,
+			-3.*mm,
 		  	nist->FindOrBuildMaterial("G4_W"),
 		  	name2); 
   
   
   new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ-aLittleBit,shieldingHeight,shieldingXZ-aLittleBit),
+		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
+			  shieldingHeight-3.5*mm,
+			  shieldingXZ-aLittleBit+2.*mm),
 		  logic_shielding2,
 		  name2,
 		  logicEnv,
@@ -263,19 +266,19 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Tin shielding
   G4String name3 = "Sn_Shielding"; 
   
-  G4double box3OuterDim = box2OuterDim - shieldingThickness2 - aBit*2;
+  G4double box3OuterDim = 84.*mm;
   G4double boxDepth3    = boxDepth2 - shieldingThickness2; 
   G4LogicalVolume* logic_shielding3 = CreateLshielding(box3OuterDim,
-			boxDepth3,
+			boxDepth3 - 5.*mm,
 		  	shieldingThickness3,
-			0.*mm,
+			-1.25*mm,
 		  	nist->FindOrBuildMaterial("G4_Sn"),
 		  	name3); 
   
   new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ-aLittleBit,
-			  	shieldingHeight+0.25*cm,
-			  	shieldingXZ-aLittleBit),
+		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
+			  	shieldingHeight+0.25*cm-5.*mm ,
+			  	shieldingXZ-aLittleBit+2.*mm),
 		  logic_shielding3,
 		  name3,
 		  logicEnv,
@@ -297,7 +300,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 							"Electronics");
   
   G4LogicalVolume* logicalTopWindow = CreateBerylliumWindow(
-		(boxInnerSizeXY-1.*mm)*2, 
+		84.*mm, 
 		windowThickness,
 		nist->FindOrBuildMaterial("G4_Be"),
 		"top_Be_Window");
@@ -395,7 +398,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
  
     // CZT Detector
     Tm.setX(pm1[nDet]*detectorPosX + 2.1*cm); 
-    Tm.setY(-1.25*cm+0.1*mm+detectorPosY+detectorZ); 
+    Tm.setY(-1.25*cm+detectorPosY+detectorZ); 
     Tm.setZ(pm2[nDet]*detectorPosZ + 2.1*cm);
     
     Tr = G4Transform3D(Rm, Tm); 
@@ -412,13 +415,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     detectorAssembly->AddPlacedVolume(logicDetectorElectronics, Tr);
   
     // Coded Aperture
-    Tm.setX(pm1[nDet]*(detectorPosX + 0.*mm));
-    Tm.setY(detectorPosY + detectorApertureSpacing + detectorZ/2.);
-    Tm.setZ(pm2[nDet]*(detectorPosZ + 0.*mm));
+    Tm.setX(pm1[nDet]*detectorPosX + 0.5*mm-100.*um);
+    Tm.setY(detectorPosY + detectorApertureSpacing + detectorZ-1.25*cm);
+    Tm.setZ(pm2[nDet]*detectorPosZ + 0.5*mm-100.*um);
     
     Rm.rotateX(90.*deg);
     Tr = G4Transform3D(Rm, Tm); 
-
     detectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);
     Rm.rotateX(-90.*deg);
     
@@ -427,32 +429,29 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   // Top beryllium window
-  G4double windowPlacement = detectorPosY + detectorApertureSpacing 
-	  				  + detectorZ/2.;
-
-  
   new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ-aLittleBit,
-	detectorHeight+windowPlacement+windowThickness/2.+1.75*mm/2.,
-			  	shieldingXZ-aLittleBit),
+		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
+    detectorHeight+detectorPosY+detectorApertureSpacing
+    +detectorZ-1.25*cm+(windowThickness+1.5*mm)/2.,
+			  	shieldingXZ-aLittleBit+2.*mm),
 		  logicalTopWindow,
 		  "top_Be_Window",
 		  logicEnv,
 		  false,
 		  checkOverlaps);
   
+  // Bottom beryllium window 
   new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ-aLittleBit,
-	     detectorHeight+windowPlacement+windowThickness/2.-1.75*mm,
-			  	shieldingXZ-aLittleBit),
+		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
+    detectorHeight+detectorPosY+detectorApertureSpacing
+    +detectorZ-1.25*cm-(windowThickness+1.5*mm)/2.,
+			  	shieldingXZ-aLittleBit+2.*mm),
 		  logicalTopWindow,
 		  "bottom_Be_Window",
 		  logicEnv,
 		  false,
 		  checkOverlaps);
-  
-  
- 
+
   // Bus structure placements
   G4double busHeight = 1.*cm;
 
@@ -505,6 +504,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  logicEnv,
 		  false,
 		  checkOverlaps);
+  
   // Place the 3 copies of the detector assemblies using the position 
   // multiplier arrays from above
   unsigned int numDetectorAssemblies = 3;
@@ -634,7 +634,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
 G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 		G4double    boxDepth,				
 		G4double    shieldingThickness,
-		G4double    finiteThicknessOffset, // fuck this parameter
+		G4double    finiteThicknessOffset, 
 		G4Material* shieldingMaterial,
 		G4String    shieldingName)
 {
@@ -655,18 +655,18 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
   // top wall of shielding
   G4Box* subtraction_block = new G4Box("B1",
 		   	    outerDim/2.,
-			    boxDepth/2.+shieldingThickness,
+			    boxDepth/2. + shieldingThickness,
 			    outerDim/2.);
 
   G4Box* sideSubtraction_block = new G4Box("B1_s",
 		   	    outerDim/2. + finiteThicknessOffset,
-			    boxDepth/2.+shieldingThickness,
+			    boxDepth/2. + shieldingThickness,
 			    outerDim/2.);
   
   
   G4Box* middleWallRemover = new G4Box("MWR",
 		 shieldingThickness*2.5, 			
-		 boxDepth/2.+shieldingThickness,
+		 boxDepth/2. + shieldingThickness,
 		 outerDim/2.);
   
   
@@ -683,6 +683,7 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
 		  			0,
 					0));
   // Union of 3rd block
+  // union on Z-side
   rotm->rotateY(90.*deg);
   solid_L = new G4UnionSolid("solid-L",
 		  		solid_L,
@@ -695,7 +696,8 @@ G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
   // (unrotate)
   rotm->rotateY(-90.*deg);
   
-  // L shape to subtraction from main L shielding, union of 2 blocks 
+  // L shape to subtraction from main L shielding, union of 2 blocks
+  // union occurs on X-side
   G4UnionSolid* sub_L = new G4UnionSolid("sub-L",
 		  			subtraction_block,
 					sideSubtraction_block,
@@ -772,7 +774,7 @@ G4LogicalVolume* DetectorConstruction::CreateBerylliumWindow(
 			       windowDimension/2.);
 
   G4Box* sideWindowBox = new G4Box("Window-box",
-		  	       windowDimension/2.+1.5*mm,
+		  	       windowDimension/2.,
 			       windowThickness/2.,
 			       windowDimension/2.);
   
@@ -806,5 +808,4 @@ G4LogicalVolume* DetectorConstruction::CreateBerylliumWindow(
   return window;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
