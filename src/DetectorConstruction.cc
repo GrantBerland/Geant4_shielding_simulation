@@ -217,23 +217,22 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Polyethylene shielding
   G4String name1 = "pe_Shielding";  
 
-  G4double box1OuterDim = 120.*mm;
+  G4double box1OuterDim = 86.5*mm+3.5*mm;
   G4double boxDepth1    = 70.*mm;
   G4double aBit 	= 4.*mm;
   G4double aLittleBit 	= 0.6*mm;
   
-  G4LogicalVolume* logic_shielding1 = CreateLshielding(box1OuterDim 
-		                                      - 5.*mm,
-		  boxDepth1-12.5*mm,
+  G4LogicalVolume* logic_shielding1 = CreateLshielding(box1OuterDim,
+		  boxDepth1-27.*mm,
 		  outerShieldingThickness,
-		  -25.*mm,
+		  -10.5*mm,
 		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 		  name1); 
   
   new G4PVPlacement(0,
-		G4ThreeVector(shieldingXZ, 
-			      shieldingHeight-5.*mm, 
-			      shieldingXZ),
+		G4ThreeVector(shieldingXZ+2.*mm-0.6*mm, 
+			      shieldingHeight-7.25*mm, 
+			      shieldingXZ+2.*mm-0.6*mm),
 		  logic_shielding1,
 		  name1,
 		  logicEnv,
@@ -243,19 +242,21 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Tungsten shielding
   G4String name2 = "W_Shielding"; 
   
-  G4double box2OuterDim = 95.*mm - 2.*mm;
+  G4double box2OuterDim = 86.5*mm;
   G4double boxDepth2    = boxDepth1 - outerShieldingThickness;
   
   G4LogicalVolume* logic_shielding2 = CreateLshielding(box2OuterDim,
-			boxDepth2+aBit,
+			boxDepth2+aBit-12.*mm,
 		  	shieldingThickness2,
-			-7.*mm,
+			-3.*mm,
 		  	nist->FindOrBuildMaterial("G4_W"),
 		  	name2); 
   
   
   new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,shieldingHeight,shieldingXZ-aLittleBit+2.*mm),
+		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
+			  shieldingHeight-3.5*mm,
+			  shieldingXZ-aLittleBit+2.*mm),
 		  logic_shielding2,
 		  name2,
 		  logicEnv,
@@ -265,13 +266,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Tin shielding
   G4String name3 = "Sn_Shielding"; 
   
-  //G4double box3OuterDim = 95.*mm - 10.5*mm;
-  G4double box3OuterDim = 89.*mm - 5.*mm;
+  G4double box3OuterDim = 84.*mm;
   G4double boxDepth3    = boxDepth2 - shieldingThickness2; 
   G4LogicalVolume* logic_shielding3 = CreateLshielding(box3OuterDim,
 			boxDepth3 - 5.*mm,
 		  	shieldingThickness3,
-			0.*mm,
+			-1.25*mm,
 		  	nist->FindOrBuildMaterial("G4_Sn"),
 		  	name3); 
   
@@ -424,7 +424,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     Rm.rotateX(90.*deg);
     Tr = G4Transform3D(Rm, Tm); 
     // TMP
-    detectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);
+    //detectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);
     Rm.rotateX(-90.*deg);
     
    } 
