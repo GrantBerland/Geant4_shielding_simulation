@@ -27,8 +27,8 @@
 /tracking/verbose 0
 
 # Set hit and signal file names
-/dataCollection/setHitFileName archive/hitTest10.csv
-/dataCollection/setSignalFileName archive/signalTest10.csv
+/dataCollection/setHitFileName hitTest_s.csv
+/dataCollection/setSignalFileName signalTest_s.csv
 
 # E0 of background distribution out of {100,200,300} keV
 /particleSource/setFoldingEnergy 100. # [keV]
@@ -37,19 +37,14 @@
 /particleSource/setEventAngularSize 30 # deg, [0, 40]
 
 
-/particleSource/setThetaDirection 10
+/particleSource/setThetaDirection 0  # deg, mean
+/particleSource/setThetaSigma 30     # deg, std dev
 
-# 0 = background trapped electrons
-#/particleSource/setBackgroundType 0
-#/run/beamOn 710000
-
-# 1 = background loss cone electrons
-#/particleSource/setBackgroundType 1
-#/run/beamOn 330000
+/particleSource/setPhiDirection 10  # deg, mean
+/particleSource/setPhiSigma 30     # deg, std dev
 
 # 2 = bremsstrahlung signal photons
 /particleSource/setBackgroundType 3 
 #/run/beamOn 9800
 /run/beamOn 98000
-
 

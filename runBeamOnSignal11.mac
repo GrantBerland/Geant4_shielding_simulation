@@ -27,17 +27,30 @@
 /tracking/verbose 0
 
 # Set hit and signal file names
-/dataCollection/setHitFileName hitBG_trappedOnly_noSCbus2.csv
-/dataCollection/setSignalFileName signalBG_trappedOnly_noSCbus2.csv
+/dataCollection/setHitFileName archive1/hitTest10.csv
+/dataCollection/setSignalFileName archive1/signalTest10.csv
 
 # E0 of background distribution out of {100,200,300} keV
 /particleSource/setFoldingEnergy 100. # [keV]
 
-# 0 = background trapped electrons
-/particleSource/setBackgroundType 0
-/run/beamOn 100000000
+# Angular half-angle size of event (maps to spatial size at 450 km)
+/particleSource/setEventAngularSize 30 # deg, [0, 40]
 
-# 1 = background loss cone electrons
-#/particleSource/setBackgroundType 1
-#/run/beamOn 1000000
+/particleSource/setThetaDirection 14
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+
+/particleSource/setThetaDirection 15
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
+
+/particleSource/setThetaDirection 16
+
+# 2 = bremsstrahlung signal photons
+/particleSource/setBackgroundType 3 
+/run/beamOn 9800
 
