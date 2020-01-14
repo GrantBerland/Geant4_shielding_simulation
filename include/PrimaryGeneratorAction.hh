@@ -70,12 +70,18 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     // Methods for messenger class
     void SetWhichParticle(G4int partSelection) {fWhichParticle = partSelection;};
 
+    // Sets background and signal folding energies
     void SetFoldingEnergy(G4double E0) { E_folding = E0; };
+    
+    // Under GenerateSignalPhotons, selects limiting zenith angle
     void SetEventAngle(G4double ang) { photonPhiLimitDeg = ang; };
+    
+    // Sets spatial distribution type under GenerateOtherDistributions
+    void SetSpatialDistribution(G4int type) { fDistType = type; };    
 
+    // Under SpatialDistributions case 3, sets Gaussian parameters
     void SetThetaDirection(G4double ang) { fDirectionTheta = ang; }; 
     void SetThetaSigma(G4double stddev) { fThetaSigma = stddev; }; 
-    
     void SetPhiDirection(G4double ang) { fDirectionPhi = ang; }; 
     void SetPhiSigma(G4double stddev) { fPhiSigma = stddev; }; 
     
@@ -96,17 +102,15 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double fThetaSigma;
     G4double fDirectionPhi;
     G4double fPhiSigma;
+
+    G4int    fDistType;
     
     G4int    fWhichParticle;
+
     G4ParticleDefinition* electronParticle; 
     G4ParticleDefinition* photonParticle; 
     PrimaryGeneratorMessenger* fPrimaryGeneratorMessenger;
 
-    /*
-    const G4double photonEnergyProb100keV[64];
-    const G4double photonEnergyProb200keV[64];
-    const G4double photonEnergyProb300keV[64];
-    */
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

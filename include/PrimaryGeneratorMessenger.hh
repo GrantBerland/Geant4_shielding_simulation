@@ -26,6 +26,7 @@ private:
   PrimaryGeneratorAction* fPrimaryGenerator;
   G4UIdirectory*             fPrimDir;
   G4UIcmdWithAnInteger*      fcmd;
+  G4UIcmdWithAnInteger*      fcmd2;
   G4UIcmdWithADouble*        fDcmd;
   G4UIcmdWithADouble*        fD2cmd;
   G4UIcmdWithADouble*        fD3cmd;

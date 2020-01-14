@@ -12,49 +12,61 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* pri
 {
   fPrimDir = new G4UIdirectory("/particleSource/");
   fPrimDir->SetGuidance("Select trapped background, loss cone background, or photon signal source.");
-
+  
+  // Sets fWhichParticle 
   fcmd = new G4UIcmdWithAnInteger("/particleSource/setBackgroundType",this);
   fcmd->SetParameterName("Background Type {0,1,2}",true);
   fcmd->SetDefaultValue(0);
   fcmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+ 
+  // Sets fDistType
+  fcmd2 = new G4UIcmdWithAnInteger("/particleSource/setSpatialDistribution",this);
+  fcmd2->SetParameterName("Special Distribution type.",true);
+  fcmd2->SetDefaultValue(3);
+  fcmd2->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+  // Sets E_folding
   fDcmd = new G4UIcmdWithADouble("/particleSource/setFoldingEnergy",this);
   fDcmd->SetParameterName("Folding Energy {100, 200, 300} keV",true);
   fDcmd->SetDefaultValue(100.);
   fDcmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+  // Sets photonPhiLimitDeg
   fD2cmd= new G4UIcmdWithADouble("/particleSource/setEventAngularSize",this);
   fD2cmd->SetParameterName("Enter an angle within (0, 45] degrees.",true);
   fD2cmd->SetDefaultValue(100.);
   fD2cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-  
+ 
+  // Sets fDirectionTheta
   fD3cmd= new G4UIcmdWithADouble("/particleSource/setThetaDirection",this);
   fD3cmd->SetParameterName("Enter a direction angle for theta [deg].",true);
   fD3cmd->SetDefaultValue(0.);
   fD3cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-  
+ 
+  // Sets fThetaSigma
   fD4cmd= new G4UIcmdWithADouble("/particleSource/setThetaSigma",this);
   fD4cmd->SetParameterName("Enter an angular std dev for theta [deg].",true);
   fD4cmd->SetDefaultValue(0.);
   fD4cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+  // Sets fDirectionPhi
   fD5cmd= new G4UIcmdWithADouble("/particleSource/setPhiDirection",this);
   fD5cmd->SetParameterName("Enter a direction angle for phi [deg].",true);
   fD5cmd->SetDefaultValue(0.);
   fD5cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
   
+  // Sets fPhiSigma
   fD6cmd= new G4UIcmdWithADouble("/particleSource/setPhiSigma",this);
   fD6cmd->SetParameterName("Enter an angular std dev for phi [deg].",true);
   fD6cmd->SetDefaultValue(0.);
   fD6cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
-
-
 PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
   delete fPrimDir;
   delete fcmd;
+  delete fcmd2;
   delete fDcmd;
   delete fD2cmd;
   delete fD3cmd;
@@ -63,13 +75,16 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
   delete fD6cmd;
 }
 
-
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, 
 					    G4String newValue)
 {
 
   if(command == fcmd){
     fPrimaryGenerator->SetWhichParticle(std::stoi(newValue));
+  }    	  
+  
+  if(command == fcmd2){
+    fPrimaryGenerator->SetSpatialDistribution(std::stoi(newValue));
   }    	  
 
   if(command == fDcmd){

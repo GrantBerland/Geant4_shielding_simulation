@@ -58,10 +58,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   sphereR(25.*cm),
   lossConeAngleDeg(64.),
   photonPhiLimitDeg(40.), 
-  fDirectionTheta(), 
-  fThetaSigma(),
-  fDirectionPhi(), 
-  fPhiSigma(),
+  fDirectionTheta(0.), 
+  fThetaSigma(0.),
+  fDirectionPhi(0.), 
+  fPhiSigma(0.),
+  fDistType(3),
   fWhichParticle(0),
   electronParticle(0),
   photonParticle(0),
@@ -263,14 +264,11 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 
   detectorSize  = 250*2;  // mm , units assigned in switch-case
 
-  G4double fE0 = 241.;
   do{
-    r->energy = -(fE0-50) * std::log(1 - G4UniformRand()) * keV;
+    r->energy = -(E_folding-50) * std::log(1 - G4UniformRand()) * keV;
   } while(r->energy < 50.*keV);
 	
  
-  G4int fDistType = 3;
-  
   switch(fDistType)
   {
         case 0: // point source, near
@@ -297,40 +295,43 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 		break;
         
 	case 2: // structured circle
-                R = std::sqrt(G4UniformRand() * 30.) * mm;
-                theta = G4UniformRand() * 2. * fPI;
-                r->x = 10.*mm + R * std::cos(theta);
-                r->y = 5.*mm - R * std::sin(theta);
-                r->z = -20.*cm;
+                //R = std::sqrt(G4UniformRand() * 20.) * cm;
+                R = 5. * cm;
+		theta = G4UniformRand() * 2. * fPI;
+                r->x = R * std::cos(theta) - 10.*cm;
+                r->z = R * std::sin(theta) - 10.*cm;
+                r->y = 20.*cm;
                 
-                r->xDir = r->yDir = 0;
- 		r->zDir = 1;
+                r->xDir = r->zDir = 0;
+ 		r->yDir = -1;
 
                 break;
 
-        case 3: // Rotated plane + Gaussian spot
+        case 3: // Gaussian spot (default spatial distribution)
 		
-		// Box-Mueller transform
+		// Box-Mueller transform for standard normals, N1 & N2
 		U1 = G4UniformRand();
 		U2 = G4UniformRand();
 		N1 = std::sqrt(-2*std::log(U1)) * std::cos(2*fPI*U2);
 		N2 = std::sqrt(-2*std::log(U1)) * std::sin(2*fPI*U2);
 
-		// x ~ N(x_mean, sigma^2)
-		theta = (fDirectionTheta + N1*fThetaSigma) * fDeg2Rad;
-		phi   = (fDirectionPhi   + N2*fPhiSigma)   * fDeg2Rad;
+		// X ~ N(x_mean, sigma^2)
+		theta = (fDirectionTheta + N1 * fThetaSigma) * fDeg2Rad;
+		phi   = (fDirectionPhi   + N2 * fPhiSigma)   * fDeg2Rad;
 
-                r->x = G4UniformRand()*detectorSize - detectorSize/2.;
+                // Define the random position on a plane above AXIS
+		r->x = G4UniformRand()*detectorSize - detectorSize/2.;
                 r->x *= mm;
-
                 r->x -= 5*cm;
 
                 r->z = G4UniformRand()*detectorSize - detectorSize/2.;
                 r->z *= mm;
-                
+		
+		// Height of plane
 		r->y = 20.*cm;
 
-                r->xDir = std::sin(phi) * std::cos(theta);
+                // Directionality of particle
+		r->xDir = std::sin(phi) * std::cos(theta);
                 r->zDir = std::sin(phi) * std::sin(theta);
                 r->yDir = -std::cos(phi);
                 break;
