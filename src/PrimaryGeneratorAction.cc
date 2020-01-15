@@ -308,7 +308,10 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
                 break;
 
         case 3: // Gaussian spot (default spatial distribution)
-		
+	
+		// REMEMBER this is two rotations, zenith angle away from
+		// the Y-axis, THEN about Y with theta
+
 		// Box-Mueller transform for standard normals, N1 & N2
 		U1 = G4UniformRand();
 		U2 = G4UniformRand();
