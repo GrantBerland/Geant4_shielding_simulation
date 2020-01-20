@@ -213,9 +213,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double boxDepth1    = 70.*mm;
   G4double aBit 	= 4.*mm;
   G4double aLittleBit 	= 0.6*mm;
-  
+  G4double depthCorrection = 8.*mm;
+
   G4LogicalVolume* logic_shielding1 = CreateLshielding(box1OuterDim,
-		  boxDepth1-27.*mm,
+		  boxDepth1-27.*mm-depthCorrection/2.,
 		  outerShieldingThickness,
 		  -10.5*mm,
 		  nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
@@ -223,7 +224,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   new G4PVPlacement(0,
 		G4ThreeVector(shieldingXZ+2.*mm-0.6*mm, 
-			      shieldingHeight-7.25*mm, 
+			      shieldingHeight-7.25*mm-depthCorrection/2., 
 			      shieldingXZ+2.*mm-0.6*mm),
 		  logic_shielding1,
 		  name1,
@@ -238,7 +239,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double boxDepth2    = boxDepth1 - outerShieldingThickness;
   
   G4LogicalVolume* logic_shielding2 = CreateLshielding(box2OuterDim,
-			boxDepth2+aBit-12.*mm,
+			boxDepth2+aBit-12.*mm-depthCorrection+2.*mm,
 		  	shieldingThickness2,
 			-3.*mm,
 		  	nist->FindOrBuildMaterial("G4_W"),
@@ -247,7 +248,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   new G4PVPlacement(0,
 		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
-			  shieldingHeight-3.5*mm,
+			  shieldingHeight-3.5*mm-depthCorrection/2.,
 			  shieldingXZ-aLittleBit+2.*mm),
 		  logic_shielding2,
 		  name2,
@@ -261,7 +262,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double box3OuterDim = 84.*mm;
   G4double boxDepth3    = boxDepth2 - shieldingThickness2; 
   G4LogicalVolume* logic_shielding3 = CreateLshielding(box3OuterDim,
-			boxDepth3 - 5.*mm,
+			boxDepth3 - 5.*mm-depthCorrection+2.*mm,
 		  	shieldingThickness3,
 			-1.25*mm,
 		  	nist->FindOrBuildMaterial("G4_Sn"),
@@ -269,7 +270,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   new G4PVPlacement(0,
 		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
-			  	shieldingHeight+0.25*cm-5.*mm ,
+			  	shieldingHeight+0.25*cm-5.*mm-depthCorrection/2.,
 			  	shieldingXZ-aLittleBit+2.*mm),
 		  logic_shielding3,
 		  name3,
@@ -379,7 +380,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	
 	TrT = G4Transform3D(RmT, TmT);	
         
-	//pixelAssembly->AddPlacedVolume(logicPixel, TrT);
+	pixelAssembly->AddPlacedVolume(logicPixel, TrT);
     }
   }
   
@@ -472,7 +473,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
   // FIXME
-  G4double aperatureSquare = 0.2*cm;
+  G4double aperatureSquare = 0.22*cm;
 
   // added dimension to "fill the gap" between detectors
   G4double fillTheGap = 2.*mm;
