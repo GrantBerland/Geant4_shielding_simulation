@@ -166,7 +166,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double frontEndBoardThickness  = 2.86*mm;
   G4double detectorApertureSpacing = 12.*mm;
   G4double detectorHeight 	   = 50.*mm;
-  G4double collimatorHeight 	   = 20.*mm;
+  G4double collimatorHeight 	   = 15.*mm;
 
   G4double pixelSize      = 2.5*mm;
   /////////////////////////////////////////
@@ -193,7 +193,16 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  		   0.5*collimatorHeight,
 				   0.5*1.*mm,
 				   0.5*2*detectorXY); 
- 
+  
+  G4RotationMatrix* rotm = new G4RotationMatrix();   
+  rotm->rotateX(90.*deg);
+
+  G4VSolid* collimatorUnion = new G4UnionSolid("Collimator",
+		  		   collimatorBlock,
+				   collimatorBlock,
+				   rotm,
+				   G4ThreeVector()); 
+  delete rotm;
 
   G4double shieldingHeight = 5.*cm;
   G4double shieldingXZ     = -4.30*cm; 
@@ -275,7 +284,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4LogicalVolume* logicPixel; 
  
 
-  G4LogicalVolume* logicCollimator = new G4LogicalVolume(collimatorBlock,
+  G4LogicalVolume* logicCollimator = new G4LogicalVolume(collimatorUnion,
 		  		      nist->FindOrBuildMaterial("G4_W"),
 				      "Collimator");
 
@@ -311,7 +320,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
  
 
   // Collimator placements
-  Tm.setX(0.*cm); Tm.setY(0.25*cm); Tm.setZ(0.);
+  Tm.setX(0.*cm); Tm.setY(0.35*cm); Tm.setZ(0.);
   Rm.rotateX(90.*deg);
   Rm.rotateZ(90.*deg);
   Tr = G4Transform3D(Rm, Tm); 
