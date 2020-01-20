@@ -158,14 +158,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double outerShieldingThickness = 15.*mm; // PE 
   G4double shieldingThickness2     = 3.5*mm; // W
   G4double shieldingThickness3     = 2.5*mm; // Sn
-  G4double detectorXY      = 40.*mm;
-  G4double detectorZ       = 6.*mm;
-  G4double detectorElectronicsZ = 10.185*mm;
-  G4double boxInnerSizeXY  = 90.*mm * 0.5;
-  G4double windowThickness = 1.*mm;		// 2 windows, each 1 mm
-  G4double frontEndBoardThickness = 2.86*mm;
-  G4double detectorApertureSpacing = 20.*mm;
-  G4double detectorHeight = 50.*mm;
+  G4double detectorXY      	   = 40.*mm;
+  G4double detectorZ       	   = 6.*mm;
+  G4double detectorElectronicsZ    = 10.185*mm;
+  G4double boxInnerSizeXY  	   = 90.*mm * 0.5;
+  G4double windowThickness 	   = 1.*mm;// 2 windows, each 1 mm
+  G4double frontEndBoardThickness  = 2.86*mm;
+  G4double detectorApertureSpacing = 12.*mm;
+  G4double detectorHeight 	   = 50.*mm;
+  G4double collimatorHeight 	   = 20.*mm;
 
   G4double pixelSize      = 2.5*mm;
   /////////////////////////////////////////
@@ -188,8 +189,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				    0.5*frontEndBoardThickness,
 				    boxInnerSizeXY-5.*mm);
 
-  
+  G4VSolid* collimatorBlock = new G4Box("Collimator",
+		  		   0.5*collimatorHeight,
+				   0.5*1.*mm,
+				   0.5*2*detectorXY); 
  
+
   G4double shieldingHeight = 5.*cm;
   G4double shieldingXZ     = -4.30*cm; 
   // Polyethylene shielding
@@ -268,7 +273,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   ////////////////////////////////////////////
 
   G4LogicalVolume* logicPixel; 
-  
+ 
+
+  G4LogicalVolume* logicCollimator = new G4LogicalVolume(collimatorBlock,
+		  		      nist->FindOrBuildMaterial("G4_W"),
+				      "Collimator");
+
   G4LogicalVolume* logicDetectorElectronics = new G4LogicalVolume(detectorElectronics,
 							FR4,
 							"BottomFR4");
@@ -298,7 +308,19 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   Tm.setX(0.); Tm.setY(-2.*cm); Tm.setZ(0.);
   Tr = G4Transform3D(Rm, Tm); 
   detectorAssembly->AddPlacedVolume(logicFrontEndBoard, Tr);
+ 
+
+  // Collimator placements
+  Tm.setX(0.*cm); Tm.setY(0.25*cm); Tm.setZ(0.);
+  Rm.rotateX(90.*deg);
+  Rm.rotateZ(90.*deg);
+  Tr = G4Transform3D(Rm, Tm); 
+  detectorAssembly->AddPlacedVolume(logicCollimator, Tr);
   
+  Rm.rotateZ(-90.*deg);
+  Rm.rotateX(-90.*deg);
+
+
   // Call method to return coded aperture sub solid, logical volume below
   G4SubtractionSolid* logicAp1 = CreateCodedAperture();
   
@@ -348,7 +370,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	
 	TrT = G4Transform3D(RmT, TmT);	
         
-	pixelAssembly->AddPlacedVolume(logicPixel, TrT);
+	//pixelAssembly->AddPlacedVolume(logicPixel, TrT);
     }
   }
   
