@@ -25,9 +25,9 @@
 /event/verbose 0
 /tracking/verbose 0
 
-# Set hit and signal file names
-/dataCollection/setHitFileName hitTest_s6.csv
-/dataCollection/setSignalFileName signalTest_s6.csv
+# Set hit and signal file names, files generated in /data directory
+/dataCollection/setHitFileName hit_test_phi20_sig30.csv
+/dataCollection/setSignalFileName sig_test_phi20_sig30.csv
 
 # E0 of background distribution out of {100,200,300} keV
 /particleSource/setFoldingEnergy 300. # [keV]
@@ -36,12 +36,14 @@
 /particleSource/setEventAngularSize 30 # deg, [0, 40]
 
 
-# 0 =
-# 1 = 
+# 0 = background trapped electrons
+# 1 = atmospheric backscattered electrons
 # 2 = bremsstrahlung signal photons
 # 3 = other spatial distributions (tests mostly)
 /particleSource/setBackgroundType 3 
 
+# 0 = 
+# 1 = 
 # 2 = circle
 # 3 = Gaussian spot
 /particleSource/setSpatialDistribution 3
