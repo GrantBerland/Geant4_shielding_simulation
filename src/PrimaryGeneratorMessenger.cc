@@ -24,6 +24,12 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* pri
   fcmd2->SetParameterName("Special Distribution type.",true);
   fcmd2->SetDefaultValue(3);
   fcmd2->AvailableForStates(G4State_PreInit, G4State_Idle);
+  
+  // Sets fBackgroundDistribution
+  fcmd3 = new G4UIcmdWithAnInteger("/particleSource/setBackgroundDistribution",this);
+  fcmd3->SetParameterName("Background spatial distribution type.",true);
+  fcmd3->SetDefaultValue(2);
+  fcmd3->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   // Sets E_folding
   fDcmd = new G4UIcmdWithADouble("/particleSource/setFoldingEnergy",this);
@@ -67,6 +73,7 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
   delete fPrimDir;
   delete fcmd;
   delete fcmd2;
+  delete fcmd3;
   delete fDcmd;
   delete fD2cmd;
   delete fD3cmd;
@@ -85,6 +92,10 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
   
   if(command == fcmd2){
     fPrimaryGenerator->SetSpatialDistribution(std::stoi(newValue));
+  }    	  
+  
+  if(command == fcmd3){
+    fPrimaryGenerator->SetBackgroundDistribution(std::stoi(newValue));
   }    	  
 
   if(command == fDcmd){
