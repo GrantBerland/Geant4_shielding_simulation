@@ -46,13 +46,13 @@
 #include "G4PhysListFactory.hh"
 #include "QBBC_modified.hh"
 
-#ifdef G4VIS_USE
+//#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
+//#endif
 
-#ifdef G4UI_USE
+//#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+//#endif
 
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
