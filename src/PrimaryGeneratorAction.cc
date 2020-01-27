@@ -382,6 +382,8 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
     G4double theta_exclusion = 64.*fPI/180.;
     G4double maxPitchAngle   = 64.*fPI/180.;
     G4double pitchAngle, gyroPhase;
+    
+    std::ofstream testFile;
 
     // Switch-case for the background spatial distribution type
     switch(fBackgroundSpatialDist)
@@ -403,7 +405,6 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
         r->yDir = std::sin(pitchAngle);
         r->zDir = std::cos(pitchAngle) * std::sin(gyroPhase);
 
-	std::ofstream testFile;
 	testFile.open("test.txt", std::ios_base::app);
 	testFile << r->x << ',' << r->y << ',' << r->z << ','
 		 << r->xDir << ',' << r->yDir << ',' << r->zDir << '\n';

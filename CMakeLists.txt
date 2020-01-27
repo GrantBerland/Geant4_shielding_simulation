@@ -51,6 +51,7 @@ set(EXAMPLEB1_SCRIPTS
   init_vis.mac
   vis.mac
   create_runfiles.py
+  coded_aperture_array.txt
   )
 
 foreach(_script ${EXAMPLEB1_SCRIPTS})
