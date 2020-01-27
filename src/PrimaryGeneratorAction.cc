@@ -64,7 +64,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fPhiSigma(0.),
   fSpatialSignalDist(3),
   fBackgroundEnergyDist(0),
-  fBackgroundSpatialDist(0),
+  fBackgroundSpatialDist(2),
   fWhichParticle(0),
   fElectronParticle(0),
   fPhotonParticle(0),
@@ -380,39 +380,87 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
   
     // Loss cone angle (same as polar angle, phi) at 500 km, in radians
     G4double theta_exclusion = 64.*fPI/180.;
+    G4double maxPitchAngle   = 64.*fPI/180.;
+    G4double pitchAngle, gyroPhase;
 
     // Switch-case for the background spatial distribution type
     switch(fBackgroundSpatialDist)
     {
     
-    case(3):
-      // Calculate random particle position on sphere via rejection 
-      // sampling, excluding spherical cap that makes up the loss cone
-      do{
-        // Rand on [-1, 1)
-        G4double u = G4UniformRand()*2.-1.;
+      case(0): // sin(alpha) distribution
+   
+        // pitchAngle ~ sine[0, maxPitchAngle]
+        pitchAngle = std::acos(G4UniformRand()*2.-1.)/(fPI * maxPitchAngle);
+      
+        // gyroPhase ~ U[0 , 2 pi]
+        gyroPhase  = G4UniformRand() * 2 *fPI;
+	   
+        r->x = fSphereR * std::cos(gyroPhase); 
+        r->y = fSphereR * std::cos(pitchAngle);
+        r->z = fSphereR * std::sin(gyroPhase);
 
-        // Rand on [0, 2*pi)
-        G4double theta = G4UniformRand()*2.*fPI;
-        r->x = fSphereR * std::sqrt(1 - u * u) * std::cos(theta); 
-        r->y = fSphereR * u; 
-        r->z = fSphereR * std::sqrt(1 - u * u) * std::sin(theta); 
-        }
-      // exits when y position falls below spherical cap
-      while(r->y > fSphereR * std::cos(theta_exclusion));
+        r->xDir = std::cos(pitchAngle) * std::cos(gyroPhase);	   
+        r->yDir = std::sin(pitchAngle);
+        r->zDir = std::cos(pitchAngle) * std::sin(gyroPhase);
 
-      // Uniform random numbers on [0, 1)
-      r->xDir = G4UniformRand();
-      r->yDir = G4UniformRand();
-      r->zDir = G4UniformRand();
+	std::ofstream testFile;
+	testFile.open("test.txt", std::ios_base::app);
+	testFile << r->x << ',' << r->y << ',' << r->z << ','
+		 << r->xDir << ',' << r->yDir << ',' << r->zDir << '\n';
+	testFile.close();
+        break;
+    
+      case(1): // sin(2 alpha) distribution
+      
+        // pitchAngle ~ sine[0, maxPitchAngle / 2]
+        pitchAngle = std::acos(G4UniformRand()*2.-1.)/(2*fPI*maxPitchAngle);
+      
+        // gyroPhase ~ U[0 , 2 pi]
+        gyroPhase  = G4UniformRand() * 2 *fPI;
+      
+        r->x = fSphereR * std::cos(gyroPhase); 
+        r->y = fSphereR * std::cos(pitchAngle);
+        r->z = fSphereR * std::sin(gyroPhase);
 
-      // Enforces inward directionality to particles
-      if(r->x > 0) {r->xDir = -r->xDir;}
-      if(r->y > 0) {r->yDir = -r->yDir;}
-      if(r->z > 0) {r->zDir = -r->zDir;}
+        r->xDir = std::cos(pitchAngle) * std::cos(gyroPhase);	   
+        r->yDir = std::sin(pitchAngle);
+        r->zDir = std::cos(pitchAngle) * std::sin(gyroPhase);
+      
+        break;
+	      
+      case(2): // isotropically distributed electrons outside of the 
+	       // upward-going (anti-Earthward) loss cone
 
-    default:
-      throw std::invalid_argument("Enter a background spatial distribution!");
+        // Calculate random particle position on sphere via rejection 
+        // sampling, excluding spherical cap that makes up the loss cone
+        do{
+          
+	  // Rand on [-1, 1)
+          G4double u = G4UniformRand()*2.-1.;
+
+          // Rand on [0, 2*pi)
+          G4double theta = G4UniformRand()*2.*fPI;
+          r->x = fSphereR * std::sqrt(1 - u * u) * std::cos(theta); 
+          r->y = fSphereR * u; 
+          r->z = fSphereR * std::sqrt(1 - u * u) * std::sin(theta); 
+          }
+        // exits when y position falls below spherical cap
+        while(r->y > fSphereR * std::cos(theta_exclusion));
+
+        // Uniform random numbers on [0, 1)
+        r->xDir = G4UniformRand();
+        r->yDir = G4UniformRand();
+        r->zDir = G4UniformRand();
+
+        // Enforces inward directionality to particles
+        if(r->x > 0) {r->xDir = -r->xDir;}
+        if(r->y > 0) {r->yDir = -r->yDir;}
+        if(r->z > 0) {r->zDir = -r->zDir;}
+
+        break;
+
+      default:
+        throw std::invalid_argument("Enter a background spatial distribution!");
     }
 
     // Switch-case for the energy distribution type
