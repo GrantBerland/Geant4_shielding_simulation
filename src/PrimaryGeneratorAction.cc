@@ -380,8 +380,8 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
   
     // Loss cone angle (same as polar angle, phi) at 500 km, in radians
     G4double theta_exclusion = 64.*fPI/180.;
-    G4double maxPitchAngle   = 64.*fPI/180.;
-    G4double pitchAngle, gyroPhase;
+    G4double maxPitchAngle   = (90.-64.)*fPI/180.; // 26 deg 
+    G4double pitchAngle, gyroPhase, sign;
     
     std::ofstream testFile;
 
@@ -392,18 +392,26 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
       case(0): // sin(alpha) distribution
    
         // pitchAngle ~ sine[0, maxPitchAngle]
-        pitchAngle = std::acos(G4UniformRand()*2.-1.)/(fPI * maxPitchAngle);
+
+	// sign is +/- 1 with 50/50 probability
+	sign = G4UniformRand();
+	if(sign > 0.5) sign = 1;
+	else sign = -1;
+
+	// U ~ Unif[-1, 1]
+	// 90 deg - cos^-1(U) /(pi / angular distance of distribution) 
+        pitchAngle = 90.*fDeg2Rad - sign * std::acos(G4UniformRand()*2.-1.)/(fPI/maxPitchAngle);
       
         // gyroPhase ~ U[0 , 2 pi]
-        gyroPhase  = G4UniformRand() * 2 *fPI;
+        gyroPhase  = G4UniformRand() * 2. *fPI;
 	   
         r->x = fSphereR * std::cos(gyroPhase); 
-        r->y = fSphereR * std::cos(pitchAngle);
+        r->y = 2.5*cm + fSphereR * std::cos(pitchAngle);
         r->z = fSphereR * std::sin(gyroPhase);
 
-        r->xDir = std::cos(pitchAngle) * std::cos(gyroPhase);	   
-        r->yDir = std::sin(pitchAngle);
-        r->zDir = std::cos(pitchAngle) * std::sin(gyroPhase);
+        r->xDir = -std::sin(pitchAngle) * std::cos(gyroPhase);	   
+        r->yDir = -std::cos(pitchAngle);
+        r->zDir = -std::sin(pitchAngle) * std::sin(gyroPhase);
 
 	testFile.open("test.txt", std::ios_base::app);
 	testFile << r->x << ',' << r->y << ',' << r->z << ','

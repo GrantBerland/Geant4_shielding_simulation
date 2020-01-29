@@ -15,7 +15,7 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* pri
   
   // Sets fWhichParticle 
   fcmd = new G4UIcmdWithAnInteger("/particleSource/setBackgroundType",this);
-  fcmd->SetParameterName("Background Type {0,1,2}",true);
+  fcmd->SetParameterName("Background Type {0,1,2,3} (Trapped, Backscattered Loss Cone, Signal Photons, Signal photons-other distributions)",true);
   fcmd->SetDefaultValue(0);
   fcmd->AvailableForStates(G4State_PreInit, G4State_Idle);
  
@@ -26,8 +26,8 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* pri
   fcmd2->AvailableForStates(G4State_PreInit, G4State_Idle);
   
   // Sets fBackgroundDistribution
-  fcmd3 = new G4UIcmdWithAnInteger("/particleSource/setBackgroundDistribution",this);
-  fcmd3->SetParameterName("Background spatial distribution type.",true);
+  fcmd3 = new G4UIcmdWithAnInteger("/particleSource/setBackgroundSpatialDistribution",this);
+  fcmd3->SetParameterName("Trapped electron spatial distribution {0,1,2} (sine, sine 2 theta, isotropic).",true);
   fcmd3->SetDefaultValue(2);
   fcmd3->AvailableForStates(G4State_PreInit, G4State_Idle);
 
@@ -95,7 +95,7 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
   }    	  
   
   if(command == fcmd3){
-    fPrimaryGenerator->SetBackgroundDistribution(std::stoi(newValue));
+    fPrimaryGenerator->SetBackgroundSpatialDistribution(std::stoi(newValue));
   }    	  
 
   if(command == fDcmd){

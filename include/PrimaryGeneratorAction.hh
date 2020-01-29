@@ -78,8 +78,10 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     
     // Sets spatial distribution type under GenerateOtherDistributions
     void SetSpatialDistribution(G4int type) {fSpatialSignalDist = type; };    
+    
     // Sets background spatial distribution
-    void SetBackgroundDistribution(G4int type){fBackgroundSpatialDist=type;};
+    void SetBackgroundSpatialDistribution(G4int type){fBackgroundSpatialDist=type;};
+
 
     // Under SpatialDistributions case 3, sets Gaussian parameters
     void SetThetaDirection(G4double ang) { fDirectionTheta = ang; }; 
