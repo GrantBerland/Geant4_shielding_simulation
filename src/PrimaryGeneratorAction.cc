@@ -268,9 +268,9 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 
   detectorSize  = 250*2;  // mm , units assigned in switch-case
 
-  do{
-    r->energy = -(fE_folding-50) * std::log(1 - G4UniformRand()) * keV;
-  } while(r->energy < 50.*keV);
+  G4double meanEnergyShift = 50.;
+  r->energy = -( ( fE_folding-meanEnergyShift ) * 
+		  std::log( 1 - G4UniformRand() ) + meanEnergyShift) * keV;
 	
  
   switch(fSpatialSignalDist)
@@ -414,7 +414,7 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
         r->zDir = -std::sin(pitchAngle) * std::sin(gyroPhase);
 
 	testFile.open("test.txt", std::ios_base::app);
-	testFile << r->x << ',' << r->y << ',' << r->z << ','
+	testFile << r->x/cm << ',' << r->y/cm << ',' << r->z/cm << ','
 		 << r->xDir << ',' << r->yDir << ',' << r->zDir << '\n';
 	testFile.close();
         break;
@@ -422,19 +422,26 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
       case(1): // sin(2 alpha) distribution
       
         // pitchAngle ~ sine[0, maxPitchAngle / 2]
-        pitchAngle = std::acos(G4UniformRand()*2.-1.)/(2*fPI*maxPitchAngle);
+
+	// sign is +/- 1 with 50/50 probability
+	sign = G4UniformRand();
+	if(sign > 0.5) sign = 1;
+	else sign = -1;
+
+	// U ~ Unif[-1, 1]
+	// 90 deg - cos^-1(U) /(pi / angular distance of distribution) 
+        pitchAngle = 90.*fDeg2Rad - sign * std::acos(G4UniformRand()*2.-1.)/(fPI/(2.*maxPitchAngle));
       
         // gyroPhase ~ U[0 , 2 pi]
-        gyroPhase  = G4UniformRand() * 2 *fPI;
-      
+        gyroPhase  = G4UniformRand() * 2. *fPI;
+	   
         r->x = fSphereR * std::cos(gyroPhase); 
-        r->y = fSphereR * std::cos(pitchAngle);
+        r->y = 2.5*cm + fSphereR * std::cos(pitchAngle);
         r->z = fSphereR * std::sin(gyroPhase);
 
-        r->xDir = std::cos(pitchAngle) * std::cos(gyroPhase);	   
-        r->yDir = std::sin(pitchAngle);
-        r->zDir = std::cos(pitchAngle) * std::sin(gyroPhase);
-      
+        r->xDir = -std::sin(pitchAngle) * std::cos(gyroPhase);	   
+        r->yDir = -std::cos(pitchAngle);
+        r->zDir = -std::sin(pitchAngle) * std::sin(gyroPhase);
         break;
 	      
       case(2): // isotropically distributed electrons outside of the 
@@ -503,8 +510,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // Constant sphere offsets
   G4double xShift = 0.;
-  G4double yShift = 1.*cm;
-  G4double zShift = 2.5*cm;
+  G4double yShift = 2.*cm;
+  G4double zShift = 0.;
 
   // Struct that holds position, momentum direction, and energy
   ParticleSample* r = new ParticleSample();

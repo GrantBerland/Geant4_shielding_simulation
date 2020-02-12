@@ -27,6 +27,9 @@
 /tracking/verbose 0
 
 
+########################
+#### Run from here! ####
+########################
 /control/loop runLoop.mac E0 100. 300. 100.
 
 
