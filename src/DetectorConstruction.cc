@@ -166,7 +166,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double frontEndBoardThickness  = 2.86*mm;
   G4double detectorApertureSpacing = 12.*mm;
   G4double detectorHeight 	   = 50.*mm;
-  G4double collimatorHeight 	   = 15.*mm;
+  G4double collimatorHeight 	   = 13.*mm;
 
   G4double pixelSize      = 2.5*mm;
   /////////////////////////////////////////
@@ -321,7 +321,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
  
 
   // Collimator placements
-  Tm.setX(0.*cm); Tm.setY(0.35*cm); Tm.setZ(0.);
+  Tm.setX(0.*cm); Tm.setY(0.60*cm); Tm.setZ(0.);
   Rm.rotateX(90.*deg);
   Rm.rotateZ(90.*deg);
   Tr = G4Transform3D(Rm, Tm); 
@@ -473,7 +473,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
   // FIXME
-  G4double aperatureSquare = 0.22*cm;
+  G4double aperatureSquare = 0.2*cm;
 
   // added dimension to "fill the gap" between detectors
   G4double fillTheGap = 2.*mm;

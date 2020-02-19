@@ -71,13 +71,17 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void SetWhichParticle(G4int partSelection) {fWhichParticle = partSelection;};
 
     // Sets background and signal folding energies
-    void SetFoldingEnergy(G4double E0) { E_folding = E0; };
+    void SetFoldingEnergy(G4double E0) { fE_folding = E0; };
     
     // Under GenerateSignalPhotons, selects limiting zenith angle
-    void SetEventAngle(G4double ang) { photonPhiLimitDeg = ang; };
+    void SetEventAngle(G4double ang) { fPhotonPhiLimitDeg = ang; };
     
     // Sets spatial distribution type under GenerateOtherDistributions
-    void SetSpatialDistribution(G4int type) { fDistType = type; };    
+    void SetSpatialDistribution(G4int type) {fSpatialSignalDist = type; };    
+    
+    // Sets background spatial distribution
+    void SetBackgroundSpatialDistribution(G4int type){fBackgroundSpatialDist=type;};
+
 
     // Under SpatialDistributions case 3, sets Gaussian parameters
     void SetThetaDirection(G4double ang) { fDirectionTheta = ang; }; 
@@ -91,24 +95,25 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   private:
     G4ParticleGun*  fParticleGun; // pointer a to G4 gun class
     
-    G4double E_folding;
+    G4double fE_folding;
     G4double fPI;
     G4double fDeg2Rad;
-    G4double sphereR;
-    G4double lossConeAngleDeg;
-    G4double photonPhiLimitDeg;
+    G4double fSphereR;
+    G4double fLossConeAngleDeg;
+    G4double fPhotonPhiLimitDeg;
     
     G4double fDirectionTheta;
     G4double fThetaSigma;
     G4double fDirectionPhi;
     G4double fPhiSigma;
 
-    G4int    fDistType;
-    
+    G4int    fSpatialSignalDist;
+    G4int    fBackgroundEnergyDist;    
+    G4int    fBackgroundSpatialDist;
     G4int    fWhichParticle;
 
-    G4ParticleDefinition* electronParticle; 
-    G4ParticleDefinition* photonParticle; 
+    G4ParticleDefinition* fElectronParticle; 
+    G4ParticleDefinition* fPhotonParticle; 
     PrimaryGeneratorMessenger* fPrimaryGeneratorMessenger;
 
 };

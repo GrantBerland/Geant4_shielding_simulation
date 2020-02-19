@@ -52,20 +52,22 @@
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
-  E_folding(100.),
+  fE_folding(100.),
   fPI(3.14159265358979323846),
   fDeg2Rad(3.14159265358979323846 / 180.),
-  sphereR(25.*cm),
-  lossConeAngleDeg(64.),
-  photonPhiLimitDeg(40.), 
+  fSphereR(25.*cm),
+  fLossConeAngleDeg(64.),
+  fPhotonPhiLimitDeg(40.), 
   fDirectionTheta(0.), 
   fThetaSigma(0.),
   fDirectionPhi(0.), 
   fPhiSigma(0.),
-  fDistType(3),
+  fSpatialSignalDist(3),
+  fBackgroundEnergyDist(0),
+  fBackgroundSpatialDist(2),
   fWhichParticle(0),
-  electronParticle(0),
-  photonParticle(0),
+  fElectronParticle(0),
+  fPhotonParticle(0),
   fPrimaryGeneratorMessenger(0)
 {
 
@@ -73,9 +75,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
  
   fPrimaryGeneratorMessenger = new PrimaryGeneratorMessenger(this);
 
-  electronParticle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+  fElectronParticle = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   
-  photonParticle = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
+  fPhotonParticle = G4ParticleTable::GetParticleTable()->FindParticle("gamma");
 
   
 }
@@ -151,7 +153,7 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 
   // Selects exponential folding energy E0 based on backscattered 
   // pitch angle range
-  G4double E0 = -1;
+  G4double E0 = -1.;
   if(     lossConeData[angleIndex][0] < 20) {E0 = 159.;}
   else if(lossConeData[angleIndex][0] < 30) {E0 = 141.;}
   else if(lossConeData[angleIndex][0] < 40) {E0 = 177.;}
@@ -170,9 +172,9 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   // We want our Y direction to be "up," otherwise standard
   // spherical to cartesian coordinate transform
   
-  r->x = sphereR * std::cos(theta) * std::sin(phi);
-  r->y = sphereR * std::cos(phi);
-  r->z = sphereR * std::sin(theta) * std::sin(phi);
+  r->x = fSphereR * std::cos(theta) * std::sin(phi);
+  r->y = fSphereR * std::cos(phi);
+  r->z = fSphereR * std::sin(theta) * std::sin(phi);
   
 
 
@@ -205,8 +207,8 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   
   //Sample from exponential, energy dist. fitted to Wei's results
   // (valid for E0,source = 100 keV) 
-  G4double shiftThreshold = 50.;
-  G4double meanEnergy     = 241.4;
+  G4double shiftThreshold = 50.;    // keV
+  G4double meanEnergy     = 241.4;  // keV
 
   // Rejection sampling on particle energy to generate exponential particles > 50 keV 
   do
@@ -225,7 +227,7 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   
   // Phi (half angle) takes values in a cone determined by 
   // spacecraft altitude, precipitation event altitude and size
-  G4double photonPhiLimitRad = photonPhiLimitDeg * fDeg2Rad;       
+  G4double photonPhiLimitRad = fPhotonPhiLimitDeg * fDeg2Rad;       
   
   // u ~ U[0, 1-1/2*cos(phi_limit)] s.t. phi is distributed uniformly
   G4double u = G4UniformRand()*(1.-std::cos(photonPhiLimitRad))/2.;
@@ -235,9 +237,9 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
 
 
   // We want our Y direction to be "up"
-  r->x = (sphereR + 15.*cm) * std::sin(phi) * std::sin(theta);
-  r->y = (sphereR + 15.*cm) * std::cos(phi);
-  r->z = (sphereR + 15.*cm) * std::sin(phi) * std::cos(theta);
+  r->x = (fSphereR + 15.*cm) * std::sin(phi) * std::sin(theta);
+  r->y = (fSphereR + 15.*cm) * std::cos(phi);
+  r->z = (fSphereR + 15.*cm) * std::sin(phi) * std::cos(theta);
 
 
   // Inward unit normal
@@ -261,15 +263,17 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
   G4double narrowingOffset;
   G4double detectorSize;
   G4double N1, N2, U1, U2;
+  
+  G4double photonPhiLimitRad = fPhotonPhiLimitDeg * fDeg2Rad;
 
   detectorSize  = 250*2;  // mm , units assigned in switch-case
 
-  do{
-    r->energy = -(E_folding-50) * std::log(1 - G4UniformRand()) * keV;
-  } while(r->energy < 50.*keV);
+  G4double meanEnergyShift = 50.;
+  r->energy = -( ( fE_folding-meanEnergyShift ) * 
+		  std::log( 1 - G4UniformRand() ) + meanEnergyShift) * keV;
 	
  
-  switch(fDistType)
+  switch(fSpatialSignalDist)
   {
         case 0: // point source, near
                 r->x = 10.*mm;
@@ -348,7 +352,7 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 
                 // Zenith angle of particles wrt to detector
                 phi = std::acos(1 - 2 * G4UniformRand()*
-                  (1.-std::cos(photonPhiLimitDeg * fDeg2Rad))/2.);
+                  (1.-std::cos(photonPhiLimitRad))/2.);
 
                 // Position on surface of sphere
                 r->x = R * std::sin(phi) * std::cos(theta);
@@ -361,7 +365,7 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 
                 // |z| ~ U[0, phi_limit]
                 r->zDir = std::sqrt(r->xDir * r->xDir + r->yDir * r->yDir)/
-                std::tan(G4UniformRand()*photonPhiLimitDeg * fDeg2Rad);
+                std::tan(G4UniformRand()*photonPhiLimitRad);
                 break;
 
         default:
@@ -376,38 +380,120 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
   
     // Loss cone angle (same as polar angle, phi) at 500 km, in radians
     G4double theta_exclusion = 64.*fPI/180.;
+    G4double maxPitchAngle   = (90.-64.)*fPI/180.; // 26 deg 
+    G4double pitchAngle, gyroPhase, sign;
+    G4double heightAdj; 
 
-    // Calculate random particle position on sphere via rejection 
-    // sampling, excluding spherical cap that makes up the loss cone
-    do{
-      // Rand on [-1, 1)
-      G4double u = G4UniformRand()*2.-1.;
-
-      // Rand on [0, 2*pi)
-      G4double theta = G4UniformRand()*2.*fPI;
-      r->x = sphereR * std::sqrt(1 - u * u) * std::cos(theta); 
-      r->y = sphereR * u; 
-      r->z = sphereR * std::sqrt(1 - u * u) * std::sin(theta); 
-      }
-    while(r->y > sphereR * std::cos(theta_exclusion));
-    // exits when y position falls below spherical cap
-
-    // Uniform random numbers on [0, 1)
-    r->xDir = G4UniformRand();
-    r->yDir = G4UniformRand();
-    r->zDir = G4UniformRand();
-
+    // Switch-case for the background spatial distribution type
+    switch(fBackgroundSpatialDist)
+    {
     
-    // Enforces inward directionality to particles
-    if(r->x > 0) {r->xDir = -r->xDir;}
-    if(r->y > 0) {r->yDir = -r->yDir;}
-    if(r->z > 0) {r->zDir = -r->zDir;}
+      case(0): // sin(alpha) distribution
+   
+        // pitchAngle ~ sine[0, maxPitchAngle]
 
+	// sign is +/- 1 with 50/50 probability
+	sign = G4UniformRand();
+	if(sign > 0.5) sign = 1;
+	else sign = -1;
 
-    // Selects random energy according to exponential distribution
-    //G4double randomNumber = G4UniformRand();
-    //r->energy = ((std::log(1 - randomNumber)*-E_folding))*keV;
-     r->energy = 1. * MeV;
+	// U ~ Unif[-1, 1]
+	// 90 deg - cos^-1(U) /(pi / angular distance of distribution) 
+        pitchAngle = 90.*fDeg2Rad - sign * std::acos(G4UniformRand()*2.-1.)/(fPI/maxPitchAngle);
+      
+        // gyroPhase ~ U[0 , 2 pi]
+        gyroPhase  = G4UniformRand() * 2. *fPI;
+	
+	heightAdj = (G4UniformRand() * 2. - 1.) * 10.;
+	//heightAdj = 0.;
+
+        r->x = fSphereR * std::cos(gyroPhase); 
+        r->y = heightAdj*cm + fSphereR * std::cos(pitchAngle);
+        r->z = fSphereR * std::sin(gyroPhase);
+
+        r->xDir = -std::sin(pitchAngle) * std::cos(gyroPhase);	   
+        r->yDir = -std::cos(pitchAngle);
+        r->zDir = -std::sin(pitchAngle) * std::sin(gyroPhase);
+
+        break;
+    
+      case(1): // sin(2 alpha) distribution
+      
+        // pitchAngle ~ sine[0, maxPitchAngle / 2]
+
+	// sign is +/- 1 with 50/50 probability
+	sign = G4UniformRand();
+	if(sign > 0.5) sign = 1;
+	else sign = -1;
+
+	// U ~ Unif[-1, 1]
+	// 90 deg - cos^-1(U) /(pi / angular distance of distribution) 
+        pitchAngle = 90.*fDeg2Rad - sign * std::acos(G4UniformRand()*2.-1.)/(fPI/(2.*maxPitchAngle));
+      
+        // gyroPhase ~ U[0 , 2 pi]
+        gyroPhase  = G4UniformRand() * 2. *fPI;
+	   
+        r->x = fSphereR * std::cos(gyroPhase); 
+        r->y = 2.5*cm + fSphereR * std::cos(pitchAngle);
+        r->z = fSphereR * std::sin(gyroPhase);
+
+        r->xDir = -std::sin(pitchAngle) * std::cos(gyroPhase);	   
+        r->yDir = -std::cos(pitchAngle);
+        r->zDir = -std::sin(pitchAngle) * std::sin(gyroPhase);
+        break;
+	      
+      case(2): // isotropically distributed electrons outside of the 
+	       // upward-going (anti-Earthward) loss cone
+
+        // Calculate random particle position on sphere via rejection 
+        // sampling, excluding spherical cap that makes up the loss cone
+        do{
+          
+	  // Rand on [-1, 1)
+          G4double u = G4UniformRand()*2.-1.;
+
+          // Rand on [0, 2*pi)
+          G4double theta = G4UniformRand()*2.*fPI;
+          r->x = fSphereR * std::sqrt(1 - u * u) * std::cos(theta); 
+          r->y = fSphereR * u; 
+          r->z = fSphereR * std::sqrt(1 - u * u) * std::sin(theta); 
+          }
+        // exits when y position falls below spherical cap
+        while(r->y > fSphereR * std::cos(theta_exclusion));
+
+        // Uniform random numbers on [0, 1)
+        r->xDir = G4UniformRand();
+        r->yDir = G4UniformRand();
+        r->zDir = G4UniformRand();
+
+        // Enforces inward directionality to particles
+        if(r->x > 0) {r->xDir = -r->xDir;}
+        if(r->y > 0) {r->yDir = -r->yDir;}
+        if(r->z > 0) {r->zDir = -r->zDir;}
+
+        break;
+
+      default:
+        throw std::invalid_argument("Enter a background spatial distribution!");
+    }
+
+    // Switch-case for the energy distribution type
+    G4double randomNumber;
+    switch(fBackgroundEnergyDist)
+    {
+      case(0): // exponential with folding energy fE_folding
+	randomNumber = G4UniformRand();	
+        r->energy = ((std::log(1 - randomNumber)*-fE_folding))*keV;
+        break;
+
+      case(1): // monoenergetic with energy fE_folding
+	r->energy = fE_folding * keV;
+	break;
+      
+      default:
+	throw std::invalid_argument("Enter a background energy distribution type!");
+    
+    }
 }
 
 
@@ -418,12 +504,12 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   //CalculateParticlesToGenerate();
 
   // Selects electron for particle type
-  fParticleGun->SetParticleDefinition(electronParticle);
+  fParticleGun->SetParticleDefinition(fElectronParticle);
 
   // Constant sphere offsets
   G4double xShift = 0.;
-  G4double yShift = 1.*cm;
-  G4double zShift = 2.5*cm;
+  G4double yShift = 2.*cm;
+  G4double zShift = 0.;
 
   // Struct that holds position, momentum direction, and energy
   ParticleSample* r = new ParticleSample();
@@ -456,7 +542,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     case(2): // Signal photon
 
     // Selects photon for particle type
-    fParticleGun->SetParticleDefinition(photonParticle);
+    fParticleGun->SetParticleDefinition(fPhotonParticle);
   
     GenerateSignalSource(r);
     
@@ -471,7 +557,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     case(3): // Signal photon, other distribution types
 
     // Selects photon for particle type
-    fParticleGun->SetParticleDefinition(photonParticle);
+    fParticleGun->SetParticleDefinition(fPhotonParticle);
   
     GenerateOtherDistributions(r);
     
