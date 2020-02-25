@@ -117,6 +117,7 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   G4double phi_lossCone = 64./1000.; // scaled degrees, upper limit on returning electrons
 
   // Selects parameter set to be used per distribution
+  G4double E0;
   G4double a100, b100;
   G4double a200, b200;
   G4double a300, b300;
@@ -152,9 +153,12 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 
   // Selects parameters to be used with each energy range
   G4double a, b;
-  if     (fE_folding == 100.){a = a100; b = b100;}
-  else if(fE_folding == 200.){a = a200; b = b200;} 
-  else if(fE_folding == 300.){a = a300; b = b300;} 
+
+  // NB: E0's are for the sin distribution ONLY!!!!!
+
+  if     (fE_folding == 100.){a = a100; b = b100; E0 = 85.;}
+  else if(fE_folding == 200.){a = a200; b = b200; E0 = 147.;} 
+  else if(fE_folding == 300.){a = a300; b = b300; E0 = 196.;} 
   else {throw std::invalid_argument("Loss cone electron PAD parameter selection energy range is incorrect!");}
 
 
@@ -169,13 +173,17 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   // Selects exponential folding energy E0 based on backscattered 
   // pitch angle range
   // TODO: write in energy-pitch angle coupling
-  G4double E0 = -1.;
+
+  /*
   if(     lossConePhi < 20) {E0 = 159.;}
   else if(lossConePhi < 30) {E0 = 141.;}
   else if(lossConePhi < 40) {E0 = 177.;}
   else if(lossConePhi < 50) {E0 = 194.;}
   else if(lossConePhi < 64) {E0 = 230.;}
-  
+  */
+
+
+
 
   // NB: Mathematics spherical coordinates definition used below
   
