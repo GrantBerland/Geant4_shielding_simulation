@@ -98,67 +98,83 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   // and towards the satellite.
 
 
-  // Discrete CDF of particles within the loss cone and backscattered
-  // from the atmosphere with 0.6527 degree resolution from [0, 63] 
-  // degrees (i.e. the loss cone at approximately 500 km altitude)
-  const G4int dataSize = 96;
-  static const G4double lossConeData[96][2] = {
-{ 1.0000 , 0.0000 },{ 1.6526 , 0.0006 },{ 2.3053 , 0.0012 },
-{ 2.9579 , 0.0019 },{ 3.6105 , 0.0030 },{ 4.2632 , 0.0042 },
-{ 4.9158 , 0.0054 },{ 5.5684 , 0.0071 },{ 6.2211 , 0.0089 },
-{ 6.8737 , 0.0107 },{ 7.5263 , 0.0129 },{ 8.1789 , 0.0153 },
-{ 8.8316 , 0.0176 },{ 9.4842 , 0.0204 },{ 10.1368 , 0.0233 },
-{ 10.7895 , 0.0263 },{ 11.4421 , 0.0296 },{ 12.0947 , 0.0331 },
-{ 12.7474 , 0.0366 },{ 13.4000 , 0.0404 },{ 14.0526 , 0.0444 },
-{ 14.7053 , 0.0485 },{ 15.3579 , 0.0529 },{ 16.0105 , 0.0575 },
-{ 16.6632 , 0.0622 },{ 17.3158 , 0.0673 },{ 17.9684 , 0.0729 },
-{ 18.6211 , 0.0785 },{ 19.2737 , 0.0843 },{ 19.9263 , 0.0905 },
-{ 20.5789 , 0.0967 },{ 21.2316 , 0.1030 },{ 21.8842 , 0.1097 },
-{ 22.5368 , 0.1163 },{ 23.1895 , 0.1231 },{ 23.8421 , 0.1303 },
-{ 24.4947 , 0.1375 },{ 25.1474 , 0.1448 },{ 25.8000 , 0.1526 },
-{ 26.4526 , 0.1605 },{ 27.1053 , 0.1685 },{ 27.7579 , 0.1772 },
-{ 28.4105 , 0.1859 },{ 29.0632 , 0.1947 },{ 29.7158 , 0.2040 },
-{ 30.3684 , 0.2133 },{ 31.0211 , 0.2226 },{ 31.6737 , 0.2325 },
-{ 32.3263 , 0.2425 },{ 32.9789 , 0.2524 },{ 33.6316 , 0.2630 },
-{ 34.2842 , 0.2736 },{ 34.9368 , 0.2842 },{ 35.5895 , 0.2951 },
-{ 36.2421 , 0.3062 },{ 36.8947 , 0.3172 },{ 37.5474 , 0.3288 },
-{ 38.2000 , 0.3405 },{ 38.8526 , 0.3522 },{ 39.5053 , 0.3643 },
-{ 40.1579 , 0.3766 },{ 40.8105 , 0.3889 },{ 41.4632 , 0.4017 },
-{ 42.1158 , 0.4145 },{ 42.7684 , 0.4274 },{ 43.4211 , 0.4409 },
-{ 44.0737 , 0.4547 },{ 44.7263 , 0.4685 },{ 45.3789 , 0.4827 },
-{ 46.0316 , 0.4973 },{ 46.6842 , 0.5119 },{ 47.3368 , 0.5267 },
-{ 47.9895 , 0.5419 },{ 48.6421 , 0.5570 },{ 49.2947 , 0.5726 },
-{ 49.9474 , 0.5887 },{ 50.6000 , 0.6048 },{ 51.2526 , 0.6213 },
-{ 51.9053 , 0.6386 },{ 52.5579 , 0.6559 },{ 53.2105 , 0.6735 },
-{ 53.8632 , 0.6919 },{ 54.5158 , 0.7102 },{ 55.1684 , 0.7288 },
-{ 55.8211 , 0.7483 },{ 56.4737 , 0.7677 },{ 57.1263 , 0.7875 },
-{ 57.7789 , 0.8085 },{ 58.4316 , 0.8296 },{ 59.0842 , 0.8509 },
-{ 59.7368 , 0.8740 },{ 60.3895 , 0.8970 },{ 61.0421 , 0.9203 },
-{ 61.6947 , 0.9469 },{ 62.3474 , 0.9734 },{ 63.0000 , 1.0000 }};
-  
-  G4double randomNumber = G4UniformRand();
-  G4int angleIndex = -1;
+  // Fits:
+  // f = a*exp(b*x)
+  // In order to sample from this distribution, we take
+  //
+  // => X := b*ln(b/a*U) 
+  //
+  // we want X to be bounded on [0, phi_lossCone], so we'll choose a U such that
+  // 
+  //  U ~ U( U_min, Umax ) = U( a/b , a/b*exp(phi_lossCone/b) )
+  //
+  // we need to scale phi_lossCone due to numerical issues, so 64 deg -> 0.064 [unitless]
+  //
+  // therefore U = Rand(0,1) * (U_max - U_min) + U_min
+  //
+  //
 
-  // Discrete inverse CDF sampling to determine the spatial distribution
-  // of backscattered particles from the atmosphere
-  for(G4int angle = 0; angle<dataSize; angle++)
-  {    
-    if(randomNumber < lossConeData[angle][1])
-    {
-      angleIndex = angle;
-      break; 
-    }
+  G4double phi_lossCone = 64./1000.; // scaled degrees, upper limit on returning electrons
+
+  // Selects parameter set to be used per distribution
+  G4double a100, b100;
+  G4double a200, b200;
+  G4double a300, b300;
+  switch(fBackgroundSpatialDist)
+  {
+    case(0): // sine distribution
+      a100 = 0.00705;
+      b100 = 0.02356;
+      a200 = 0.00759;
+      b200 = 0.02296;
+      a300 = 0.00978;
+      b300 = 0.01496;
+      break;
+    case(1): // sine 2 distribution
+      a100 = 0.00862;
+      b100 = 0.02078;
+      a200 = 0.00908;
+      b200 = 0.02140;
+      a300 = 0.01069;
+      b300 = 0.01742;
+      break;
+    case(2): // isotropic distribution
+      a100 = 0.00990;
+      b100 = 0.01732;
+      a200 = 0.01031;
+      b200 = 0.01657;
+      a300 = 0.01131;
+      b300 = 0.01417;
+      break;
+    default:
+	throw std::invalid_argument("Loss cone electron PAD parameter distribution selection is incorrect!");
   }
 
+  // Selects parameters to be used with each energy range
+  G4double a, b;
+  if     (fE_folding == 100.){a = a100; b = b100;}
+  else if(fE_folding == 200.){a = a200; b = b200;} 
+  else if(fE_folding == 300.){a = a300; b = b300;} 
+  else {throw std::invalid_argument("Loss cone electron PAD parameter selection energy range is incorrect!");}
 
+
+  // Draw sample from exponential fit to pitch angle distribution
+  G4double U_min = a / b;			       // U lower bound
+  G4double U_max = a / b * std::exp(phi_lossCone / b); // U upper bound
+  
+  G4double U = G4UniformRand() * (U_max - U_min) + U_min; // shifts uniform random
+  
+  G4double lossConePhi = 1000*b*std::log(b/a * U); // 1000 due to scaling factor used above
+  
   // Selects exponential folding energy E0 based on backscattered 
   // pitch angle range
+  // TODO: write in energy-pitch angle coupling
   G4double E0 = -1.;
-  if(     lossConeData[angleIndex][0] < 20) {E0 = 159.;}
-  else if(lossConeData[angleIndex][0] < 30) {E0 = 141.;}
-  else if(lossConeData[angleIndex][0] < 40) {E0 = 177.;}
-  else if(lossConeData[angleIndex][0] < 50) {E0 = 194.;}
-  else if(lossConeData[angleIndex][0] < 64) {E0 = 230.;}
+  if(     lossConePhi < 20) {E0 = 159.;}
+  else if(lossConePhi < 30) {E0 = 141.;}
+  else if(lossConePhi < 40) {E0 = 177.;}
+  else if(lossConePhi < 50) {E0 = 194.;}
+  else if(lossConePhi < 64) {E0 = 230.;}
   
 
   // NB: Mathematics spherical coordinates definition used below
@@ -167,16 +183,14 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   G4double theta = G4UniformRand() * 2. * fPI; 
   
   // Zenith angle (pitch angle), converted to radians
-  G4double phi = lossConeData[angleIndex][0] * fDeg2Rad;
+  G4double phi = lossConePhi * fDeg2Rad;
   
   // We want our Y direction to be "up," otherwise standard
   // spherical to cartesian coordinate transform
-  
   r->x = fSphereR * std::cos(theta) * std::sin(phi);
   r->y = fSphereR * std::cos(phi);
   r->z = fSphereR * std::sin(theta) * std::sin(phi);
   
-
 
   // Uniform random numbers on [0, 1) for particle direction
   r->xDir = G4UniformRand();
@@ -191,8 +205,8 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 
 
   // Continous inverse CDF sampling for exponential energy distribution
-  randomNumber = G4UniformRand();
-  r->energy = ((std::log(1 - randomNumber)*-E0))*keV;
+  // (only samples electrons with energy 50 keV or above)
+  r->energy = -((E0 - 50.)*std::log( G4UniformRand() ) + 50.)*keV;
 
 }
 
@@ -203,22 +217,17 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   // altitude. Variables are photon energy and the 
   // zenith angle distribution of the photons.
 
-  G4double theta, randomNumber;
+  G4double theta;
   
   //Sample from exponential, energy dist. fitted to Wei's results
   // (valid for E0,source = 100 keV) 
   G4double shiftThreshold = 50.;    // keV
   G4double meanEnergy     = 241.4;  // keV
 
-  // Rejection sampling on particle energy to generate exponential particles > 50 keV 
-  do
-  {
-    randomNumber = G4UniformRand();
     
-    r->energy = -(meanEnergy - shiftThreshold) *
-	    std::log(1 - randomNumber) * keV;
+  r->energy = -(meanEnergy - shiftThreshold) *
+	    (std::log( G4UniformRand() ) + shiftThreshold) * keV;
   
-  } while(r->energy < shiftThreshold*keV);
   
 
   // Uniformly distributed around azimuthal direction ab. fieldline 
@@ -270,7 +279,7 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 
   G4double meanEnergyShift = 50.;
   r->energy = -( ( fE_folding-meanEnergyShift ) * 
-		  std::log( 1 - G4UniformRand() ) + meanEnergyShift) * keV;
+		  std::log( G4UniformRand() ) + meanEnergyShift) * keV;
 	
  
   switch(fSpatialSignalDist)
@@ -478,12 +487,10 @@ void PrimaryGeneratorAction::GenerateTrappedElectrons(ParticleSample* r)
     }
 
     // Switch-case for the energy distribution type
-    G4double randomNumber;
     switch(fBackgroundEnergyDist)
     {
       case(0): // exponential with folding energy fE_folding
-	randomNumber = G4UniformRand();	
-        r->energy = ((std::log(1 - randomNumber)*-fE_folding))*keV;
+        r->energy = ((std::log( G4UniformRand() )*-fE_folding))*keV;
         break;
 
       case(1): // monoenergetic with energy fE_folding
