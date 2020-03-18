@@ -169,7 +169,8 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   G4double U = G4UniformRand() * (U_max - U_min) + U_min; // shifts uniform random
   
   G4double lossConePhi = 1000*b*std::log(b/a * U); // 1000 due to scaling factor used above
-  
+ 
+
   // Selects exponential folding energy E0 based on backscattered 
   // pitch angle range
   // TODO: write in energy-pitch angle coupling
@@ -192,7 +193,9 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   
   // Zenith angle (pitch angle), converted to radians
   G4double phi = lossConePhi * fDeg2Rad;
-  
+ 
+  G4double phiDirection = phi + G4UniformRand() * 10. * fDeg2Rad;
+
   // We want our Y direction to be "up," otherwise standard
   // spherical to cartesian coordinate transform
   r->x = fSphereR * std::cos(theta) * std::sin(phi);
@@ -201,20 +204,30 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   
 
   // Uniform random numbers on [0, 1) for particle direction
-  r->xDir = G4UniformRand();
-  r->yDir = G4UniformRand();
-  r->zDir = G4UniformRand();
+  r->xDir = -std::sin(phiDirection) * std::cos(theta);	   
+  r->yDir = -std::cos(phiDirection);
+  r->zDir = -std::sin(phiDirection) * std::sin(theta);
 
 
   // Enforces inward directionality to particles
-  if(r->x > 0) {r->xDir = -r->xDir;}
-  if(r->y > 0) {r->yDir = -r->yDir;}
-  if(r->z > 0) {r->zDir = -r->zDir;}
+  //if(r->x > 0) {r->xDir = -r->xDir;}
+  //if(r->y > 0) {r->yDir = -r->yDir;}
+  //if(r->z > 0) {r->zDir = -r->zDir;}
 
 
   // Continous inverse CDF sampling for exponential energy distribution
   // (only samples electrons with energy 50 keV or above)
-  r->energy = -((E0 - 50.)*std::log( G4UniformRand() ) + 50.)*keV;
+  r->energy = (-(E0 - 50.)*std::log( G4UniformRand() ) + 50.)*keV;
+ 
+  if(r->energy < 0.) throw std::invalid_argument("E < 0 :(((((((");
+
+  std::ofstream testFile;
+  testFile.open("test.csv", std::ios_base::app);
+
+  testFile << lossConePhi << ',' << r->energy/keV << 
+	   ',' << r->x/cm << ',' << r->y/cm << ',' << r->z/cm << 
+	   ',' << r->xDir << ',' << r->yDir << ',' << r->zDir << '\n';
+  testFile.close();
 
 }
 
@@ -290,17 +303,32 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 		  std::log( G4UniformRand() ) + meanEnergyShift) * keV;
 	
  
+  G4double z_centers[4] = {-6.*cm, -2.*cm, 2.*cm, 6.*cm};
+  G4double x_centers[4] = {-6.*cm, -2.*cm, 2.*cm, 6.*cm};
+  G4int randIndex1, randIndex2;
   switch(fSpatialSignalDist)
   {
         case 0: // point source, near
-                r->x = 10.*mm;
-                r->y = 5.*mm;
-                r->z = -20.*cm;
 
-                narrowingOffset = 0.4;
+		// Randomly selects integer from {0,1,2,3}
+		// but not the sets {(2,2),(3,3),(2,3),(3,2)}
+		// (that's where detectors aren't)
+		do{
+                  randIndex1 = std::floor(G4UniformRand()*4.);
+                  randIndex2 = std::floor(G4UniformRand()*4.);
+		} while((randIndex1 == 2 && randIndex2 == 2) ||
+			(randIndex1 == 2 && randIndex2 == 3) ||
+			(randIndex1 == 3 && randIndex2 == 2) ||
+		        (randIndex1 == 3 && randIndex2 == 3));
+
+		r->x = x_centers[randIndex1];
+		r->z = z_centers[randIndex2];
+                r->y = 20.*cm;
+
+                narrowingOffset = 0.2;
                 r->xDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
-                r->yDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
-                r->zDir = 1;
+                r->zDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
+                r->yDir = -1;
                 break;
 
         case 1: // point source, infinitely far
@@ -316,14 +344,28 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 		break;
         
 	case 2: // structured circle
-                //R = std::sqrt(G4UniformRand() * 20.) * cm;
-                R = 5. * cm;
+		
+		do{
+                  randIndex1 = std::floor(G4UniformRand()*4.);
+                  randIndex2 = std::floor(G4UniformRand()*4.);
+		} while((randIndex1 == 2 && randIndex2 == 2) ||
+			(randIndex1 == 2 && randIndex2 == 3) ||
+			(randIndex1 == 3 && randIndex2 == 2) ||
+		        (randIndex1 == 3 && randIndex2 == 3));
+
+		//Filled circle
+                R = std::sqrt(G4UniformRand() * 4.) * cm;
+                
+		// Empty circle
+		//R = 2. * cm;
 		theta = G4UniformRand() * 2. * fPI;
-                r->x = R * std::cos(theta) - 10.*cm;
-                r->z = R * std::sin(theta) - 10.*cm;
+                r->x = R * std::cos(theta) + x_centers[randIndex1] + 1.5*cm;
+                r->z = R * std::sin(theta) + z_centers[randIndex2] + 1.5*cm;
                 r->y = 20.*cm;
                 
-                r->xDir = r->zDir = 0;
+                narrowingOffset = 0.2;
+		r->xDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
+                r->zDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
  		r->yDir = -1;
 
                 break;

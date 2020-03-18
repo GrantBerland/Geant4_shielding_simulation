@@ -13,6 +13,8 @@
 
 /run/beamOn 100
 
+/control/echo E0 = {E0} and Dist = {dist}
+
 # 1 = background loss cone electrons
 #/particleSource/setBackgroundType 1
 #/run/beamOn 1000000

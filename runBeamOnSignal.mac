@@ -42,19 +42,15 @@
 # 3 = other spatial distributions (tests mostly)
 /particleSource/setBackgroundType 3 
 
-# 0 = 
-# 1 = 
-# 2 = circle
-# 3 = Gaussian spot
-/particleSource/setSpatialDistribution 3
+/particleSource/setBackgroundSpatialDistribution 3
 
 # Zenith angle away from y-axis
-/particleSource/setPhiDirection 20  # deg, mean
-/particleSource/setPhiSigma 30       # deg, std dev
+#/particleSource/setPhiDirection 20  # deg, mean
+#/particleSource/setPhiSigma 30       # deg, std dev
 
 # Azimuthal angle about y-axis
-/particleSource/setThetaDirection 0  # deg, mean
-/particleSource/setThetaSigma 0      # deg, std dev
+#/particleSource/setThetaDirection 0  # deg, mean
+#/particleSource/setThetaSigma 0      # deg, std dev
 
-/run/beamOn 98000
+/run/beamOn 100000
 
