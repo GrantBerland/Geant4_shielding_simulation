@@ -219,16 +219,7 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   // (only samples electrons with energy 50 keV or above)
   r->energy = (-(E0 - 50.)*std::log( G4UniformRand() ) + 50.)*keV;
  
-  if(r->energy < 0.) throw std::invalid_argument("E < 0 :(((((((");
-
-  std::ofstream testFile;
-  testFile.open("test.csv", std::ios_base::app);
-
-  testFile << lossConePhi << ',' << r->energy/keV << 
-	   ',' << r->x/cm << ',' << r->y/cm << ',' << r->z/cm << 
-	   ',' << r->xDir << ',' << r->yDir << ',' << r->zDir << '\n';
-  testFile.close();
-
+  if(r->energy < 0.) {throw std::invalid_argument("E < 0 :(((((((");}
 }
 
 void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
@@ -427,6 +418,20 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
                 std::tan(G4UniformRand()*photonPhiLimitRad);
                 break;
 
+	case 5: // distributed source (for real this time)
+
+		phi   = G4UniformRand() * 10. * fDeg2Rad; // ~U[0,10] deg
+		theta = G4UniformRand() * 2. * fPI;       // ~U[0,2pi]rad
+
+		r->x = (G4UniformRand()*2.-1.)*10.*cm; // ~U[-5, 5]
+		r->y = 20.*cm;
+		r->z = (G4UniformRand()*2.-1.)*10.*cm; // ~U[-5, 5]
+
+		r->xDir = std::sin(phi) * std::cos(theta);
+                r->zDir = std::sin(phi) * std::sin(theta);
+                r->yDir = -std::cos(phi);
+
+		break;
         default:
                 throw std::invalid_argument("Choose distribution type!");
   }
