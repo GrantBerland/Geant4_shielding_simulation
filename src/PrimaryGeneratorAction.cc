@@ -420,7 +420,7 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 
 	case 5: // distributed source (for real this time)
 
-		phi   = G4UniformRand() * 10. * fDeg2Rad; // ~U[0,10] deg
+		phi   = (G4UniformRand() * 40.)* fDeg2Rad; // ~U[0,10] deg
 		theta = G4UniformRand() * 2. * fPI;       // ~U[0,2pi]rad
 
 		r->x = (G4UniformRand()*2.-1.)*10.*cm; // ~U[-5, 5]
