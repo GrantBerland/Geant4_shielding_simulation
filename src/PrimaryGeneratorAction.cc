@@ -316,7 +316,7 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 		r->z = z_centers[randIndex2];
                 r->y = 20.*cm;
 
-                narrowingOffset = 0.2;
+                narrowingOffset = 0.002;
                 r->xDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
                 r->zDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
                 r->yDir = -1;
@@ -345,7 +345,7 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 		        (randIndex1 == 3 && randIndex2 == 3));
 
 		//Filled circle
-                R = std::sqrt(G4UniformRand() * 4.) * cm;
+                R = std::sqrt(G4UniformRand() * 10.) * cm;
                 
 		// Empty circle
 		//R = 2. * cm;
@@ -355,8 +355,8 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
                 r->y = 20.*cm;
                 
                 narrowingOffset = 0.2;
-		r->xDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
-                r->zDir = G4UniformRand()*narrowingOffset-narrowingOffset/2.;
+		r->xDir = (G4UniformRand()*2.-1.)*narrowingOffset;
+                r->zDir = (G4UniformRand()*2.-1.)*narrowingOffset;
  		r->yDir = -1;
 
                 break;
