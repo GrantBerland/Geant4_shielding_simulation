@@ -309,6 +309,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   ////////////////////////////////////////////////
   
   G4AssemblyVolume* detectorAssembly = new G4AssemblyVolume();
+  G4AssemblyVolume* darkDetectorAssembly = new G4AssemblyVolume();
 
   G4RotationMatrix Rm;
   G4ThreeVector    Tm;
@@ -318,6 +319,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   Tm.setX(0.); Tm.setY(-2.*cm); Tm.setZ(0.);
   Tr = G4Transform3D(Rm, Tm); 
   detectorAssembly->AddPlacedVolume(logicFrontEndBoard, Tr);
+  darkDetectorAssembly->AddPlacedVolume(logicFrontEndBoard, Tr);
  
 
   // Collimator placements
@@ -326,18 +328,20 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   Rm.rotateZ(90.*deg);
   Tr = G4Transform3D(Rm, Tm); 
   detectorAssembly->AddPlacedVolume(logicCollimator, Tr);
+  darkDetectorAssembly->AddPlacedVolume(logicCollimator, Tr);
   
   Rm.rotateZ(-90.*deg);
   Rm.rotateX(-90.*deg);
 
 
   // Call method to return coded aperture sub solid, logical volume below
-  G4SubtractionSolid* logicAp1 = CreateCodedAperture();
+  G4LogicalVolume* logic_aperature_base = CreateCodedAperture(0, 
+		  nist->FindOrBuildMaterial("G4_W"),
+		  "Aperature-base");
+  G4LogicalVolume* logic_solidMask_base = CreateCodedAperture(1,
+		   nist->FindOrBuildMaterial("G4_W"),
+		   "Aperature-solid-mask"); 
   
-  G4LogicalVolume* logic_aperature_base =
-    new G4LogicalVolume(logicAp1,            //its solid
-                        nist->FindOrBuildMaterial("G4_W"), // material
-                        "Aperature-base");         //its name
   
   G4double detectorPosX = -21.*mm;
   G4double detectorPosZ = -21.*mm;
@@ -418,6 +422,48 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     
    } 
 
+  // Create all Redlen detectors and apertures per assembly
+  // for the DARK detector assembly
+  for(G4int nDet=0; nDet<4;nDet++)
+  {
+ 
+    // CZT Detector
+    Tm.setX(pm1[nDet]*detectorPosX + 2.1*cm); 
+    Tm.setY(-1.25*cm+detectorPosY+detectorZ); 
+    Tm.setZ(pm2[nDet]*detectorPosZ + 2.1*cm);
+    
+    Tr = G4Transform3D(Rm, Tm); 
+  
+    darkDetectorAssembly->AddPlacedAssembly(pixelAssembly, Tr);
+
+    // FR4 Detector
+    Tm.setX(pm1[nDet]*detectorPosX); 
+    Tm.setY(-2.*cm+detectorPosY); 
+    Tm.setZ(pm2[nDet]*detectorPosZ);
+    
+    Tr = G4Transform3D(Rm, Tm); 
+
+    darkDetectorAssembly->AddPlacedVolume(logicDetectorElectronics, Tr);
+  
+    // Coded Aperture
+    Tm.setX(pm1[nDet]*detectorPosX + 0.5*mm-100.*um);
+    Tm.setY(detectorPosY + detectorApertureSpacing + detectorZ-1.25*cm);
+    Tm.setZ(pm2[nDet]*detectorPosZ + 0.5*mm-100.*um);
+   
+    // Place solid mask apeture
+    
+    
+    Rm.rotateX(90.*deg);
+    Tr = G4Transform3D(Rm, Tm); 
+    
+    if(nDet == 2)
+      {darkDetectorAssembly->AddPlacedVolume(logic_solidMask_base, Tr);}
+    else
+      {darkDetectorAssembly->AddPlacedVolume(logic_aperature_base, Tr);}
+
+    Rm.rotateX(-90.*deg);
+   
+  } 
 
 
   // Top beryllium window
@@ -452,10 +498,21 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   Rm.rotateY(0.*deg);
  
   for(unsigned int i=0; i<numDetectorAssemblies; i++){	 
-    Tm.setX(pm1[i]*dimX); Tm.setY(detectorHeight); Tm.setZ(pm2[i]*dimZ);
+   
+    // Translational shifts
+    Tm.setX(pm1[i]*dimX); 
+    Tm.setY(detectorHeight); 
+    Tm.setZ(pm2[i]*dimZ);
+   
+    // Form transform object with rotation matrix 
+    // from before and translations
     Tr = G4Transform3D(Rm, Tm);
 
-    detectorAssembly->MakeImprint(logicEnv, Tr);
+    // Imprint the 3 detector assemblies
+    if(i == 2)
+      {darkDetectorAssembly->MakeImprint(logicEnv, Tr);}
+    else  
+      {detectorAssembly->MakeImprint(logicEnv, Tr);}
 
   }
 
@@ -464,7 +521,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   return physWorld;
 }
 
-G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
+G4LogicalVolume* DetectorConstruction::CreateCodedAperture( 
+		G4int darkDetectorSelector, 
+		G4Material* matl, 
+		G4String name)
 {
   G4RotationMatrix Rm;
   G4ThreeVector    Tm;
@@ -532,7 +592,7 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
 							0.)); 
   
   // starts at 1 since logicAp1 uses first line of file 
-  for(int i=1; i<numberOfBoxes; i++)
+  for(unsigned int i=1; i<numberOfBoxes; i++)
   {
     getline(placementFile, placementXY_str, '\n');
 
@@ -560,15 +620,23 @@ G4SubtractionSolid* DetectorConstruction::CreateCodedAperture()
   }
   
   placementFile.close();
-
+  
   G4SubtractionSolid* logicAp1 = 
 	    new G4SubtractionSolid("Aperature-base",
 	  			   aperature_base,
 	  			   coded_boxes,
 	  			   rotm,
 	  			   G4ThreeVector(0.,0.,0.));
+
+  if(darkDetectorSelector == 0)
+    {return new G4LogicalVolume(logicAp1, matl, name);}
+
+  else if (darkDetectorSelector == 1)
+    {return new G4LogicalVolume(aperature_base, matl, name);}
   
-  return logicAp1; 
+  else 
+    {throw std::invalid_argument("Enter 0 or 1 for fnc:CreateCodedAperture(int)");}
+
 }
 
 G4LogicalVolume* DetectorConstruction::CreateLshielding(G4double outerDim,
