@@ -558,7 +558,7 @@ G4LogicalVolume* DetectorConstruction::CreateCodedAperture(
   std::ifstream placementFile("coded_aperture_array.txt", std::ios_base::in);
   
   // Get number of lines in file
-  int numberOfBoxes = 0;
+  unsigned int numberOfBoxes = 0;
   while(getline(placementFile, placementXY_str, '\n'))
     { numberOfBoxes++; }
   

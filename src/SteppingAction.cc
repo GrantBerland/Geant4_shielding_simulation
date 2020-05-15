@@ -80,9 +80,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   G4Track* track = aStep->GetTrack();
 
-  // Particles are background by default
-  G4bool isBackground = true;
-
   // Get pre and post step logical volume names
   if (track->GetVolume()) {volName = track->GetVolume()->GetName();}
   if (track->GetNextVolume()) {nextVolName = track->GetNextVolume()->GetName();}
@@ -99,40 +96,20 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   check1 = (std::string::npos != volName.find("P", 12));
   check2 = (std::string::npos != nextVolName.find("P", 12));
   
-  
-  // Get particle name string, either "e-" or "gamma" 
-  G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
 
   // Creator process corresponds to particle generation via ParticleGun or
   // a physics process, in this case electron bremsstrahlung (eBrem) 
   // or electron ionization (eIoni)
   // **N.B.: need to check CreatorProcess is not null since primary tracks
   // have no process name and will segfault if dereferenced**
-  if(particleName == "gamma")
-  {
-    isBackground = false;
-    
-    if(track->GetCreatorProcess() != NULL){
-      const G4String& processName = 
-	      track->GetCreatorProcess()->GetProcessName();
-  
-      // If the particle is not a primary track, then checked if it's 
-      // created via electron bremsstrahlung (eBrem); if so, resets to 
-      // isBackgroung = true
-      isBackground = (processName == "eBrem");
-  
-      } 
-  }
 
   if(check1 && check2) // particle is in detector
   {
     // Position of hit
     //const G4ThreeVector pos = aStep->GetPostStepPoint()->GetPosition();
     
-    // Difference in energy between the last and current step point
-    const G4double ene = (aStep->GetPreStepPoint()->GetKineticEnergy()) 
-	- (aStep->GetPostStepPoint()->GetKineticEnergy());
-  
+    // Particle energy immediately before it enters detector material 
+    const G4double ene = aStep->GetPreStepPoint()->GetKineticEnergy(); 
 
     // Get generated particle position, energy, and momentum direction
     const G4ThreeVector vtx = track->GetVertexPosition();
@@ -140,12 +117,17 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     // Redlen lower energy detection threshold
     if(ene > 50.*keV)
     {
-      // write to background hits file	    
-      if(isBackground) LogParticle(vtx, ene, backgroundFileName, volName);
-      
-      // write to signal hits file (no part. name since all are gammas)
-      else LogParticle(vtx, ene, signalFileName, volName); 
-      	    
+  
+      // Get particle name string, either "e-" or "gamma" 
+      G4String particleName = track->GetDynamicParticle()->GetDefinition()->GetParticleName();
+     
+      if(particleName == "gamma" && track->GetCreatorProcess() == NULL)
+      // Write to signal hits file (no part. name since all are gammas)
+        {LogParticle(vtx, ene, signalFileName, volName);} 
+      else
+     // Write to background hits file	   
+        {LogParticle(vtx, ene, backgroundFileName, volName);}
+
     }
   }    
   
