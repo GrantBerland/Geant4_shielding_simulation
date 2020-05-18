@@ -93,7 +93,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // character 12, where X is the impression copy 
   // (detector assembly) [1,2,3] and Y is the detector number 
   // within each assembly [2,4,6,8]
-  check1 = (std::string::npos != volName.find("P", 12));
+  check1 = (std::string::npos == volName.find("P", 12));
   check2 = (std::string::npos != nextVolName.find("P", 12));
   
 
@@ -123,10 +123,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
      
       if(particleName == "gamma" && track->GetCreatorProcess() == NULL)
       // Write to signal hits file (no part. name since all are gammas)
-        {LogParticle(vtx, ene, signalFileName, volName);} 
+        {LogParticle(vtx, ene, signalFileName, nextVolName);} 
       else
      // Write to background hits file	   
-        {LogParticle(vtx, ene, backgroundFileName, volName);}
+        {LogParticle(vtx, ene, backgroundFileName, nextVolName);}
 
     }
   }    
