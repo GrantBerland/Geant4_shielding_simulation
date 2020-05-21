@@ -204,9 +204,13 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   
 
   // Uniform random numbers on [0, 1) for particle direction
-  r->xDir = -std::sin(phiDirection) * std::cos(theta);	   
-  r->yDir = -std::cos(phiDirection);
-  r->zDir = -std::sin(phiDirection) * std::sin(theta);
+  G4double s1 = (G4UniformRand()*2.-1.)*fPI/8.;
+  G4double s2 = (G4UniformRand()*2.-1.)*fPI/8.;
+  G4double s3 = (G4UniformRand()*2.-1.)*fPI/8.;
+  
+  r->xDir = -std::sin(phiDirection+s1) * std::cos(theta);	   
+  r->yDir = -std::cos(phiDirection+s2);
+  r->zDir = -std::sin(phiDirection+s3) * std::sin(theta);
 
 
   // Enforces inward directionality to particles
