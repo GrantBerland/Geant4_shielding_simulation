@@ -323,7 +323,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
  
 
   // Collimator placements
-  Tm.setX(0.*cm); Tm.setY(0.60*cm); Tm.setZ(0.);
+  Tm.setX(0.*cm); Tm.setY(0.50*cm); Tm.setZ(0.);
   Rm.rotateX(90.*deg);
   Rm.rotateZ(90.*deg);
   Tr = G4Transform3D(Rm, Tm); 
