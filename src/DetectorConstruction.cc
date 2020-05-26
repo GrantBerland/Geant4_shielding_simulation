@@ -206,14 +206,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4double shieldingHeight = 5.*cm;
   G4double shieldingXZ     = -4.30*cm; 
-  // Polyethylene shielding
-  G4String name1 = "pe_Shielding";  
 
-  G4double box1OuterDim = 86.5*mm+3.5*mm;
-  G4double boxDepth1    = 70.*mm;
-  G4double aBit 	= 4.*mm;
   G4double aLittleBit 	= 0.6*mm;
-  G4double depthCorrection = 8.*mm;
   
   G4RotationMatrix* rotm2 = new G4RotationMatrix();   
 
@@ -392,7 +386,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  true,
 		  checkOverlaps);
  
-  delete rotm2, rotm3, rotm4, rotm5;
+  delete rotm2;
+  delete rotm3;
+  delete rotm4;
+  delete rotm5;
 
 
 
@@ -834,7 +831,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	
 	TrT = G4Transform3D(RmT, TmT);	
         
-	//pixelAssembly->AddPlacedVolume(logicPixel, TrT);
+	pixelAssembly->AddPlacedVolume(logicPixel, TrT);
     }
   }
   
