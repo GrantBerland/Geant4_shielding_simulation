@@ -221,7 +221,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //////////////// Layer 1  ///////////////
   /////////////////////////////////////////
 
-  G4double bottomPlateDim = 9*cm;
+  G4double bottomPlateDim = 9*cm-500.*um;
   G4Box* sn_plate_segment = new G4Box("sn_bottom_plate_segment",
 		  	             bottomPlateDim/2.,
 		  		     shieldingThickness3/2.,
@@ -260,7 +260,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   G4Box* sn_side_plates_long1 = new G4Box("sn_side_plates_long",
-		   			 8.75*cm,
+		   			 17.5*cm/2.-0.2*mm/2,
 		  			 shieldingThickness3/2.,
 					 3.85*cm/2.);
   G4Box* sn_side_plates_long2 = new G4Box("sn_side_plates_long",
@@ -276,9 +276,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 								"sn_side_plate_long");
 
 
-  rotm2->rotateX(90.*deg);
-  new G4PVPlacement(rotm2,
-		  G4ThreeVector(shieldingXZ+4.35*cm,
+  G4RotationMatrix* rotm_tmp = new G4RotationMatrix();
+  rotm_tmp->rotateX(90.*deg);
+  new G4PVPlacement(rotm_tmp,
+		  G4ThreeVector(shieldingXZ+4.35*cm+0.2*mm/2+0.4*mm,
 			  shieldingHeight-0.45*cm,
 			  shieldingXZ-4.25*cm),
 		  logic_sn_side_plates_long1,
@@ -322,7 +323,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 				       "sn_side_plate_short1");
 
-  new G4PVPlacement(rotm2,
+  new G4PVPlacement(rotm_tmp,
 		  G4ThreeVector(shieldingXZ+8.75*cm,
 			  shieldingHeight-0.45*cm,
 			  shieldingXZ+4.5*cm),
@@ -346,7 +347,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   
   G4Box* sn_end_plate1 = new G4Box("sn_end_plate1",
-		  		4.25*cm,
+		  		4.35*cm,
 		  		shieldingThickness3/2.,
 				3.85*cm/2.);
   
@@ -391,7 +392,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  true,
 		  checkOverlaps);
  
-
+  delete rotm2, rotm3, rotm4, rotm5;
 
 
 
@@ -399,58 +400,171 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //////////////// Layer 2  ///////////////
   /////////////////////////////////////////
   
+  G4double bottomPlateDimLayer2 = 9.75*cm;
+  G4double gapDistance  = shieldingThickness3/2. + shieldingThickness2/2.;
+  G4Box* w_plate_segment = new G4Box("w_bottom_plate_segment",
+		  	             bottomPlateDimLayer2/2.,
+		  		     shieldingThickness2/2.,
+				     bottomPlateDimLayer2/2.);
+  
+  G4RotationMatrix* rotm6 = new G4RotationMatrix();
+  G4UnionSolid* w_bottom_plate = new G4UnionSolid("w_bottom_plate",
+		  				   w_plate_segment,
+						   w_plate_segment,
+						   rotm6,
+					   G4ThreeVector(bottomPlateDimLayer2-1.*cm,
+							   0, 0));
+
+  w_bottom_plate = new G4UnionSolid("w_bottom_plate",
+		  				   w_bottom_plate,
+						   w_plate_segment,
+						   rotm6,
+						   G4ThreeVector(0, 0,
+							bottomPlateDimLayer2-1.*cm));
+
+
+
+  G4LogicalVolume* logic_w_bottom_plate = new G4LogicalVolume(w_bottom_plate,
+		  			nist->FindOrBuildMaterial("G4_W"),
+								"w_bottom_plate");
+
+  
+  new G4PVPlacement(0,
+		  G4ThreeVector(shieldingXZ+1.5*mm,
+	        shieldingHeight-25.*mm-shieldingThickness3/2.-shieldingThickness2/2.,
+			  shieldingXZ+1.5*mm),
+		  logic_w_bottom_plate,
+		  "w_bottom_plate",
+		  logicEnv,
+		  true,
+		  checkOverlaps);
+
+
+  G4Box* w_side_plates_long1 = new G4Box("w_side_plates_long",
+		   			 17.5*cm/2+shieldingThickness2/2.,
+		  			 shieldingThickness2/2.,
+					 4.1*cm/2.);
+  G4Box* w_side_plates_long2 = new G4Box("w_side_plates_long",
+		   			 17.5*cm/2+2.5*mm/2,
+		  			 shieldingThickness2/2.,
+					 4.1*cm/2.);
+  
+  G4LogicalVolume* logic_w_side_plates_long1=new G4LogicalVolume(w_side_plates_long1,
+				       nist->FindOrBuildMaterial("G4_W"),
+								"w_side_plate_long");
+  G4LogicalVolume* logic_w_side_plates_long2=new G4LogicalVolume(w_side_plates_long2,
+				       nist->FindOrBuildMaterial("G4_W"),
+								"w_side_plate_long");
+
+  new G4PVPlacement(rotm_tmp,
+		  G4ThreeVector(shieldingXZ+4.35*cm-shieldingThickness2/2.,
+			  shieldingHeight-0.45*cm-2.5*mm/2+0.035*mm/2,
+			  shieldingXZ-4.25*cm-gapDistance-0.25*mm),
+		  logic_w_side_plates_long1,
+		  "w_side_plate_long1",
+		  logicEnv,
+		  true,
+		  checkOverlaps);
+  
+  new G4PVPlacement(rotm3,
+		  G4ThreeVector(shieldingXZ-4.2*cm-gapDistance-0.25*mm,
+			  shieldingHeight-0.45*cm-2.5*mm/2+0.035*mm/2,
+			  shieldingXZ+4.5*cm),
+		  logic_w_side_plates_long2,
+		  "w_side_plate_long2",
+		  logicEnv,
+		  true,
+		  checkOverlaps);
+
+  G4Box* w_side_plates_short1 = new G4Box("w_side_plates_short1",
+		  		        8.25*cm/2+3.5*mm/2,   
+		  			shieldingThickness2/2.,
+					4.1*cm/2.);
+
+  G4Box* w_side_plates_short2 = new G4Box("w_side_plates_short2",
+		  		        8.45*cm/2,   
+		  			shieldingThickness2/2.,
+					4.1*cm/2.);
+
+
+  G4LogicalVolume* logic_w_side_plates_short1 = new G4LogicalVolume(
+		  		       w_side_plates_short1,
+				       nist->FindOrBuildMaterial("G4_W"),
+				       "w_side_plate_short1");
+
+  G4LogicalVolume* logic_w_side_plates_short2 = new G4LogicalVolume(
+		  		       w_side_plates_short2,
+				       nist->FindOrBuildMaterial("G4_W"),
+				       "w_side_plate_short1");
+  new G4PVPlacement(rotm_tmp,
+		  G4ThreeVector(shieldingXZ+8.75*cm+shieldingThickness2+3.5*mm/2,
+			  shieldingHeight-0.45*cm-2.5*mm/2.,
+			  shieldingXZ+4.5*cm+gapDistance+0.75*mm),
+		  logic_w_side_plates_short1,
+		  "w_side_plate_short1",
+		  logicEnv,
+		  true,
+		  checkOverlaps);
+
+
+  new G4PVPlacement(rotm3,
+		  G4ThreeVector(shieldingXZ+4.5*cm+gapDistance,
+			  shieldingHeight-0.45*cm-2.5*mm/2.,
+			  shieldingXZ+8.65*cm+shieldingThickness2/2.+0.25*mm),
+		  logic_w_side_plates_short2,
+		  "w_side_plate_short2",
+		  logicEnv,
+		  true,
+		  checkOverlaps);
+  
+  
+  G4Box* w_end_plate1 = new G4Box("w_end_plate1",
+		  		8.7*cm/2.+6.*mm/2,
+		  		shieldingThickness2/2.,
+				4.1*cm/2.);
+
+  
+  
+  G4Box* w_end_plate2 = new G4Box("w_end_plate2",
+		  		8.6*cm/2.+6.5*mm/2,
+		  		shieldingThickness2/2.,
+				4.1*cm/2.);
+  
+  G4LogicalVolume* logic_w_end_plate1 = new G4LogicalVolume(
+		  		       w_end_plate1,
+				       nist->FindOrBuildMaterial("G4_W"),
+				       "w_end_plate1");
+  
+  G4LogicalVolume* logic_w_end_plate2 = new G4LogicalVolume(
+		  		       w_end_plate2,
+				       nist->FindOrBuildMaterial("G4_W"),
+				       "w_end_plate2");
+  new G4PVPlacement(rotm4,
+		  G4ThreeVector(shieldingXZ+13.*cm+gapDistance+0.5*mm,
+			  shieldingHeight-0.45*cm-2.5*mm/2.,
+			  shieldingXZ+0.25*cm-6.*mm/2.),
+		  logic_w_end_plate1,
+		  "w_end_plate1",
+		  logicEnv,
+		  true,
+		  checkOverlaps);
+
+  new G4PVPlacement(rotm5,
+		  G4ThreeVector(shieldingXZ+0.25*cm+0.5*mm/2,
+			  shieldingHeight-0.45*cm-2.5*mm/2.,
+			  shieldingXZ+13.*cm+gapDistance),
+		  logic_w_end_plate2,
+		  "w_end_plate2",
+		  logicEnv,
+		  true,
+		  checkOverlaps);
+  
   
   /////////////////////////////////////////
   //////////////// Layer 3  ///////////////
   /////////////////////////////////////////
 
 
-  // Tungsten shielding
-  G4String name2 = "W_Shielding"; 
-  
-  G4double box2OuterDim = 86.5*mm;
-  G4double boxDepth2    = boxDepth1 - outerShieldingThickness;
-  
-  G4LogicalVolume* logic_shielding2 = CreateLshielding(box2OuterDim+1.5*mm,
-			boxDepth2+aBit-12.*mm-depthCorrection+4.*mm,
-		  	shieldingThickness2+2.6*mm,
-			-3.*mm,
-		  	nist->FindOrBuildMaterial("G4_W"),
-		  	name2); 
-  
-  /*
-  new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ-aLittleBit+1.*mm,
-			  shieldingHeight-4.*mm-depthCorrection/2.,
-			  shieldingXZ-aLittleBit+1.*mm),
-		  logic_shielding2,
-		  name2,
-		  logicEnv,
-		  false,
-		  checkOverlaps);
- */
-  // Tin shielding
-  G4String name3 = "Sn_Shielding"; 
-  
-  G4double box3OuterDim = 84.*mm;
-  G4double boxDepth3    = boxDepth2 - shieldingThickness2; 
-  G4LogicalVolume* logic_shielding3 = CreateLshielding(box3OuterDim,
-			boxDepth3 - 5.*mm-depthCorrection+2.*mm,
-		  	shieldingThickness3+2.0*mm,
-			-2.*mm,
-		  	nist->FindOrBuildMaterial("G4_Sn"),
-		  	name3); 
-  /*
-  new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ-aLittleBit+2.*mm,
-			  	shieldingHeight+0.25*cm-5.*mm-depthCorrection/2.,
-			  	shieldingXZ-aLittleBit+2.*mm),
-		  logic_shielding3,
-		  name3,
-		  logicEnv,
-		  false,
-		  checkOverlaps);
-  */
   ////////////////////////////////////////////
   ////////////// Logical Volumes /////////////
   ////////////////////////////////////////////
