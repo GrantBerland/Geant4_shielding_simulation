@@ -155,7 +155,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   /////////// Detector Construction ////////
   //////////////////////////////////////////
 
-  G4double shieldingThickness1 = 15.*mm; // PE 
+  G4double outerShieldingThickness = 15.*mm; // PE 
   G4double shieldingThickness2     = 3.5*mm; // W
   G4double shieldingThickness3     = 2.5*mm; // Sn
   G4double detectorXY      	   = 40.*mm;
@@ -238,7 +238,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   G4LogicalVolume* logic_sn_bottom_plate = new G4LogicalVolume(sn_bottom_plate,
-		  			nist->FindOrBuildMaterial("G4_Sn"),
+		  			nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 								"sn_bottom_plate");
 
   
@@ -263,10 +263,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 					 3.85*cm/2.);
   
   G4LogicalVolume* logic_sn_side_plates_long1=new G4LogicalVolume(sn_side_plates_long1,
-				       nist->FindOrBuildMaterial("G4_Sn"),
+				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 								"sn_side_plate_long");
   G4LogicalVolume* logic_sn_side_plates_long2=new G4LogicalVolume(sn_side_plates_long2,
-				       nist->FindOrBuildMaterial("G4_Sn"),
+				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 								"sn_side_plate_long");
 
 
@@ -309,12 +309,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   G4LogicalVolume* logic_sn_side_plates_short1 = new G4LogicalVolume(
 		  		       sn_side_plates_short1,
-				       nist->FindOrBuildMaterial("G4_Sn"),
+				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 				       "sn_side_plate_short1");
 
   G4LogicalVolume* logic_sn_side_plates_short2 = new G4LogicalVolume(
 		  		       sn_side_plates_short2,
-				       nist->FindOrBuildMaterial("G4_Sn"),
+				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 				       "sn_side_plate_short1");
 
   new G4PVPlacement(rotm_tmp,
@@ -353,12 +353,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   G4LogicalVolume* logic_sn_end_plate1 = new G4LogicalVolume(
 		  		       sn_end_plate1,
-				       nist->FindOrBuildMaterial("G4_Sn"),
+				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 				       "sn_end_plate1");
   
   G4LogicalVolume* logic_sn_end_plate2 = new G4LogicalVolume(
 		  		       sn_end_plate2,
-				       nist->FindOrBuildMaterial("G4_Sn"),
+				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
 				       "sn_end_plate2");
   
   G4RotationMatrix* rotm4 = new G4RotationMatrix();
@@ -397,7 +397,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //////////////// Layer 2  ///////////////
   /////////////////////////////////////////
   
-  G4double bottomPlateDimLayer2 = 9.65*cm;
+  G4double bottomPlateDimLayer2 = 9.75*cm;
   G4double gapDistance  = shieldingThickness3/2. + shieldingThickness2/2.;
   G4Box* w_plate_segment = new G4Box("w_bottom_plate_segment",
 		  	             bottomPlateDimLayer2/2.,
@@ -561,169 +561,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //////////////// Layer 3  ///////////////
   /////////////////////////////////////////
 
-
-  G4double bottomPlateDimLayer3 = 12.75*cm;
-  G4double gapDistance2 = shieldingThickness3/2. + 
-	  		  shieldingThickness2/2. + 
-			  shieldingThickness1/2.;
-
-  G4Box* pe_plate_segment = new G4Box("pe_bottom_plate_segment",
-		  	             bottomPlateDimLayer3/2.,
-		  		     shieldingThickness1/2.,
-				     bottomPlateDimLayer3/2.);
-  
-  G4UnionSolid* pe_bottom_plate = new G4UnionSolid("pe_bottom_plate",
-		  				   pe_plate_segment,
-						   pe_plate_segment,
-						   rotm6,
-					   G4ThreeVector(bottomPlateDimLayer3-4.*cm,
-							   0, 0));
-
-  pe_bottom_plate = new G4UnionSolid("pe_bottom_plate",
-		  		     pe_bottom_plate,
-				     pe_plate_segment,
-				     rotm6,
-				     G4ThreeVector(0, 0,
-				     bottomPlateDimLayer3-4.*cm));
-
-
-
-  G4LogicalVolume* logic_pe_bottom_plate = new G4LogicalVolume(pe_bottom_plate,
-		  			nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
-								"pe_bottom_plate");
-
-  
-  new G4PVPlacement(0,
-		  G4ThreeVector(shieldingXZ+1.5*mm,
-	        shieldingHeight-25.*mm-shieldingThickness3/2.-shieldingThickness2/2.-shieldingThickness1/2.-1.75*mm,
-			  shieldingXZ+1.5*mm),
-		  logic_pe_bottom_plate,
-		  "pe_bottom_plate",
-		  logicEnv,
-		  true,
-		  checkOverlaps);
-
-
-  G4Box* pe_side_plates_long1 = new G4Box("pe_side_plates_long",
-		   			 17.5*cm/2+shieldingThickness1/2.+8.*mm/2.,
-		  			 shieldingThickness1/2.,
-					 4.1*cm/2.+3.*mm/2.);
-  G4Box* pe_side_plates_long2 = new G4Box("pe_side_plates_long",
-		   			 17.5*cm/2+10.*mm/2+15.*mm/2.,
-		  			 shieldingThickness1/2.,
-					 4.1*cm/2.+3.*mm/2.);
-  
-  G4LogicalVolume* logic_pe_side_plates_long1=new G4LogicalVolume(pe_side_plates_long1,
-				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
-								"pe_side_plate_long");
-  G4LogicalVolume* logic_pe_side_plates_long2=new G4LogicalVolume(pe_side_plates_long2,
-				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
-								"pe_side_plate_long");
-
-  new G4PVPlacement(rotm_tmp,
-		  G4ThreeVector(shieldingXZ+4.35*cm-shieldingThickness1/2.,
-			  shieldingHeight-0.45*cm-2.5*mm/2+0.035*mm/2-3.*mm/2.,
-			  shieldingXZ-4.25*cm-gapDistance2-3.*mm),
-		  logic_pe_side_plates_long1,
-		  "pe_side_plate_long1",
-		  logicEnv,
-		  true,
-		  checkOverlaps);
-  
-  new G4PVPlacement(rotm3,
-		  G4ThreeVector(shieldingXZ-4.2*cm-gapDistance2-3.*mm,
-			  shieldingHeight-0.45*cm-2.5*mm/2+0.035*mm/2-3.*mm/2.,
-			  shieldingXZ+4.5*cm+14.*mm/2.),
-		  logic_pe_side_plates_long2,
-		  "pe_side_plate_long2",
-		  logicEnv,
-		  true,
-		  checkOverlaps);
-
-  G4Box* pe_side_plates_short1 = new G4Box("pe_side_plates_short1",
-		  		        8.25*cm/2+3.5*mm/2,   
-		  			shieldingThickness1/2.,
-					4.1*cm/2.+3.*mm/2.);
-
-  G4Box* pe_side_plates_short2 = new G4Box("pe_side_plates_short2",
-		  		        8.45*cm/2+15.*mm/2,   
-		  			shieldingThickness1/2.,
-					4.1*cm/2.+3.*mm/2.);
-
-
-  G4LogicalVolume* logic_pe_side_plates_short1 = new G4LogicalVolume(
-		  		       pe_side_plates_short1,
-				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
-				       "pe_side_plate_short1");
-
-  G4LogicalVolume* logic_pe_side_plates_short2 = new G4LogicalVolume(
-		  		       pe_side_plates_short2,
-				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
-				       "pe_side_plate_short1");
-  
-  new G4PVPlacement(rotm_tmp,
-		  G4ThreeVector(shieldingXZ+8.75*cm+shieldingThickness1+14.*mm/2,
-			  shieldingHeight-0.45*cm-2.5*mm/2.-3.*mm/2.,
-			  shieldingXZ+4.5*cm+gapDistance2+3.*mm),
-		  logic_pe_side_plates_short1,
-		  "pe_side_plate_short1",
-		  logicEnv,
-		  true,
-		  checkOverlaps);
-
-
-  new G4PVPlacement(rotm3,
-		  G4ThreeVector(shieldingXZ+4.5*cm+gapDistance2+3.*mm,
-			  shieldingHeight-0.45*cm-2.5*mm/2.-3.*mm/2.,
-			  shieldingXZ+8.65*cm+shieldingThickness1/2.+0.25*mm-1.*mm+15.*mm/2.),
-		  logic_pe_side_plates_short2,
-		  "pe_side_plate_short2",
-		  logicEnv,
-		  true,
-		  checkOverlaps);
-  
-  
-  G4Box* pe_end_plate1 = new G4Box("pe_end_plate1",
-		  		8.7*cm/2.+21.*mm/2+4.*mm/2,
-		  		shieldingThickness1/2.,
-				4.1*cm/2.);
-
-  
-  
-  G4Box* pe_end_plate2 = new G4Box("pe_end_plate2",
-		  		8.6*cm/2.+10.5*mm/2,
-		  		shieldingThickness1/2.,
-				4.1*cm/2.);
-  
-  G4LogicalVolume* logic_pe_end_plate1 = new G4LogicalVolume(
-		  		       pe_end_plate1,
-				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
-				       "pe_end_plate1");
-  
-  G4LogicalVolume* logic_pe_end_plate2 = new G4LogicalVolume(
-		  		       pe_end_plate2,
-				       nist->FindOrBuildMaterial("G4_POLYETHYLENE"),
-				       "pe_end_plate2");
-  
-  new G4PVPlacement(rotm4,
-		  G4ThreeVector(shieldingXZ+13.*cm+gapDistance2+0.5*mm+shieldingThickness2/2.+1.*mm,
-			  shieldingHeight-0.45*cm-2.5*mm/2.,
-			  shieldingXZ+0.25*cm-6.*mm/2.-15.*mm/2+4.*mm/2.),
-		  logic_pe_end_plate1,
-		  "pe_end_plate1",
-		  logicEnv,
-		  true,
-		  checkOverlaps);
-
-  new G4PVPlacement(rotm5,
-		  G4ThreeVector(shieldingXZ+0.25*cm+0.5*mm/2-2.*mm/2,
-			  shieldingHeight-0.45*cm-2.5*mm/2.,
-			  shieldingXZ+13.*cm+gapDistance2+shieldingThickness2/2.),
-		  logic_pe_end_plate2,
-		  "pe_end_plate2",
-		  logicEnv,
-		  true,
-		  checkOverlaps);
 
   ////////////////////////////////////////////
   ////////////// Logical Volumes /////////////
