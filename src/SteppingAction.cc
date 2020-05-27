@@ -146,10 +146,38 @@ void SteppingAction::LogParticle(G4ThreeVector vtx, G4double ene, G4String detec
     G4int loc3  = volName.find('j', loc2);
     G4int loc4  = volName.find('_', loc3);
  
+    
     // Find detector and pixel number from volume name string
+    G4String avPlacementNum = volName.substr(3, volName.find('_',3)-3);
     G4String detNumber   = volName.substr(10, volName.find('_', 10)-10);
     G4String iNum   	 = volName.substr(loc2p+1, loc3-(loc2p+2));
     G4String jNum 	 = volName.substr(loc3+1, loc4-(loc3+1));
+
+    std::cout << volName << std::endl; 
+    std::cout << avPlacementNum << std::endl; 
+
+    // Correction needed after dark detector was implemented
+    if(std::stoi(avPlacementNum) == 2)
+    {
+      switch(std::stoi(detNumber))
+      {
+	case 2:
+	  detNumber = "12";
+	  break;
+	case 3:
+	  detNumber = "13";
+	  break;
+	case 4:
+	  detNumber = "14";
+	  break;
+	case 5:
+	  detNumber = "15";
+          break;
+	default:
+	  throw std::invalid_argument("Something wrong with detector switch method!");
+      }
+    }
+
 
     std::ofstream hitFile_detector;
     hitFile_detector.open(detectorFileName, std::ios_base::app);
