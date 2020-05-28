@@ -153,8 +153,8 @@ void SteppingAction::LogParticle(G4ThreeVector vtx, G4double ene, G4String detec
     G4String iNum   	 = volName.substr(loc2p+1, loc3-(loc2p+2));
     G4String jNum 	 = volName.substr(loc3+1, loc4-(loc3+1));
 
-    std::cout << volName << std::endl; 
-    std::cout << avPlacementNum << std::endl; 
+    //std::cout << volName << std::endl; 
+    //std::cout << avPlacementNum << std::endl; 
 
     // Correction needed after dark detector was implemented
     if(std::stoi(avPlacementNum) == 2)

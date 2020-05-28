@@ -202,7 +202,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				   collimatorBlock,
 				   rotm,
 				   G4ThreeVector()); 
-  delete rotm;
 
   G4double shieldingHeight = 5.*cm;
   G4double shieldingXZ     = -4.30*cm; 
@@ -254,7 +253,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   G4Box* sn_side_plates_long1 = new G4Box("sn_side_plates_long",
-		   			 17.5*cm/2.-0.2*mm/2,
+		   			 17.5*cm/2.-0.2*mm/2-1.5*mm/2.,
 		  			 shieldingThickness3/2.,
 					 3.85*cm/2.);
   G4Box* sn_side_plates_long2 = new G4Box("sn_side_plates_long",
@@ -273,7 +272,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4RotationMatrix* rotm_tmp = new G4RotationMatrix();
   rotm_tmp->rotateX(90.*deg);
   new G4PVPlacement(rotm_tmp,
-		  G4ThreeVector(shieldingXZ+4.35*cm+0.2*mm/2+0.4*mm,
+		  G4ThreeVector(shieldingXZ+4.35*cm+0.2*mm/2+0.4*mm-1.5*mm/2.,
 			  shieldingHeight-0.45*cm,
 			  shieldingXZ-4.25*cm+1.*mm-350.*um),
 		  logic_sn_side_plates_long1,
@@ -341,7 +340,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   
   G4Box* sn_end_plate1 = new G4Box("sn_end_plate1",
-		  		4.35*cm-400.*um/2.,
+		  		4.35*cm-400.*um/2.-1.*mm/2.,
 		  		shieldingThickness3/2.,
 				3.85*cm/2.);
   
@@ -393,7 +392,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   //////////////// Layer 2  ///////////////
   /////////////////////////////////////////
   
-  G4double bottomPlateDimLayer2 = 9.65*cm;
+  G4double bottomPlateDimLayer2 = 9.65*cm-700*um;
   G4double gapDistance  = shieldingThickness3/2. + shieldingThickness2/2.;
   G4Box* w_plate_segment = new G4Box("w_bottom_plate_segment",
 		  	             bottomPlateDimLayer2/2.,
@@ -434,11 +433,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   G4Box* w_side_plates_long1 = new G4Box("w_side_plates_long",
-		   			 17.5*cm/2+shieldingThickness2/2.,
+		   			 17.5*cm/2+shieldingThickness2/2.-1.5*mm/2.,
 		  			 shieldingThickness2/2.,
 					 4.1*cm/2.);
   G4Box* w_side_plates_long2 = new G4Box("w_side_plates_long",
-		   			 17.5*cm/2+2.5*mm/2-750.*um/2.,
+		   			 17.5*cm/2+2.5*mm/2-750.*um/2.-350.*um/2.,
 		  			 shieldingThickness2/2.,
 					 4.1*cm/2.);
   
@@ -450,9 +449,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 								"w_side_plate_long");
 
   new G4PVPlacement(rotm_tmp,
-		  G4ThreeVector(shieldingXZ+4.35*cm-shieldingThickness2/2.,
+		  G4ThreeVector(shieldingXZ+4.35*cm-shieldingThickness2/2.-1.5*mm/2.,
 			  shieldingHeight-0.45*cm-2.5*mm/2+0.035*mm/2,
-			  shieldingXZ-4.25*cm-gapDistance-0.25*mm+1.*mm),
+			  shieldingXZ-4.25*cm-gapDistance-0.25*mm+1.*mm-100.*um),
 		  logic_w_side_plates_long1,
 		  "w_side_plate_long1",
 		  logicEnv,
@@ -462,7 +461,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   new G4PVPlacement(rotm3,
 		  G4ThreeVector(shieldingXZ-4.2*cm-gapDistance-0.25*mm+0.4*mm-0.3*mm,
 			  shieldingHeight-0.45*cm-2.5*mm/2+0.035*mm/2,
-			  shieldingXZ+4.5*cm+750.*um/2.),
+			  shieldingXZ+4.5*cm+750.*um/2.-350.*um/2.),
 		  logic_w_side_plates_long2,
 		  "w_side_plate_long2",
 		  logicEnv,
@@ -470,12 +469,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  checkOverlaps);
 
   G4Box* w_side_plates_short1 = new G4Box("w_side_plates_short1",
-		  		        8.25*cm/2+3.5*mm/2,   
+		  		        8.25*cm/2+3.5*mm/2-2.*mm/2.,   
 		  			shieldingThickness2/2.,
 					4.1*cm/2.);
 
   G4Box* w_side_plates_short2 = new G4Box("w_side_plates_short2",
-		  		        8.45*cm/2-1.*mm/2.,   
+		  		        8.45*cm/2-2.*mm/2.,   
 		  			shieldingThickness2/2.,
 					4.1*cm/2.);
 
@@ -490,9 +489,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				       nist->FindOrBuildMaterial("G4_W"),
 				       "w_side_plate_short2");
   new G4PVPlacement(rotm_tmp,
-		  G4ThreeVector(shieldingXZ+8.75*cm+shieldingThickness2+3.5*mm/2-650.*um+300.*um,
+		  G4ThreeVector(shieldingXZ+8.75*cm+shieldingThickness2+3.5*mm/2-650.*um+300.*um-2.*mm/2.,
 			  shieldingHeight-0.45*cm-2.5*mm/2.,
-			  shieldingXZ+4.5*cm+gapDistance+0.75*mm-1.*mm+1.*mm/2.),
+			  shieldingXZ+4.5*cm+gapDistance+0.75*mm-1.*mm+1.*mm/2.-1.*mm+400.*um),
 		  logic_w_side_plates_short1,
 		  "w_side_plate_short1",
 		  logicEnv,
@@ -503,7 +502,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   new G4PVPlacement(rotm3,
 		  G4ThreeVector(shieldingXZ+4.5*cm+gapDistance-1.*mm+650.*um,
 			  shieldingHeight-0.45*cm-2.5*mm/2.,
-			  shieldingXZ+8.65*cm+shieldingThickness2/2.+0.25*mm-1.*mm+582.*um+68*um),
+			  shieldingXZ+8.65*cm+shieldingThickness2/2.+0.25*mm-1.*mm+582.*um+68*um-1.*mm+10.3*um+490*um-1.*mm/2.),
 		  logic_w_side_plates_short2,
 		  "w_side_plate_short2",
 		  logicEnv,
@@ -512,7 +511,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   
   G4Box* w_end_plate1 = new G4Box("w_end_plate1",
-		  		8.7*cm/2.+6.*mm/2,
+		  		8.7*cm/2.+6.*mm/2-1.*mm/2.,
 		  		shieldingThickness2/2.,
 				4.1*cm/2.);
 
@@ -533,7 +532,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				       nist->FindOrBuildMaterial("G4_W"),
 				       "w_end_plate2");
   new G4PVPlacement(rotm4,
-		  G4ThreeVector(shieldingXZ+13.*cm+gapDistance+150.*um,
+		  G4ThreeVector(shieldingXZ+13.*cm+gapDistance+150.*um-1.5*mm,
 			  shieldingHeight-0.45*cm-2.5*mm/2.,
 			  shieldingXZ+0.25*cm-6.*mm/2.),
 		  logic_w_end_plate1,
@@ -572,7 +571,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  				   pe_plate_segment,
 						   pe_plate_segment,
 						   rotm6,
-					   G4ThreeVector(bottomPlateDimLayer3-4.*cm,
+				G4ThreeVector(bottomPlateDimLayer3-4.5*cm,
 							   0, 0));
 
   pe_bottom_plate = new G4UnionSolid("pe_bottom_plate",
@@ -580,7 +579,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				     pe_plate_segment,
 				     rotm6,
 				     G4ThreeVector(0, 0,
-				     bottomPlateDimLayer3-4.*cm));
+				     bottomPlateDimLayer3-4.5*cm));
 
 
 
@@ -601,11 +600,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   G4Box* pe_side_plates_long1 = new G4Box("pe_side_plates_long",
-		   			 17.5*cm/2+shieldingThickness1/2.+8.*mm/2.,
+		   			 17.5*cm/2+shieldingThickness1/2.+8.*mm/2.-2.*mm/2.,
 		  			 shieldingThickness1/2.,
 					 4.1*cm/2.+3.*mm/2.);
   G4Box* pe_side_plates_long2 = new G4Box("pe_side_plates_long",
-		   			 17.5*cm/2+10.*mm/2+15.*mm/2.,
+		   			 17.5*cm/2+10.*mm/2+15.*mm/2-2.8*mm/2.,
 		  			 shieldingThickness1/2.,
 					 4.1*cm/2.+3.*mm/2.);
   
@@ -617,9 +616,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 								"pe_side_plate_long");
 
   new G4PVPlacement(rotm_tmp,
-		  G4ThreeVector(shieldingXZ+4.35*cm-shieldingThickness1/2.,
-			  shieldingHeight-0.45*cm-2.5*mm/2+0.035*mm/2-3.*mm/2.,
-			  shieldingXZ-4.25*cm-gapDistance2-3.*mm),
+      G4ThreeVector(shieldingXZ+4.35*cm-shieldingThickness1/2.-2.*mm/2.,
+		    shieldingHeight-7.2325*mm,
+		    shieldingXZ-4.25*cm-gapDistance2-1.1*mm),
 		  logic_pe_side_plates_long1,
 		  "pe_side_plate_long1",
 		  logicEnv,
@@ -628,7 +627,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   new G4PVPlacement(rotm3,
 		  G4ThreeVector(shieldingXZ-4.2*cm-gapDistance2-3.*mm,
-			  shieldingHeight-0.45*cm-2.5*mm/2+0.035*mm/2-3.*mm/2.,
+		  shieldingHeight-7.2325*mm,
 			  shieldingXZ+4.5*cm+14.*mm/2.),
 		  logic_pe_side_plates_long2,
 		  "pe_side_plate_long2",
@@ -658,9 +657,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				       "pe_side_plate_short1");
   
   new G4PVPlacement(rotm_tmp,
-		  G4ThreeVector(shieldingXZ+8.75*cm+shieldingThickness1+14.*mm/2,
+		  G4ThreeVector(shieldingXZ+8.75*cm+shieldingThickness1+4.9*mm,
 			  shieldingHeight-0.45*cm-2.5*mm/2.-3.*mm/2.,
-			  shieldingXZ+4.5*cm+gapDistance2+3.*mm),
+			  shieldingXZ+4.5*cm+gapDistance2+3.*mm-1.6*mm),
 		  logic_pe_side_plates_short1,
 		  "pe_side_plate_short1",
 		  logicEnv,
@@ -669,9 +668,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   new G4PVPlacement(rotm3,
-		  G4ThreeVector(shieldingXZ+4.5*cm+gapDistance2+3.*mm,
-			  shieldingHeight-0.45*cm-2.5*mm/2.-3.*mm/2.,
-			  shieldingXZ+8.65*cm+shieldingThickness1/2.+0.25*mm-1.*mm+15.*mm/2.),
+		  G4ThreeVector(shieldingXZ+4.5*cm+gapDistance2+1.4*mm,
+			  shieldingHeight-7.25*mm,
+		    shieldingXZ+8.65*cm+shieldingThickness1/2.+5.15*mm),
 		  logic_pe_side_plates_short2,
 		  "pe_side_plate_short2",
 		  logicEnv,
@@ -680,16 +679,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   
   
   G4Box* pe_end_plate1 = new G4Box("pe_end_plate1",
-		  		8.7*cm/2.+21.*mm/2+4.*mm/2,
+		  		11.2*cm/2,
 		  		shieldingThickness1/2.,
-				4.1*cm/2.+5*mm/2-1.5*mm/2);
+				4.45*cm/2.);
 
   
-  
   G4Box* pe_end_plate2 = new G4Box("pe_end_plate2",
-		  		8.6*cm/2.+10.5*mm/2,
+		  		9.65*cm/2.,
 		  		shieldingThickness1/2.,
-				4.1*cm/2.+5*mm/2-1.5*mm/2);
+				4.45*cm/2.);
   
   G4LogicalVolume* logic_pe_end_plate1 = new G4LogicalVolume(
 		  		       pe_end_plate1,
@@ -702,9 +700,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 				       "pe_end_plate2");
   
   new G4PVPlacement(rotm4,
-		  G4ThreeVector(shieldingXZ+13.*cm+gapDistance2+0.5*mm+shieldingThickness2/2.+1.*mm,
-			  shieldingHeight-0.45*cm-2.5*mm/2.-5*mm/2+1.5*mm/2,
-			  shieldingXZ+0.25*cm-6.*mm/2.-15.*mm/2+4.*mm/2.),
+    G4ThreeVector(shieldingXZ+13.*cm+gapDistance2+shieldingThickness2/2.-1.35*mm,
+			  shieldingHeight-7.5*mm,
+   			  shieldingXZ-7.*mm),
 		  logic_pe_end_plate1,
 		  "pe_end_plate1",
 		  logicEnv,
@@ -712,19 +710,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 		  checkOverlaps);
 
   new G4PVPlacement(rotm5,
-		  G4ThreeVector(shieldingXZ+0.25*cm+0.5*mm/2-2.*mm/2,
-			  shieldingHeight-0.45*cm-2.5*mm/2.-5*mm/2+1.5*mm/2,
-			  shieldingXZ+13.*cm+gapDistance2+shieldingThickness2/2.),
+		G4ThreeVector(shieldingXZ+0.75*mm,
+			  shieldingHeight-7.5*mm,
+  shieldingXZ+13.*cm+gapDistance2+shieldingThickness2/2.-2.*mm+650.*um),
 		  logic_pe_end_plate2,
 		  "pe_end_plate2",
 		  logicEnv,
 		  true,
 		  checkOverlaps);
   
-  //delete rotm2;
-  //delete rotm3;
-  //delete rotm4;
-  //delete rotm5;
 
   ////////////////////////////////////////////
   ////////////// Logical Volumes /////////////
@@ -832,7 +826,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	
 	TrT = G4Transform3D(RmT, TmT);	
         
-	//pixelAssembly->AddPlacedVolume(logicPixel, TrT);
+	pixelAssembly->AddPlacedVolume(logicPixel, TrT);
     }
   }
   
