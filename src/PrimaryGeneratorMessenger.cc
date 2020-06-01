@@ -4,6 +4,7 @@
 
 #include "PrimaryGeneratorAction.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIdirectory.hh"
 
@@ -66,6 +67,13 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(PrimaryGeneratorAction* pri
   fD6cmd->SetParameterName("Enter an angular std dev for phi [deg].",true);
   fD6cmd->SetDefaultValue(0.);
   fD6cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  // Sets fPhotonFilename
+  fScmd1=new G4UIcmdWithAString("/dataCollection/setPhotonFileName",this);
+  fScmd1->SetParameterName("Enter file name to draw photons from.",true);
+  fScmd1->SetDefaultValue("test1_photons.csv");
+  fScmd1->AvailableForStates(G4State_PreInit, G4State_Idle);
+  
 }
 
 PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
@@ -80,6 +88,7 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
   delete fD4cmd;
   delete fD5cmd;
   delete fD6cmd;
+  delete fScmd1; 
 }
 
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command, 
@@ -122,4 +131,9 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
     fPrimaryGenerator->SetPhiSigma(std::stod(newValue));
   }
 
+  if(command == fScmd1){
+    G4String pathAndName = "../analysis/photonFiles/";
+    pathAndName += newValue;
+    fPrimaryGenerator->SetPhotonFileName(pathAndName);
+  }
 }

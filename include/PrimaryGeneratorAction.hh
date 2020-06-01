@@ -62,10 +62,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     virtual void GeneratePrimaries(G4Event* anEvent);         
 
     // Statistical selections of part. energy, position, and direction
-    void GenerateLossConeElectrons(ParticleSample* r);
-    void GenerateTrappedElectrons(ParticleSample* r);
-    void GenerateSignalSource(ParticleSample* r);
-    void GenerateOtherDistributions(ParticleSample* r);
+    void GenerateLossConeElectrons(ParticleSample*);
+    void GenerateTrappedElectrons(ParticleSample*);
+    void GenerateSignalSource(ParticleSample*);
+    void GenerateOtherDistributions(ParticleSample*);
+    void GenerateSignalFromFile(ParticleSample*);
     
     // Methods for messenger class
     void SetWhichParticle(G4int partSelection) {fWhichParticle = partSelection;};
@@ -82,6 +83,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     // Sets background spatial distribution
     void SetBackgroundSpatialDistribution(G4int type){fBackgroundSpatialDist=type;};
 
+
+    void SetPhotonFileName(G4String fname){fPhotonFilename = fname;};
 
     // Under SpatialDistributions case 3, sets Gaussian parameters
     void SetThetaDirection(G4double ang) { fDirectionTheta = ang; }; 
@@ -112,6 +115,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4int    fBackgroundSpatialDist;
     G4int    fWhichParticle;
 
+    G4String fPhotonFilename;
+    unsigned static int fPhotonFileLineCounter;
     G4ParticleDefinition* fElectronParticle; 
     G4ParticleDefinition* fPhotonParticle; 
     PrimaryGeneratorMessenger* fPrimaryGeneratorMessenger;

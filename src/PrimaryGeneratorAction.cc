@@ -49,6 +49,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+unsigned int PrimaryGeneratorAction::fPhotonFileLineCounter = 1;
+
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),
   fParticleGun(0),
@@ -66,6 +68,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   fBackgroundEnergyDist(0),
   fBackgroundSpatialDist(2),
   fWhichParticle(0),
+  fPhotonFilename(),
+  //fPhotonFileLineCounter(0),
   fElectronParticle(0),
   fPhotonParticle(0),
   fPrimaryGeneratorMessenger(0)
@@ -224,6 +228,50 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
   r->energy = (-(E0 - 50.)*std::log( G4UniformRand() ) + 50.)*keV;
  
   if(r->energy < 0.) {throw std::invalid_argument("E < 0 :(((((((");}
+}
+
+void PrimaryGeneratorAction::GenerateSignalFromFile(ParticleSample* r)
+{
+  std::ifstream photonFile;
+  photonFile.open(fPhotonFilename, std::ios_base::in);
+
+  G4String line, word;
+
+  for(unsigned int i=0; i<fPhotonFileLineCounter; i++)
+  {
+    getline(photonFile, line);
+  }
+
+  std::stringstream s_ptr(line);
+ 
+  getline(s_ptr, word, ',');
+  r->x = std::stod(word) * cm;
+
+  getline(s_ptr, word, ',');
+  r->y = std::stod(word) * cm;
+  
+  getline(s_ptr, word, ',');
+  r->z = std::stod(word) * cm;
+  
+  getline(s_ptr, word, ',');
+  r->xDir = std::stod(word);
+  
+  getline(s_ptr, word, ',');
+  r->yDir = std::stod(word);
+  
+  getline(s_ptr, word, '\n');
+  r->zDir = std::stod(word);
+
+  photonFile.close();
+
+  fPhotonFileLineCounter++;
+  
+  // Power law sampling for photon energy
+  // f(E) = C E^-k , where k > 0 and E > E_min; 
+  //
+  // Inverse CDF sampling:
+  // E = E_min * (1 - U[0,1])^(-1/(k-1))
+  r->energy = 50.*keV*std::pow((1 - G4UniformRand()),-1/(fE_folding-1));
 }
 
 void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
@@ -626,6 +674,21 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->SetParticleDefinition(fPhotonParticle);
   
     GenerateOtherDistributions(r);
+    
+    fParticleGun->SetParticlePosition(
+		    G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
+    fParticleGun->SetParticleMomentumDirection(
+		    G4ThreeVector(r->xDir, r->yDir, r->zDir));
+    fParticleGun->SetParticleEnergy(r->energy);
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+    break;
+    
+    case(4): // Signal photon, other distribution types
+
+    // Selects photon for particle type
+    fParticleGun->SetParticleDefinition(fPhotonParticle);
+  
+    GenerateSignalFromFile(r);
     
     fParticleGun->SetParticlePosition(
 		    G4ThreeVector(r->x+xShift, r->y+yShift, r->z+zShift));
