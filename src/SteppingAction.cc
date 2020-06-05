@@ -115,7 +115,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     const G4ThreeVector vtx = track->GetVertexPosition();
 
     // Redlen lower energy detection threshold
-    if(ene > 50.*keV)
+    if(ene > 20.*keV)
     {
   
       // Get particle name string, either "e-" or "gamma" 
