@@ -627,7 +627,14 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   // Struct that holds position, momentum direction, and energy
   ParticleSample* r = new ParticleSample();
- 
+  // r->x ~ x position
+  // r->y ~ y position
+  // r->z ~ z position
+  // r->xDir ~ x momentum direction
+  // r->yDir ~ y momentum direction
+  // r->zDir ~ z momentum direction
+  // r->energy ~ particle energy 
+
   switch(fWhichParticle){
     case(0): // Background electron, outside loss cone
 
