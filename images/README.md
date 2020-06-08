@@ -1,10 +1,6 @@
 
 
-# Newest shielding configuration with MURA coded aperture mask
+# Background electron sources and photon signal sources 
 
-
-![iso1](./iso1.png)
-
-
-![iso2](./iso2.png)
+![diagram](./GEANT_diagram.png)
 
