@@ -2,3 +2,4 @@
 
 For determining background radiation-inducing noise counts on an spacecraft-based X-ray detector.
 
+![diagram](./images/GEANT_diagram.png)
