@@ -826,7 +826,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	
 	TrT = G4Transform3D(RmT, TmT);	
         
-	pixelAssembly->AddPlacedVolume(logicPixel, TrT);
+	//pixelAssembly->AddPlacedVolume(logicPixel, TrT);
     }
   }
   
@@ -959,6 +959,106 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   }
 
 
+  // Bus geometry
+
+
+  G4VSolid* busBackPlate = new G4Box("Back-plate",
+		        24.*cm/2,
+			2.*mm/2.,
+			24.*cm/2.);
+
+  G4VSolid* busFrontPlate = new G4Box("Front-plate",
+		        5.*cm,
+			2.*mm/2.,
+			10.65*cm+0.25*cm/2);
+
+  G4VSolid* busSidePlate = new G4Box("Side-plate",
+		        22.*cm/2.,
+			2.*mm/2.,
+			10.*cm/2.);
+  
+  G4VSolid* busThickPlate = new G4Box("Thick-plate",
+		        22.*cm/2.,
+			2.*mm/2.,
+			10.*cm/2.);
+
+
+   // Bus structures
+  //
+
+G4LogicalVolume* logicalBusBackPlate = new G4LogicalVolume(busBackPlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Back-plate");
+
+G4LogicalVolume* logicalBusFrontPlate = new G4LogicalVolume(busFrontPlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Front-plate");
+
+G4LogicalVolume* logicalBusSidePlate = new G4LogicalVolume(busSidePlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Side-plate");
+
+G4LogicalVolume* logicalBusThickPlate = new G4LogicalVolume(busThickPlate,
+		  nist->FindOrBuildMaterial("G4_Al"),
+		  "Thick-plate"); 
+  
+  
+  
+ // Bus structure placements
+  
+  G4double busHeight = 1.*cm;
+
+  G4RotationMatrix* wallRotm = new G4RotationMatrix();
+  wallRotm->rotateZ(90.*deg);
+
+  new G4PVPlacement(0,
+		  G4ThreeVector(0., -5.*cm+busHeight, 0.),
+		  logicalBusBackPlate,
+		  "Back-plate",
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+
+  
+  new G4PVPlacement(wallRotm,
+		  G4ThreeVector(-10.*cm-8.5*mm/2-1.*cm, busHeight+0.65*cm, 0.25*cm/2),
+		  logicalBusFrontPlate,
+		  "Front-plate",
+		  logicEnv,
+		  false,
+		  0,
+		  checkOverlaps);
+
+  
+  new G4PVPlacement(wallRotm,
+		  G4ThreeVector(10.*cm+8.5*mm/2+1.*cm, busHeight+0.65*cm, 0.25*cm/2),
+		  logicalBusFrontPlate,
+		  "Front-plate",
+		  logicEnv,
+		  false,
+		  1,
+		  checkOverlaps);
+
+  G4RotationMatrix* sideWallRotm = new G4RotationMatrix();
+  sideWallRotm->rotateX(90.*deg);
+
+  new G4PVPlacement(sideWallRotm,
+		  G4ThreeVector(0., busHeight+0.5*cm, -11.*cm),
+		  logicalBusSidePlate,
+		  "Side-plate",
+		  logicEnv,
+		  false,
+		  checkOverlaps);
+
+  new G4PVPlacement(sideWallRotm,
+		  G4ThreeVector(0., busHeight+5.*mm, 11.*cm),
+		  logicalBusThickPlate,
+		  "Thick-plate",
+		  logicEnv,
+		  false,
+		  checkOverlaps); 
+  
+  
   // always return the physical World
   return physWorld;
 }
