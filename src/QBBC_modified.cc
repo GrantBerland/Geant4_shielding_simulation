@@ -74,7 +74,7 @@ QBBC_modified::QBBC_modified( G4int ver, const G4String&)
   SetVerboseLevel(ver);
 
   // EM Physics
-  RegisterPhysics( new G4EmStandardPhysics_option3(ver) );
+  RegisterPhysics( new G4EmStandardPhysics_option4(ver) );
 
   // Synchroton Radiation & GN Physics
   RegisterPhysics( new G4EmExtraPhysics(ver) );
