@@ -225,7 +225,7 @@ void PrimaryGeneratorAction::GenerateLossConeElectrons(ParticleSample* r)
 
   // Continous inverse CDF sampling for exponential energy distribution
   // (only samples electrons with energy 50 keV or above)
-  r->energy = (-(E0 - 50.)*std::log( G4UniformRand() ) + 50.)*keV;
+  r->energy = -E0*std::log( G4UniformRand() )*keV;
  
   if(r->energy < 0.) {throw std::invalid_argument("E < 0 :(((((((");}
 }
@@ -285,7 +285,7 @@ void PrimaryGeneratorAction::GenerateSignalSource(ParticleSample* r)
   
   //Sample from exponential, energy dist. fitted to Wei's results
   // (valid for E0,source = 100 keV) 
-  G4double shiftThreshold = 50.;    // keV
+  G4double shiftThreshold = 0.;    // keV
   G4double meanEnergy     = 241.4;  // keV
 
     
@@ -341,7 +341,7 @@ void PrimaryGeneratorAction::GenerateOtherDistributions(ParticleSample* r)
 
   detectorSize  = 250*2;  // mm , units assigned in switch-case
 
-  G4double meanEnergyShift = 50.;
+  G4double meanEnergyShift = 0.;
   r->energy = -( ( fE_folding-meanEnergyShift ) * 
 		  std::log( G4UniformRand() ) + meanEnergyShift) * keV;
 	
