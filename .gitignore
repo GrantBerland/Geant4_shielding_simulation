@@ -8,4 +8,6 @@
 *.cc.o
 /build/*
 /results
-/analysis
+/analysis/originalImages
+/analysis/photonFiles
+*.m~

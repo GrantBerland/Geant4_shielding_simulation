@@ -826,7 +826,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	
 	TrT = G4Transform3D(RmT, TmT);	
         
-	//pixelAssembly->AddPlacedVolume(logicPixel, TrT);
+	pixelAssembly->AddPlacedVolume(logicPixel, TrT);
     }
   }
   
