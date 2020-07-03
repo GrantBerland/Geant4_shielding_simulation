@@ -22,13 +22,13 @@ close all;
 
 %%%%%% User inputs %%%%%%
 
-fileName          = 'test5';  % No file extension
-number_of_photons = 500;   % [photons]
-photonsPerSource  = 200;
+fileName          = 'test16';  % No file extension
+number_of_photons = 250;   % [photons]
+photonsPerSource  = 400;
 photon_powerLaw_k = 2.704; % []
 SNR               = 25;   % []
 
-smoothingFactor    = 3;  % 1 = no smoothing
+smoothingFactor    = 1.5;  % 1 = no smoothing
 chiSquareMapPlotOn = 1;
 optimizationPlotOn = 0;
 
@@ -45,7 +45,7 @@ optimizationPlotOn = 0;
 %runSimulation(number_of_photons*photonsPerSource, photon_powerLaw_k, fileName);
 
 % Image reconstruction algorithm
-[image_estimate, ~] = reconstructImage(fileName, SNR, [50 300], smoothingFactor);
+[image_estimate, RL_PSFest] = reconstructImageMethod1(fileName, SNR, [50 300], smoothingFactor);
 
 % Plot original estimate in convolution space
 figure(1);
@@ -65,7 +65,7 @@ title("Image Estimate");
 colorbar();
 
 % Take the difference of the normalized reconstruction and PDF
-residuals = (image_estimate / sum(sum(image_estimate)) - z); 
+residuals = image_estimate / sum(sum(image_estimate)) - z; 
 
 errorFigNum = 3;
 chiSquare = computeChiSquared(image_estimate, z, chiSquareMapPlotOn, errorFigNum);
@@ -77,7 +77,8 @@ contourf(residuals);
 title("Reconstruction Residuals");
 colorbar();
 
-%PSFest = computePSFestimate(image_estimate, z, optimizationPlotOn);
+%PSFest = computePSFestimate(image_estimate, z, ...
+%                resizem(RL_PSFest, 256/33), optimizationPlotOn);
 %fprintf("sigma_x^2 = %.3e , sigma_y^2 = %.3e\n", [PSFest(1), PSFest(2)]);
 
 % Optional: visualize generated photons
@@ -103,7 +104,12 @@ figure(1); clf; subplot(1,2,1);
 fontSize = 12;
 
 grayImage = zeros([256,256]);
-imshow(grayImage, []);
+imshow(grayImage, []); hold on;
+t = linspace(0, 2*pi);
+xCircle = 128 * (cos(t) + 1);
+yCircle = 128 * (sin(t) + 1);
+plot(xCircle, yCircle); hold off;
+
 set(gca, 'ydir', 'normal');
 axis on;
 title('Draw Here', 'FontSize', fontSize);
@@ -199,7 +205,7 @@ subplot(1,2,2); hold on; grid on; axis equal;
 title('EPP Source PDF', 'FontSize', fontSize);
 
 % Returns a kernel density estimate of the drawing
-den = ksdensity([finalX; finalY]',xi);
+den = ksdensity([finalX; finalY]',xi, 'Bandwidth', 10);
 
 [xq,yq,z] = computeGrid(xi(:,1),xi(:,2),den,resolution);
 contourf(xq,yq,z);
@@ -223,7 +229,7 @@ while current_ind < Nsamples
     % Convert trial samples to linear indices
     ind_in = sub2ind(size(z), vals(:,1), vals(:,2));
     
-    % Compare and accept if U[0,1] < F_X(trial_X, trial_Y)
+    % Compare and accept if U[0,1] < f_XY(trial_X, trial_Y)
     accepted_idx = comparison_rands < z(ind_in);
     
     % Append accepted samples to array
@@ -249,8 +255,9 @@ legend('f_{X_1,X_2}(x_1,x_2)','Samples');
 boxSize = 35; % cm x cm
 
 convFactor = 45/128; % deg/pixel
-shiftFactor = 127;%127;
+shiftFactor = 127;
 
+% Shift from [0,255] px. -> [-127,128] px. -> (-45,45] deg
 xSamples = (xq(1,samples(:,1))' - shiftFactor) * convFactor;
 zSamples = (yq(samples(:,2),1)  - shiftFactor) * convFactor;
 
@@ -260,12 +267,8 @@ phi   = sqrt(xSamples.^2 + zSamples.^2);
 
 
 % Spherical definition of (x,y,z) from (r = unity, theta, phi)
-%x_comp = sind(theta).*cosd(phi);
-%z_comp = sind(theta).*sind(phi);
-%y_comp = -cosd(theta);
-
-x_comp = sind(phi).*cosd(theta);
-z_comp = sind(phi).*sind(theta);
+x_comp =  sind(phi).*cosd(theta);
+z_comp =  sind(phi).*sind(theta);
 y_comp = -cosd(phi);
 
 % Reproduce the Nsamples points photonsPerSource number of times
@@ -329,7 +332,7 @@ fID = fopen(['../build/', runFileName], "w");
 fprintf(fID, '%s\n', runFileString{:});
 fclose(fID);
 
-fprintf("Running simulation with %s...", runFileName)
+fprintf("Running simulation with %s using %d photons...", runFileName, number_of_photons)
 
 % Switch to simulation directory
 cd ../build/
@@ -343,7 +346,7 @@ cd ../analysis/
 fprintf("simulation complete!\n")
 
 end
-function [image_est, PSF_est] = reconstructImage(fileName, SNR, energyRange, smoothingFactor)
+function [image_est, PSF_est] = reconstructImageMethod1(fileName, SNR, energyRange, smoothingFactor)
 
 lowE  = energyRange(1);
 highE = energyRange(2);
@@ -394,6 +397,7 @@ for detector = 1:length(detectorIDs)
 end
 close 1;
 
+% Normalize counts after image coaddition
 rawIm = rawIm / 11;
 
 load('CA_files/decoder.mat','decoder');
@@ -406,24 +410,24 @@ load('CA_files/mask.mat'   ,'mask');
 % over the detector. Lambda is the average height of the sidelobes of the
 % autocorrelation of the mask with itself.
 %
-% G = -lambda / (M - lambda)
+% G = -lambda / (M - lambda) = -60/(145-60)
 decoder(decoder == -1) = -0.7059;  
 
 % Test value
 %decoder(decoder == -1) = -0.4;
 
 avgSigCounts = sum(sum(rawIm));
-avgBGCounts  = sum(sum(darkIm));
+backgroundCounts  = sum(sum(darkIm));
 
-totalFlux = 4.656 * (avgSigCounts - avgBGCounts);
+totalFlux = 4.656 * (avgSigCounts - backgroundCounts);
 
 naivePSF = conv2(mask, decoder);
 
-%rawIm = rawIm - darkIm;
+rawIm = rawIm - darkIm;
 
 rawIm = rawIm - mean(rawIm);
 rawDeconv = conv2(rawIm, decoder);
-rawDeconv(rawDeconv < 0) = 0;
+%rawDeconv(rawDeconv < 0) = 0;
 
 rawDeconv = interp2(rawDeconv, 1.1);
 [image_est, PSF_est] = deconvblind(rawDeconv, naivePSF);
@@ -437,7 +441,7 @@ rawDeconv = interp2(rawDeconv, 1.1);
 image_est = image_est / sum(sum(image_est));
 
 % Assign signal flux to image and correct for inversion
-image_est = rot90(image_est * totalFlux, 2);
+image_est = rot90(image_est * totalFlux, 3);
 
 image_est = imgaussfilt(image_est, smoothingFactor);
 

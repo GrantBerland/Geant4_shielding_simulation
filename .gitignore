@@ -10,4 +10,5 @@
 /results
 /analysis/originalImages
 /analysis/photonFiles
+/analysis/html
 *.m~

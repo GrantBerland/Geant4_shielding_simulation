@@ -1075,8 +1075,8 @@ G4LogicalVolume* DetectorConstruction::CreateCodedAperture(
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
   // FIXME
-  G4double aperatureSquare = 0.2*cm;
-  //G4double aperatureSquare = 0.22*cm;
+  //G4double aperatureSquare = 0.2*cm;
+  G4double aperatureSquare = 0.22*cm;
 
   // added dimension to "fill the gap" between detectors
   G4double fillTheGap = 2.*mm;
