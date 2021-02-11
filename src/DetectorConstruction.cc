@@ -1075,8 +1075,10 @@ G4LogicalVolume* DetectorConstruction::CreateCodedAperture(
   G4double boxXY 	   = 4.*cm;
   G4double boxZ  	   = 1.5*mm;
   // FIXME
+  G4double aperatureSquare = 0.15*cm;
+  //G4double aperatureSquare = 0.2*cm/2.;
   //G4double aperatureSquare = 0.2*cm;
-  G4double aperatureSquare = 0.22*cm;
+  //G4double aperatureSquare = 0.22*cm;
 
   // added dimension to "fill the gap" between detectors
   G4double fillTheGap = 2.*mm;
@@ -1097,7 +1099,13 @@ G4LogicalVolume* DetectorConstruction::CreateCodedAperture(
   G4String placementXY_str; 
   G4double placementX, placementY; 
   G4String token;
-  std::ifstream placementFile("coded_aperture_array.txt", std::ios_base::in);
+
+
+  //G4String filename = "coded_aperture_array.txt";
+  G4String filename = "NTHT_MURA_array.txt";
+  //G4String filename = "pinhole_array.txt";
+  
+  std::ifstream placementFile(filename, std::ios_base::in);
   
   // Get number of lines in file
   unsigned int numberOfBoxes = 0;
@@ -1108,7 +1116,7 @@ G4LogicalVolume* DetectorConstruction::CreateCodedAperture(
 
 
   // Reopen file to start from first line
-  placementFile.open("coded_aperture_array.txt", std::ios_base::in);
+  placementFile.open(filename, std::ios_base::in);
   getline(placementFile, placementXY_str, '\n');
   
   token = placementXY_str.substr(

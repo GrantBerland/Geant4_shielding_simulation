@@ -22,13 +22,13 @@ close all;
 
 %%%%%% User inputs %%%%%%
 
-fileName          = 'test16';  % No file extension
+fileName          = 'test26';  % No file extension
 number_of_photons = 250;   % [photons]
-photonsPerSource  = 400;
+photonsPerSource  = 300;
 photon_powerLaw_k = 2.704; % []
 SNR               = 25;   % []
 
-smoothingFactor    = 1.5;  % 1 = no smoothing
+smoothingFactor    = 2;  % 1 = no smoothing
 chiSquareMapPlotOn = 1;
 optimizationPlotOn = 0;
 
@@ -54,7 +54,7 @@ colorbar();
 title("Original Image Estimate");
 
 % Resize image to cast on to 256x256 image 
-image_estimate = resizem(image_estimate, 256/63);
+image_estimate = resizem(image_estimate, 256/size(image_estimate,1));
 
 % Retrieve original drawn image PDF for comparison
 [z, fig] = getOriginalImageData(fileName);
@@ -77,6 +77,7 @@ contourf(residuals);
 title("Reconstruction Residuals");
 colorbar();
 
+figure(); imshow(image_estimate); set(gca, 'ydir', 'normal');
 %PSFest = computePSFestimate(image_estimate, z, ...
 %                resizem(RL_PSFest, 256/33), optimizationPlotOn);
 %fprintf("sigma_x^2 = %.3e , sigma_y^2 = %.3e\n", [PSFest(1), PSFest(2)]);
@@ -400,8 +401,8 @@ close 1;
 % Normalize counts after image coaddition
 rawIm = rawIm / 11;
 
-load('CA_files/decoder.mat','decoder');
-load('CA_files/mask.mat'   ,'mask');
+%load('CA_files/decoder.mat','decoder'); load('CA_files/mask.mat'   ,'mask');
+load('CA_files/NTHT_MURA_array_test.mat', 'mask','decoder');
 
 % This value ensures that the sum over the image is equal to 0
 % G = -1
@@ -411,10 +412,10 @@ load('CA_files/mask.mat'   ,'mask');
 % autocorrelation of the mask with itself.
 %
 % G = -lambda / (M - lambda) = -60/(145-60)
-decoder(decoder == -1) = -0.7059;  
-
+%decoder(decoder == -1) = -0.7059;
+%decoder(decoder == -1) = -0.1423; % NTHT
 % Test value
-%decoder(decoder == -1) = -0.4;
+%decoder(decoder == -1) = -0.5;
 
 avgSigCounts = sum(sum(rawIm));
 backgroundCounts  = sum(sum(darkIm));
@@ -423,7 +424,7 @@ totalFlux = 4.656 * (avgSigCounts - backgroundCounts);
 
 naivePSF = conv2(mask, decoder);
 
-rawIm = rawIm - darkIm;
+%rawIm = rawIm - darkIm;
 
 rawIm = rawIm - mean(rawIm);
 rawDeconv = conv2(rawIm, decoder);
@@ -436,6 +437,10 @@ rawDeconv = interp2(rawDeconv, 1.1);
 %image_est = rawDeconv;
 %PSF_est   = naivePSF;
 
+%{
+image_est = rawIm;
+PSF_est   = naivePSF;
+%}
 
 % Normalize s.t. sum across image is 1
 image_est = image_est / sum(sum(image_est));

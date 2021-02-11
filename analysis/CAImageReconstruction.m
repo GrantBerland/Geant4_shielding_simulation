@@ -7,7 +7,7 @@ classdef CAImageReconstruction
     %
     % Written by Grant Berland, June 2020
     
-    properties
+    properties (Access = public)
         
         % Input members
         Filename;
