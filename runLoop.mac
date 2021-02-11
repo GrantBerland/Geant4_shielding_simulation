@@ -2,5 +2,5 @@
 # 0 = sin(x)
 # 1 = sin(2x)
 # 2 = isotropic
-/control/foreach runLoop2.mac dist 0 1 2 
+/control/foreach runLoop2.mac dist 0 
 

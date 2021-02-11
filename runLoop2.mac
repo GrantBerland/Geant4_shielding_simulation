@@ -1,7 +1,7 @@
 
 # Set hit and signal file names
-/dataCollection/setHitFileName archive3/hit_{E0}_{dist}.csv
-/dataCollection/setSignalFileName archive3/signal_{E0}_{dist}.csv
+/dataCollection/setHitFileName archive3/hit_Alplate_BS_{E0}_{dist}.csv
+/dataCollection/setSignalFileName archive3/signal_Alplate_BS_{E0}_{dist}.csv
 
 # E0 of background distribution out of {100,200,300} keV
 /particleSource/setFoldingEnergy {E0} # [keV]
@@ -16,6 +16,6 @@
 /control/echo E0 = {E0} and Dist = {dist}
 
 # 1 = background loss cone electrons
-#/particleSource/setBackgroundType 1
-#/run/beamOn 1000000
+/particleSource/setBackgroundType 1
+/run/beamOn 1000000
 
