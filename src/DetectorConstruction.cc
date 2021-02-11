@@ -237,7 +237,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 
   G4LogicalVolume* logic_sn_bottom_plate = new G4LogicalVolume(sn_bottom_plate,
-		  			nist->FindOrBuildMaterial("G4_Sn"),
+		  		nist->FindOrBuildMaterial("G4_Al"),
 								"sn_bottom_plate");
 
   
